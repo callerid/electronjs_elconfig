@@ -1,0 +1,30 @@
+{
+  "name": "elconfig_cp",
+  "version": "0.0.1",
+  "description": "",
+  "main": "main.js",
+  "dependencies": {
+    "dgram": "^1.0.1",
+    "jquery": "^3.4.1",
+    "yarn": "^1.22.0"
+  },
+  "devDependencies": {
+    "electron": "^8.0.0",
+    "electron-builder": "^22.3.2"
+  },
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist_mac": "electron-builder --mac",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "elconfig.callerid.com",
+    "mac": {
+      "category": "callerid.diagnostic.tools"
+    }
+  },
+  "keywords": [],
+  "author": "CallerID.com",
+  "license": "ISC"
+}

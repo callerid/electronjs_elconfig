@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" type="text/css"href="frmMain.css">
+
+    <!-- Include jQuery -->
+    <script>
+        window.$ = window.jQuery = require("jquery");
+    </script>
+    <!-------------------->
+
+    <script>
+
+        
+
+        $(document).ready(function(){
+           
+            let info_content_main = `
+                This configuration and test tool is normally for:<br/>
+                <ul>
+                    <li>Setting the static IP of the device</li>
+                    <li>Testing for call records arriving from the Caller ID unit</li>
+                </ul>
+                Advanced users can set a number of other parameters including:<br/>
+                <ul>
+                    <li>Toggles for output options on Deluxe units</li>
+                    <li>Destination IP and MAC unicasts</li>
+                    <li>Duplicate call record delivery to increase throughput</li>
+                    <li>Starting Line count when connecting multiple units</li>
+                </ul>
+            `;
+
+            let info_content_unit_number = `
+                Some applications use unit numbers to match data arriving from multiple units.
+            `;
+
+            let info_content_unit_ip = `
+                Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
+            `;
+
+            $('#lbInfoTitle').text('ELConfig');
+            $('#lbInfoContent').html(info_content_main);
+
+            $('#btnChangeUnitNumber').hover(
+                
+                // Hover
+                function(){
+                    $('#lbInfoTitle').text('Unit Number');
+                    $('#lbInfoContent').html(info_content_unit_number);
+                },
+
+                // Exit
+                function(){
+                    $('#lbInfoTitle').text('ELConfig');
+                    $('#lbInfoContent').html(info_content_main);
+             });
+
+             $('#btnSuggestIP').hover(
+                
+                // Hover
+                function(){
+                    $('#lbInfoTitle').text('Unit IP Address');
+                    $('#lbInfoContent').html(info_content_unit_ip);
+                },
+
+                // Exit
+                function(){
+                    $('#lbInfoTitle').text('ELConfig');
+                    $('#lbInfoContent').html(info_content_main);
+            });
+
+        });
+
+    </script>
+
+    </head>
+  <body>
+      
+    <div class="header_row">
+        <div class="top_header">
+            <table>
+                <tr>
+                    <td style="width: 180px;">
+                        Starting Line Count = <span class="custom_label" id="lbLineCount">01</span>
+                    </td>
+                    <td style="width: 140px;">
+                        # Of Dups: <span class="custom_label" id="lbDups">1</span>
+                    </td>
+                    <td>
+                        <label for="ckbIgnoreDups">
+                            <input type="checkbox" id="ckbIgnoreDups"/>Ignore Dups
+                        </label>
+                    </td>
+                </tr>
+            </table>
+            
+        </div>
+    </div>
+    
+    <table style="height: 235px; border: 1px solid black; width: 100%;">
+
+        <tr>
+            <td style="width: 525px;">
+            
+                <table class="edit_settings">
+
+                    <tr>
+                        <td style="width:200px;">
+                            <p align="right"><b>Unit Number: </b></p>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="text" id = "tbUnitNumber"/><br/>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="button" width="80px" id="btnChangeUnitNumber" value="Change"/><br/>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                        <td>
+                            <p align="right"><b>Unit IP: </b></p>
+                        </td>
+                        <td>
+                            <input type="text" id = "tbUnitIP"/><br/>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="button" width="80px" id="btnSuggestIP" value="Set IP to Suggested"/><br/>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                        <td>
+                            <p align="right"><b>Unit MAC Address: </b></p>
+                        </td>
+                        <td>
+                            <input type="text" id = "tbUnitMAC"/><br/>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                        <td>
+                            <p align="right"><b>Destination Port: </b></p>
+                        </td>
+                        <td>
+                            <input type="text" id = "tbDestPort"/><br/>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="button" width="80px" id="btnChangeDestPort" value="Change"/><br/>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                        <td>
+                            <p align="right"><b>Destination IP Address: </b></p>
+                        </td>
+                        <td>
+                            <input type="text" id = "tbDestIP"/><br/>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="button" width="80px" id="btnChangeDestIP" value="Change"/><br/>
+                        </td>
+                    </tr>
+            
+                    <tr>
+                        <td>
+                            <p align="right"><b>Destination MAC Address: </b></p>
+                        </td>
+                        <td>
+                            <input type="text" id = "tbDestMAC"/><br/>
+                        </td>
+                        <td style="width:100px;">
+                            <input type="button" width="80px" id="btnChangeDestMAC" value="Change"/><br/>
+                        </td>
+                    </tr>
+
+                </table>
+                
+            </td>
+
+            <td class="info_area">
+                <div id="lbInfoTitle" class="custom_label">ELConfig 5</div>
+                <p><span id="lbInfoContent">
+                    <!-- Content for info area -->
+                </span></p>
+            </td>
+        </tr>
+
+    </table>
+
+    </body>
+</html>

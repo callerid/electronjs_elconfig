@@ -1,0 +1,122 @@
+const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const dgram = require('dgram');
+
+const top_menu = [
+    {
+       label: 'Configure',
+       submenu: [
+          {
+            label: 'Reset Ethernet Defaults'
+          },
+          {
+            label: 'Set Deluxe Unit Output Defaults'
+          },
+          {
+             type: 'separator'
+          },
+          {
+            label: 'Set Unit to Current Time'
+          },
+          {
+            label: 'Set Deluxe Unit to Basic Unit'
+          },
+          {
+            label: 'Set Line Count'
+          },
+          {
+             type: 'separator'
+          },
+          {
+            label: 'Set Duplicate Call Records'
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Listening Port'
+          },
+       ],
+    },
+    {
+      label: 'Tools',
+       submenu: [
+         {
+           label: 'Computer MAC / IP Address'
+         },
+         {
+           label: 'Ping'
+         },
+         {
+            type: 'separator'
+         },
+         {
+           label: 'Setup Uni-cast'
+         },
+         {
+           type: 'separator'
+         },
+         {
+           label: 'Start Logging Call Records'
+         }
+       ]
+    },
+    {
+      label: 'Help',
+       submenu: [
+         {
+           label: 'Change Log'
+         },
+         {
+           label: 'Bound Status'
+         }
+       ]
+    }
+ ];
+
+var server = dgram.createSocket('udp4');
+const PORT = 3520;
+const HOST = '127.0.0.1';
+
+function createWindow () {
+  
+    // Create the browser window.
+    let win = new BrowserWindow({
+    width: 1000,
+    minWidth: 1000,
+    maxWidth: 1000,
+    height: 700,
+    minHeight: 700,
+    maxHeight: 700,
+    fullscreenable: false,
+    maximizable: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  // and load the index.html of the app.
+  win.loadFile('frmMain.html');
+  
+  // Uncomment below for JS debugging
+  win.webContents.openDevTools()
+
+}
+
+const app_top_menu = Menu.buildFromTemplate(top_menu);
+Menu.setApplicationMenu(app_top_menu);
+app.whenReady().then(createWindow);
+
+server.on('listening', function() {
+
+    var address = server.address();
+    console.log('UDP Server listening on ' + address.address + ':' + address.port);
+
+});
+
+server.on('message', function(message, remote) {
+
+    console.log(remote.address + ':' + remote.port +' - ' + message);
+
+});
+
+server.bind(PORT, HOST);

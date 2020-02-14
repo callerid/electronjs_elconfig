@@ -1,0 +1,7 @@
+Unit IP Address:
+Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
+
+
+
+
+" + (char)13 + "	" + (char)13 + "Unit Destination Port:" + (char)13 + "	The default Network communication port is 3520. Do not change unless your application absolutely requires it. A value other than 3520 or 6699 will require you change the listening port on this application." + (char)13 + "	" + (char)13 + "Destination IP Address:" + (char)13 + "	The IP to where the call records will be sent. The default is 255.255.255.255 (broadcast) which most applications use, even if only one PC is listening for data. Change only if necessary." + (char)13 + "	" + (char)13 + "Unit MAC Address:" + (char)13 + "	The MAC address to where call records will be sent. The default is FF-FF-FF-FF-FF-FF (Broadcast) which most applications use. Change to specific MAC only if the Destination IP is specified as a unicast.
