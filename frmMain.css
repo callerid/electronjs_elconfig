@@ -17,6 +17,12 @@ p {
     margin: 0px;
 }
 
+.hidden {
+
+    display: none;
+
+}
+
 .edit_settings {
 
     margin-left: 5px;
@@ -47,6 +53,48 @@ p {
     margin: 0px;
     font-weight: bold;
 
+}
+
+.grid_background_comm {
+
+    background-color: rgb(168, 168, 168);
+    padding: 0px;
+    margin: 10px;
+    width: 960px;
+    height: 130px;
+}
+
+.grid_background_phone {
+
+    background-color: rgb(168, 168, 168);
+    padding: 0px;
+    margin: 10px;
+    width: 960px;
+    height: 180px;
+}
+
+.grid_header {
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(44, 44, 44);
+    padding: 0px;
+    margin: 0px;
+    width: 960px;
+    height: 20px;
+}
+
+.status_bar_connected{
+
+    background-color: rgb(134, 209, 163);
+    height: 30px;
+    width: 100%;
+}
+
+.status_bar_disconnected{
+
+    background-color: rgb(199, 150, 150);
+    height: 30px;
+    width: 100%;
 }
 
 .info_area {

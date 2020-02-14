@@ -11,7 +11,17 @@
 
     <script>
 
-        
+        function setConnected(is_connected)
+        {
+            if(is_connected)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
 
         $(document).ready(function(){
            
@@ -38,20 +48,32 @@
                 Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
             `;
 
-            $('#lbInfoTitle').text('ELConfig');
+            let info_content_dest_port = `
+                The default Network communication port is 3520. Do not change unless your application absolutely requires it. A value other than 3520 or 6699 will require you change the listening port on this application.
+            `;
+
+            let info_content_dest_ip = `
+                The IP to where the call records will be sent. The default is 255.255.255.255 (broadcast) which most applications use, even if only one PC is listening for data. Change only if necessary.
+            `;
+
+            let info_content_dest_mac = `
+                The MAC address to where call records will be sent. The default is FF-FF-FF-FF-FF-FF (Broadcast) which most applications use. Change to specific MAC only if the Destination IP is specified as a unicast.
+            `;
+
+            $('#lbInfoTitle').text('ELConfig:');
             $('#lbInfoContent').html(info_content_main);
 
             $('#btnChangeUnitNumber').hover(
                 
                 // Hover
                 function(){
-                    $('#lbInfoTitle').text('Unit Number');
+                    $('#lbInfoTitle').text('Unit Number:');
                     $('#lbInfoContent').html(info_content_unit_number);
                 },
 
                 // Exit
                 function(){
-                    $('#lbInfoTitle').text('ELConfig');
+                    $('#lbInfoTitle').text('ELConfig:');
                     $('#lbInfoContent').html(info_content_main);
              });
 
@@ -59,13 +81,55 @@
                 
                 // Hover
                 function(){
-                    $('#lbInfoTitle').text('Unit IP Address');
+                    $('#lbInfoTitle').text('Unit IP Address:');
                     $('#lbInfoContent').html(info_content_unit_ip);
                 },
 
                 // Exit
                 function(){
-                    $('#lbInfoTitle').text('ELConfig');
+                    $('#lbInfoTitle').text('ELConfig:');
+                    $('#lbInfoContent').html(info_content_main);
+            });
+
+            $('#btnChangeDestPort').hover(
+                
+                // Hover
+                function(){
+                    $('#lbInfoTitle').text('Unit Destination Port:');
+                    $('#lbInfoContent').html(info_content_dest_port);
+                },
+
+                // Exit
+                function(){
+                    $('#lbInfoTitle').text('ELConfig:');
+                    $('#lbInfoContent').html(info_content_main);
+            });
+
+            $('#btnChangeDestIP').hover(
+                
+                // Hover
+                function(){
+                    $('#lbInfoTitle').text('Destination IP Address:');
+                    $('#lbInfoContent').html(info_content_dest_ip);
+                },
+
+                // Exit
+                function(){
+                    $('#lbInfoTitle').text('ELConfig:');
+                    $('#lbInfoContent').html(info_content_main);
+            });
+
+            $('#btnChangeDestMAC').hover(
+                
+                // Hover
+                function(){
+                    $('#lbInfoTitle').text('Unit MAC Address:');
+                    $('#lbInfoContent').html(info_content_dest_mac);
+                },
+
+                // Exit
+                function(){
+                    $('#lbInfoTitle').text('ELConfig:');
                     $('#lbInfoContent').html(info_content_main);
             });
 
@@ -97,7 +161,7 @@
         </div>
     </div>
     
-    <table style="height: 235px; border: 1px solid black; width: 100%;">
+    <table style="height: 235px; width: 100%;">
 
         <tr>
             <td style="width: 525px;">
@@ -178,13 +242,115 @@
             </td>
 
             <td class="info_area">
-                <div id="lbInfoTitle" class="custom_label">ELConfig 5</div>
+                <div id="lbInfoTitle" class="custom_label">ELConfig 5:</div>
                 <p><span id="lbInfoContent">
                     <!-- Content for info area -->
                 </span></p>
             </td>
         </tr>
 
+    </table>
+
+    <table style="padding-left: 5px; width: 100%;">
+
+        <tr>
+
+            <td style="width: 300px;">
+                Communication Data &nbsp;<input type="button" id="btnClearCommData" value="Clear"/>
+            </td>
+
+            <!-- Production uses -->
+
+            <td style="width: 300px;">
+                <input type="button" id="btnClockingConfig" value="Blocking Config"/>
+                <input type="button" id="btnQ" value="Q"/>
+                <input type="button" id="btnJ" value="J"/>
+                <input type="button" id="btnR" value="R"/>
+            </td>
+
+            <!--------------------->
+            
+            <!-- Toggles -->
+            <td>
+                <input type="button"  id="btnRetrieveToggles" value="Retrieve Toggles"/>
+                <input type="button"  id="btnToggleC" value="C"/>
+                <input type="button" id="btnToggleU" value="U"/>
+                <input type="button" id="btnToggleD" value="D"/>
+                <input type="button" id="btnToggleA" value="A"/>
+                <input type="button" id="btnToggleS" value="S"/>
+                <input type="button" id="btnToggleO" value="O"/>
+                <input type="button" id="btnToggleB" value="B"/>
+                <input type="button" id="btnToggleK" value="K"/>
+            </td>
+
+            <!------------->
+
+        </tr>
+
+    </table>
+
+    <!-- Comm. Gridview -->
+    <table class="grid_background_comm">
+        <tr class="grid_header">
+            <td>Unit Output</td>
+        </tr>
+        <tr>
+            <td>
+
+                <!-- Comm data -->
+
+            </td>
+        </tr>
+    </table>
+
+    <table style="padding-left: 5px; width: 100%;">
+        <tr>
+            <td>
+                Phone Data &nbsp;<input type="button" id="btnClearPhoneData" value="Clear"/>
+            </td>
+        </tr>
+    </table>
+
+    <!-- Phone Gridview -->
+    <table class="grid_background_phone">
+        <tr class="grid_header">
+            <td>Ln</td>
+            <td>I/O</td>
+            <td>S/E</td>
+            <td>Dur</td>
+            <td>CS</td>
+            <td>Ring</td>
+            <td>Date</td>
+            <td>Time</td>
+            <td style="width: 220px;">Number</td>
+            <td style="width: 220px;">Name</td>
+        </tr>
+        <tr>
+            <td>
+
+                <!-- Phone data -->
+
+            </td>
+        </tr>
+    </table>
+
+    <!-- Status Bar -->
+    <table class="status_bar_disconnected">
+        <tr>
+            <td style="padding-left: 20px;">
+                <img id="imgConnected" class="hidden" src="./build/connected.png" style="width: 20px; height:25px;"/>
+                <span id="lbStatus">NOT Connected</span>
+            </td>
+            <td>
+                <span id="lbSendingTo">Sending Commands to: 000.000.000.000</span>
+            </td>
+            <td>
+                <span id="lbDeluxeUnit">Deluxe Unit NOT Detected</span>
+            </td>
+            <td>
+                <span id="lbBoundTo">Bound</span>
+            </td>
+        </tr>
     </table>
 
     </body>

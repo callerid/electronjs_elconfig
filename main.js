@@ -84,9 +84,9 @@ function createWindow () {
     width: 1000,
     minWidth: 1000,
     maxWidth: 1000,
-    height: 700,
-    minHeight: 700,
-    maxHeight: 700,
+    height: 770,
+    minHeight: 790,
+    maxHeight: 790,
     fullscreenable: false,
     maximizable: false,
     webPreferences: {
