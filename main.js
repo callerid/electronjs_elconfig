@@ -1,5 +1,4 @@
 const { app, BrowserWindow, Menu, MenuItem } = require('electron')
-const dgram = require('dgram');
 
 const top_menu = [
     {
@@ -73,10 +72,6 @@ const top_menu = [
     }
  ];
 
-var server = dgram.createSocket('udp4');
-const PORT = 3520;
-const HOST = '127.0.0.1';
-
 function createWindow () {
   
     // Create the browser window.
@@ -105,18 +100,3 @@ function createWindow () {
 const app_top_menu = Menu.buildFromTemplate(top_menu);
 Menu.setApplicationMenu(app_top_menu);
 app.whenReady().then(createWindow);
-
-server.on('listening', function() {
-
-    var address = server.address();
-    console.log('UDP Server listening on ' + address.address + ':' + address.port);
-
-});
-
-server.on('message', function(message, remote) {
-
-    console.log(remote.address + ':' + remote.port +' - ' + message);
-
-});
-
-server.bind(PORT, HOST);
