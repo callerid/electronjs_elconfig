@@ -1,11 +1,12 @@
 {
-  "name": "elconfig_cp",
+  "name": "elconfig_5cp",
   "version": "0.0.1",
   "description": "",
   "main": "main.js",
   "dependencies": {
     "dgram": "^1.0.1",
     "jquery": "^3.4.1",
+    "jquery-ui": "^1.12.1",
     "yarn": "^1.22.0"
   },
   "devDependencies": {

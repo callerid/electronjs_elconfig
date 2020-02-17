@@ -76,6 +76,7 @@ function createWindow () {
   
     // Create the browser window.
     let win = new BrowserWindow({
+    title: 'ELConfig 5 v.0.0.1',
     width: 1000,
     minWidth: 1000,
     maxWidth: 1000,
@@ -93,7 +94,7 @@ function createWindow () {
   win.loadFile('frmMain.html');
   
   // Uncomment below for JS debugging
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
 }
 

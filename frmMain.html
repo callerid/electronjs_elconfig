@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css"href="frmMain.css">
+    <link rel="stylesheet" type="text/css" href="frmMain.css">
+    <link rel="stylesheet" type="text/css" href="./plugins/jquery-ui.css">
+    <link rel="stylesheet" type="text/css" href="./plugins/jquery-ui.structure.min.css">
+    <link rel="stylesheet" type="text/css" href="./plugins/jquery-ui.theme.min.css">
 
     <!-- Include jQuery -->
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
+    <script src="./plugins/jquery-ui.js"></script>
     <!-------------------->
-
+    <!-- UDP Code -------->
+    <script src="./udp.js" type="text/javascript"></script>
+    <!-------------------->
     <script>
-
-        // UDP protocols
-        const UDP = require('./udp.js');
 
         function setConnected(is_connected)
         {
@@ -27,7 +30,83 @@
         }
 
         $(document).ready(function(){
-           
+            
+            // --------------------------------------------------------
+            // Check bound status
+            // Update status below
+            var dialog_bind_warning_3520 = $("#bind_warning_3520").dialog({
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 500
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    buttons: {
+                        "Close": function() {
+                        $( this ).dialog( "close" );
+                        }
+                    }
+            });
+
+            var dialog_bind_warning_6699 = $("#bind_warning_6699").dialog({
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 500
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    buttons: {
+                        "Close": function() {
+                        $( this ).dialog( "close" );
+                        }
+                    }
+            });
+
+            var dialog_bind_warning_3520_6699 = $("#bind_warning_3520_6699").dialog({
+                    autoOpen: false,
+                    show: {
+                        effect: "blind",
+                        duration: 500
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 500
+                    },
+                    buttons: {
+                        "Close": function() {
+                        $( this ).dialog( "close" );
+                        }
+                    }
+            });
+
+            if(get_bound_status(3520) && get_bound_status(6699))
+            {
+                $('#lbBoundTo').text("Bound: 3520 & 6699");
+            }
+            else if(!get_bound_status(3520) && get_bound_status(6699))
+            {
+                $('#lbBoundTo').text("Bound: 6699");
+                dialog_bind_warning_3520.dialog('open');
+            }
+            else if(get_bound_status(3520) && !get_bound_status(6699))
+            {
+                $('#lbBoundTo').text("Bound: 3520");
+                dialog_bind_warning_6699.dialog('open');
+            }
+            else
+            {
+                $('#lbBoundTo').text("Bound: Failed");
+                dialog_bind_warning_3520_6699.dialog('open');
+            }
+
+            // --------------------------------------------------------
+
             let info_content_main = `
                 This configuration and test tool is normally for:<br/>
                 <ul>
@@ -358,3 +437,18 @@
 
     </body>
 </html>
+
+
+<!---------------------- Alerts -------------------------->
+<div id="bind_warning_3520" title="Bind Warning">
+    <p style="padding-top: 10px;">Bound to 6699. Failed to bind to 3520. Port already in use.</p>
+</div>
+
+<div id="bind_warning_6699" title="Bind Warning">
+    <p style="padding-top: 10px;">Bound to 3520. Failed to bind to 6699. Port already in use.</p>
+</div>
+
+<div id="bind_warning_3520_6699" title="Bind Failure">
+    <p style="padding-top: 10px;">Failed to bind to 3520 and 6699. Ports already in use.</p>
+</div>
+<!-------------------------------------------------------->
