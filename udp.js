@@ -11,9 +11,14 @@ var bound6699 = false;
 
 var connected_port = 0;
 var found_unit = false;
+var is_deluxe_unit = false;
 var all_known_pc_ips = [];
 var all_subnets = [];
 var send_to_ip = '';
+var ping_alternator = 0;
+
+var processing_v_command = false;
+var processing_x_command = false;
 
 server3520.on('error', function(error){
 
@@ -46,8 +51,8 @@ server6699.on('listening', function() {
 server3520.on('message', function(message, remote) {
 
     // Comm command -------------------------------------------------
-    check_for_v_command(message);
-    check_for_x_command(message);
+    check_for_v_command(message, remote);
+    check_for_x_command(message, remote);
     //---------------------------------------------------------------
 
 });
@@ -63,10 +68,18 @@ server6699.on('message', function(message, remote) {
 
 function check_for_x_command(message, remote)
 {
-    if(message.length == 90)
+    if(message.length == 90 && !processing_x_command)
     {
+        processing_x_command = true;
+
         // Update target unit location
         found_unit = true;
+
+        if(send_to_ip != remote.address)
+        {
+            $("#lbSendingTo").text("Sending To: " + remote.address + ":" + remote.port);
+        }
+
         send_to_ip = remote.address;
         connected_port = remote.port;
 
@@ -76,8 +89,16 @@ function check_for_x_command(message, remote)
 
 function check_for_v_command(message, remote)
 {
-    if(message.length == 57)
+    if(message.length == 57 && !processing_v_command)
     {
+        processing_v_command = true;
+
+        if(!is_deluxe_unit)
+        {
+            is_deluxe_unit = true;
+            $("#lbDeluxeUnit").text("Deluxe Unit Detected");
+        }
+
         console.log("V Command returned.");
     }
 }
@@ -91,9 +112,6 @@ get_pc_ips();
 
 // Find Unit
 find_unit();
-
-// Auto start pinging V command to unit
-//send_v_command();
 
 function bind()
 {
@@ -117,24 +135,38 @@ function find_unit()
     }
     else
     {
+        // Auto start pinging X,V commands to unit
+        send_pinging_commands();
+        $("#status_bar").removeClass("status_bar_disconnected");
+        $("#status_bar").addClass("status_bar_connected");
+        $("#imgConnected").removeClass("hidden");
+        $("#lbStatus").text("Connected");
         console.log("Unit found on: " + connected_port + " at: " + send_to_ip);
     }
 }
 
-function send_v_command()
+function send_pinging_commands()
 {
-    if(connected_port == 0)
+    processing_v_command = false;
+    processing_x_command = false;
+
+    if(connected_port == 0 && !found_unit)
     {
-        send_udp_string("^^Id-V", 3520, send_to_ip);
-        send_udp_string("^^Id-V", 3520, send_to_ip);
+        find_unit();
     }
     else
     {
-        send_udp_string("^^Id-V", connected_port, send_to_ip);
+        if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
+        if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
+        
+        ping_alternator++;
+        if(ping_alternator > 1) ping_alternator = 0;
+
+        // Reset timer
+        setTimeout(send_pinging_commands, 1500);
+
     }    
 
-    // Reset timer
-    setTimeout(send_v_command, 1500);
 }
 
 function get_pc_ips()

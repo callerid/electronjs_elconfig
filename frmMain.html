@@ -215,6 +215,10 @@
                     $('#lbInfoContent').html(info_content_main);
             });
 
+            // --------------------------------------------------------
+
+
+
         });
 
     </script>
@@ -417,10 +421,12 @@
     </table>
 
     <!-- Status Bar -->
-    <table class="status_bar_disconnected">
+    <table id="status_bar" class="status_bar_disconnected">
         <tr>
             <td style="padding-left: 20px;">
                 <img id="imgConnected" class="hidden" src="./build/connected.png" style="width: 20px; height:25px;"/>
+            </td>
+            <td>
                 <span id="lbStatus">NOT Connected</span>
             </td>
             <td>
