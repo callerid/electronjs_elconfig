@@ -26,8 +26,9 @@ p {
 .edit_settings {
 
     margin-left: 5px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 15px;
+    padding-bottom: 0px;
+    height: 220px;
 
 }
 
@@ -39,8 +40,8 @@ p {
 
 .header_row {
 
-    padding-top: 4px;
-    padding-bottom: 4px;
+    padding-top: 2px;
+    padding-bottom: 2px;
     margin: 0px;
     background-color: rgb(98, 109, 110);
     border-bottom: 3px solid rgb(52, 57, 58);
@@ -59,7 +60,8 @@ p {
 
     background-color: rgb(168, 168, 168);
     padding: 0px;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
     width: 960px;
     height: 130px;
 }
@@ -68,9 +70,11 @@ p {
 
     background-color: rgb(168, 168, 168);
     padding: 0px;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
     width: 960px;
-    height: 180px;
+    height: 150px;
 }
 
 .grid_header {
@@ -101,8 +105,8 @@ p {
 
     padding-left: 10px; 
     padding-right: 15px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     vertical-align: text-top;
 
 }

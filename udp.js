@@ -137,6 +137,8 @@ function find_unit()
     {
         // Auto start pinging X,V commands to unit
         send_pinging_commands();
+
+        // Update UI to show connection
         $("#status_bar").removeClass("status_bar_disconnected");
         $("#status_bar").addClass("status_bar_connected");
         $("#imgConnected").removeClass("hidden");
