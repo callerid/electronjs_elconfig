@@ -63,7 +63,7 @@ p {
     margin-left: 10px;
     margin-right: 10px;
     width: 950px;
-    height: 120px;
+    height: 90px;
 }
 
 .grid_background_comm thead {
@@ -88,7 +88,7 @@ p {
     overflow-x: hidden;
     text-align: left;
     width: 950px;
-    height: 115px;
+    height: 85px;
 }
 
 .grid_comm tr {
@@ -96,22 +96,11 @@ p {
     background-color: rgb(231, 231, 231);
     display: block;
     width: 935px;
-    margin-left: 2px;
+    margin-left: 3px;
     margin-right: 10px;
     padding-left: 4px;
     padding-right: 4px;
 
-}
-
-.grid_background_phone {
-
-    background-color: rgb(168, 168, 168);
-    padding: 0px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 5px;
-    width: 960px;
-    height: 130px;
 }
 
 .grid_header {
@@ -121,6 +110,48 @@ p {
     padding: 0px;
     margin: 0px;
     width: 960px;
+    height: 20px;
+}
+
+.grid_phone {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.grid_background_phone {
+    background-color: rgb(173, 173, 173);
+    padding: 2px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 950px;
+    height: 162px;
+    margin-bottom: 4px;
+}
+
+.grid_background_phone td {
+
+    padding-top: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 4px;
+    border-right: 1px solid black;
+  
+}
+
+.grid_row_phone {
+    background-color: rgb(231, 231, 231);
+    width: 942px;
+    padding: 0px;
+    margin-left: 2px;
+}
+
+.grid_header_phone {
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(44, 44, 44);
+    padding-bottom: 4px;
+    padding-top: 0px;
+    margin: 0px;
+    width: 946px;
     height: 20px;
 }
 

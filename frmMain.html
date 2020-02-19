@@ -17,12 +17,72 @@
     <!-------------------->
     <script>
 
+        var gv_phone_data = [];
+        function write_to_phone(ln, io, se, dur, cs, rings, date, time, num, name, clear_as_bool)
+        {
+            if(clear_as_bool)
+            {
+                gv_phone_data = [];
+            }
+            else
+            {
+                var template_text = `
+                <table id="gv_phone_row_id_xxx" class="grid_row_phone">
+                    <tr>
+                    <td style="width:20px;">Ln</td>
+                    <td style="width:20px;">IO</td>
+                    <td style="width:20px;">SE</td>
+                    <td style="width:20px;">Dur</td>
+                    <td style="width:20px;">CS</td>
+                    <td style="width:20px;">Rings</td>
+                    <td style="width:50px;">Date</td>
+                    <td style="width:70px;">Time</td>
+                    <td style="padding-left: 20px; width: 353px;">Number</td>
+                    <td style="border:none; width: 353px;">Name</td>
+                    </tr>
+                </table>
+                `;
+
+                template_text = template_text.replace("Ln", ln);
+                template_text = template_text.replace("IO", io);
+                template_text = template_text.replace("SE", se);
+                template_text = template_text.replace("Dur", dur);
+                template_text = template_text.replace("CS", cs);
+                template_text = template_text.replace("Rings", rings);
+                template_text = template_text.replace("Date", date);
+                template_text = template_text.replace("Time", time);
+                template_text = template_text.replace("Number", num);
+                template_text = template_text.replace("Name", name);
+
+                gv_phone_data.push(template_text);
+            }
+
+            update_phone_data();
+        }
+
+        function update_phone_data()
+        {
+            var all_rows = "";
+            var cnt = 1;
+            gv_phone_data.forEach(function(row){
+                all_rows += row.replace("gv_phone_row_id_xxx", "gv_phone_row_id_" + cnt);
+                cnt++;
+            });
+
+            $("#gv_phone_data").html(all_rows);
+
+            var rowpos = $('#gv_phone_row_id_' + cnt).position();
+            $('#gv_phone_data').scrollTop(rowpos.top);
+
+        }
+
         var gv_comm_data = [];
         function write_to_comm(str, clear_as_bool)
         {
             if(clear_as_bool)
             {
                 gv_comm_data = [];
+                last_v_command_reception = "";
             }
             else
             {
@@ -296,6 +356,10 @@
 
             });
 
+            $('#btnClearPhoneData').on('click', function(){
+                write_to_phone(01,"I","S","0001","G", "02", "02/19", "12:00 AM", "706-889-3199", "Samuel Penland");
+            });
+
 
         });
 
@@ -470,27 +534,30 @@
     </table>
 
     <!-- Phone Gridview -->
-    <table class="grid_background_phone">
-        <tr class="grid_header">
-            <td>Ln</td>
-            <td>I/O</td>
-            <td>S/E</td>
-            <td>Dur</td>
-            <td>CS</td>
-            <td>Ring</td>
-            <td>Date</td>
-            <td>Time</td>
-            <td style="width: 220px;">Number</td>
-            <td style="width: 220px;">Name</td>
-        </tr>
-        <tr>
-            <td>
+    <div class="grid_background_phone">
 
-                <!-- Phone data -->
-
-            </td>
-        </tr>
-    </table>
+        <div class="grid_header_phone">
+            <table>
+                <tr>
+                  <td style="width:20px;">Ln</td>
+                  <td style="width:20px;">IO</td>
+                  <td style="width:20px;">SE</td>
+                  <td style="width:20px;">Dur</td>
+                  <td style="width:20px;">CS</td>
+                  <td style="width:20px;">Rings</td>
+                  <td style="width:50px;">Date</td>
+                  <td style="width:70px;">Time</td>
+                  <td style="padding-left: 20px; width: 353px;">Number</td>
+                  <td style="border:none; width: 353px;">Name</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="gv_phone_data" class="grid_phone">
+            <!-- PHONE DATA -->
+        </div>
+      
+      </div>
 
     <!-- Status Bar -->
     <table id="status_bar" class="status_bar_disconnected">
