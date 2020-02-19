@@ -17,20 +17,39 @@
     <!-------------------->
     <script>
 
-        function setConnected(is_connected)
+        var gv_comm_data = [];
+        function write_to_comm(str, clear_as_bool)
         {
-            if(is_connected)
+            if(clear_as_bool)
             {
-
+                gv_comm_data = [];
             }
             else
             {
-
+                var row = "<tr><td>" + str + "</td></tr>";
+                gv_comm_data.push(row);
             }
+            update_comm_data();
+        }
+
+        function update_comm_data()
+        {
+            var all_rows = "";
+
+            gv_comm_data.forEach(function(row){
+                all_rows += row;
+            });
+
+            $("#gv_comm_data").html(all_rows);
+
+            var rowpos = $('#table_comm tr:last').position();
+            $('#gv_comm_data').scrollTop(rowpos.top);
         }
 
         $(document).ready(function(){
             
+            write_to_comm("", true);
+
             // --------------------------------------------------------
             // Check bound status
             // Update status below
@@ -217,6 +236,65 @@
 
             // --------------------------------------------------------
 
+            $('#btnGetToggles').on('click', function(){
+
+                get_toggles();
+
+            });
+
+            $('#btnToggleC').on('click', function(){
+
+                set_toggle($('#btnToggleC').val());
+
+            });
+
+            $('#btnToggleU').on('click', function(){
+
+                set_toggle($('#btnToggleU').val());
+
+            });
+
+            $('#btnToggleD').on('click', function(){
+
+                set_toggle($('#btnToggleD').val());
+
+            });
+
+            $('#btnToggleA').on('click', function(){
+
+                set_toggle($('#btnToggleA').val());
+
+            });
+
+            $('#btnToggleS').on('click', function(){
+
+                set_toggle($('#btnToggleS').val());
+
+            });
+
+            $('#btnToggleO').on('click', function(){
+
+                set_toggle($('#btnToggleO').val());
+
+            });
+
+            $('#btnToggleB').on('click', function(){
+
+                set_toggle($('#btnToggleB').val());
+
+            });
+
+            $('#btnToggleK').on('click', function(){
+
+                set_toggle($('#btnToggleK').val());
+
+            });
+
+            $('#btnClearCommData').on('click', function(){
+
+                write_to_comm("", true);
+
+            });
 
 
         });
@@ -358,7 +436,7 @@
             
             <!-- Toggles -->
             <td>
-                <input type="button"  id="btnRetrieveToggles" value="Retrieve Toggles"/>
+                <input type="button"  id="btnGetToggles" value="Retrieve Toggles"/>
                 <input type="button"  id="btnToggleC" value="C"/>
                 <input type="button" id="btnToggleU" value="U"/>
                 <input type="button" id="btnToggleD" value="D"/>
@@ -376,17 +454,11 @@
     </table>
 
     <!-- Comm. Gridview -->
-    <table class="grid_background_comm">
-        <tr class="grid_header">
-            <td>Unit Output</td>
-        </tr>
-        <tr>
-            <td>
-
-                <!-- Comm data -->
-
-            </td>
-        </tr>
+    <table id="table_comm" class="grid_background_comm">
+        <thead><th class='grid_header'>Unit Output</th></thead>
+        <tbody id="gv_comm_data" class="grid_comm">
+            <!-- COMM ROWS -->
+        </tbody>
     </table>
 
     <table style="padding-left: 5px; width: 100%;">

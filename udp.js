@@ -20,6 +20,9 @@ var ping_alternator = 0;
 var processing_v_command = false;
 var processing_x_command = false;
 
+var last_v_command_reception = "";
+var getting_toggles_flag = false;
+
 server3520.on('error', function(error){
 
     console.log('3520 failed to bind.');
@@ -91,7 +94,27 @@ function check_for_v_command(message, remote)
 {
     if(message.length == 57 && !processing_v_command)
     {
+        var message_str = array_to_ascii(message);
+        var message_byte = message;
+
+        // Do not process duplicates
+        var chars_to_remove = 9;
+        var start_index = message_str.indexOf("$") + 1;
+        var this_v_command_reception = message_str.substr(start_index, message_str.length - start_index - chars_to_remove);
+        
+        if(last_v_command_reception == this_v_command_reception && !getting_toggles_flag)
+        {
+            // Is duplicate V command, do not process
+            return;
+        }
+        else
+        {
+            last_v_command_reception = this_v_command_reception;
+        }
+
+        // Start processing
         processing_v_command = true;
+        getting_toggles_flag = false;
 
         if(!is_deluxe_unit)
         {
@@ -99,6 +122,110 @@ function check_for_v_command(message, remote)
             $("#lbDeluxeUnit").text("Deluxe Unit Detected");
         }
 
+        // Write to COMM data
+        write_to_comm(message_str.substr(start_index), false);
+
+        // Check toggles
+        var toggle_start = message_str.toUpperCase().indexOf('E');
+        var t_chars_to_remove = 20;
+        var toggles = message_str.substr(toggle_start, message_str.length - toggle_start - t_chars_to_remove);
+        console.log(message_str);
+        // Update toggles EcXudASoBKT
+        var t_c = toggles[1];
+        var t_u = toggles[3];
+        var t_d = toggles[4];
+        var t_a = toggles[5];
+        var t_s = toggles[6];
+        var t_o = toggles[7];
+        var t_b = toggles[8];
+        var t_k = toggles[9];
+
+        
+        // -- Update toggle text
+        $("#btnToggleC").val(t_c);
+        $("#btnToggleU").val(t_u);
+        $("#btnToggleD").val(t_d);
+        $("#btnToggleA").val(t_a);
+        $("#btnToggleS").val(t_s);
+        $("#btnToggleO").val(t_o);
+        $("#btnToggleB").val(t_b);
+        $("#btnToggleK").val(t_k);
+        
+        // -- Update toggle color ---------------
+        if(t_c == t_c.toLowerCase())
+        {
+            $("#btnToggleC").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleC").removeClass("toggle_on");
+        }
+
+        if(t_u == t_u.toLowerCase())
+        {
+            $("#btnToggleU").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleU").removeClass("toggle_on");
+        }
+
+        if(t_d == t_d.toLowerCase())
+        {
+            $("#btnToggleD").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleD").removeClass("toggle_on");
+        }
+
+        if(t_a == t_a.toLowerCase())
+        {
+            $("#btnToggleA").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleA").removeClass("toggle_on");
+        }
+
+        if(t_s == t_s.toLowerCase())
+        {
+            $("#btnToggleS").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleS").removeClass("toggle_on");
+        }
+
+        if(t_o == t_o.toLowerCase())
+        {
+            $("#btnToggleO").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleO").removeClass("toggle_on");
+        }
+
+        if(t_b == t_b.toLowerCase())
+        {
+            $("#btnToggleB").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleB").removeClass("toggle_on");
+        }
+
+        if(t_k == t_k.toLowerCase())
+        {
+            $("#btnToggleK").addClass("toggle_on");
+        }
+        else
+        {
+            $("#btnToggleK").removeClass("toggle_on");
+        }
+
+        // --------------------------------------
+        
         console.log("V Command returned.");
     }
 }
@@ -169,6 +296,29 @@ function send_pinging_commands()
 
     }    
 
+}
+
+// -----------------------------------------------------------
+//                       Low-level/Misc commands
+// -----------------------------------------------------------
+function set_toggle(button_text)
+{
+    if(button_text == button_text.toUpperCase())
+    {
+        send_udp_string("^^Id-" + button_text.toLowerCase(), connected_port, send_to_ip);
+    }
+    else
+    {
+        send_udp_string("^^Id-" + button_text.toUpperCase(), connected_port, send_to_ip);
+    }
+
+    setTimeout(get_toggles, 500);
+}
+
+function get_toggles()
+{
+    getting_toggles_flag = true;
+    send_udp_string("^^Id-V", connected_port, send_to_ip);
 }
 
 function get_pc_ips()
@@ -259,4 +409,13 @@ function get_bound_status(port)
     {
         return bound3520;
     }
+}
+
+function array_to_ascii(array)
+{
+    var str = "";
+    array.forEach(function(i){
+        str += String.fromCharCode(i);
+    });
+    return str;
 }

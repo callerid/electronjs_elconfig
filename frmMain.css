@@ -58,12 +58,49 @@ p {
 
 .grid_background_comm {
 
-    background-color: rgb(168, 168, 168);
+    background-color: rgb(173, 173, 173);
     padding: 0px;
     margin-left: 10px;
     margin-right: 10px;
-    width: 960px;
-    height: 130px;
+    width: 950px;
+    height: 120px;
+}
+
+.grid_background_comm thead {
+    
+    display:block;
+    text-align:left;
+    width: 950px;
+
+}
+
+.grid_background_comm th {
+    
+    padding-left: 4px;
+    width: 950px;
+
+}
+
+.grid_comm {
+    
+    display: block;
+    overflow-y: auto;
+    overflow-x: hidden;
+    text-align: left;
+    width: 950px;
+    height: 115px;
+}
+
+.grid_comm tr {
+
+    background-color: rgb(231, 231, 231);
+    display: block;
+    width: 935px;
+    margin-left: 2px;
+    margin-right: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+
 }
 
 .grid_background_phone {
@@ -74,7 +111,7 @@ p {
     margin-right: 10px;
     margin-bottom: 5px;
     width: 960px;
-    height: 150px;
+    height: 130px;
 }
 
 .grid_header {
@@ -85,6 +122,10 @@ p {
     margin: 0px;
     width: 960px;
     height: 20px;
+}
+
+.toggle_on {
+    background-color: rgb(197, 255, 195);
 }
 
 .status_bar_connected{
