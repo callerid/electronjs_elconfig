@@ -117,6 +117,7 @@ p {
     overflow-y: auto;
     overflow-x: hidden;
     height: 136px;
+    width: 945px;
 }
 
 .grid_background_phone {
@@ -141,16 +142,20 @@ p {
 
 .grid_row_phone {
     background-color: rgb(231, 231, 231);
-    width: 942px;
+    width: 922px;
     padding: 0px;
     margin-left: 2px;
-    border-bottom: 1px solid rgb(44, 44, 44);
-    border-left: 1px solid rgb(44, 44, 44);
-    border-right: 1px solid rgb(44, 44, 44);
+    border: 1px solid rgb(44, 44, 44);
 }
 
 .grid_row_phone td {
     border-right: 1px solid rgb(44, 44, 44);
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin: 0px;
+    text-align: center;
 }
 
 .grid_header_phone {

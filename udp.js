@@ -24,6 +24,7 @@ var last_v_command_reception = "";
 var getting_toggles_flag = false;
 
 var last_call_record_reception = "";
+var last_detailed_record_reception = "";
 
 server3520.on('error', function(error){
 
@@ -75,6 +76,42 @@ server6699.on('message', function(message, remote) {
 
 function check_for_call_record(message)
 {
+    // Detailed call record
+    if(message.length == 52)
+    {
+        var message_str = array_to_ascii(message);
+        message_str = message_str.substr(21, message_str.length - 21);
+
+        // Reset duplicate filtering after max wait time
+        setTimeout(function(){
+            last_detailed_record_reception = "";
+        }, 500);
+
+        // Ignore dups (always - for detailed)
+        if(last_detailed_record_reception == message_str)
+        {
+            return;
+        }
+
+        last_detailed_record_reception = message_str;
+
+        var pattern = /.*(\d\d) ([NFR]) {13}(\d\d\/\d\d) (\d\d:\d\d:\d\d)/;
+        var groups = pattern.exec(message_str);
+
+        if(groups == null) return;
+
+        var ln = groups[1];
+        var type = groups[2];
+        var date = groups[3];
+        var time = groups[4];
+
+        var num = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        var name = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+        write_to_phone(ln, "&nbsp;", type, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", "&nbsp;&nbsp;", "&nbsp;&nbsp;", date, time, num, name, false);
+
+    }
+    
+    // Full call record
     if(message.length == 83)
     {
         // UDP is a call record
@@ -110,8 +147,8 @@ function check_for_call_record(message)
         var rings = groups[6];
         var date = groups[7];
         var time = groups[8];
-        var num = groups[9];
-        var name = groups[10];
+        var num = groups[9].padEnd(14, "&nbsp;");
+        var name = groups[10].padEnd(15, "&nbsp;");
         
         write_to_phone(ln, io, se, dur, cs, rings, date, time, num, name, false);
 
