@@ -141,19 +141,21 @@ p {
 }
 
 .grid_row_phone {
-    background-color: rgb(231, 231, 231);
+    background-color: rgb(255, 255, 255);
     width: 922px;
     padding: 0px;
     margin-left: 2px;
-    border: 1px solid rgb(44, 44, 44);
+    border-left: 1px solid rgb(44, 44, 44);
+    border-right: 1px solid rgb(44, 44, 44);
+    border-bottom: 1px solid rgb(44, 44, 44);
 }
 
 .grid_row_phone td {
-    border-right: 1px solid rgb(44, 44, 44);
-    padding-left: 2px;
-    padding-right: 2px;
+    
     padding-top: 4px;
     padding-bottom: 4px;
+    padding-left: 0px;
+    padding-right: 0px;
     margin: 0px;
     text-align: center;
 }
@@ -166,6 +168,7 @@ p {
     margin: 0px;
     width: 946px;
     height: 20px;
+    text-align: center;
 }
 
 .toggle_on {
