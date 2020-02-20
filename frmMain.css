@@ -144,7 +144,9 @@ p {
     width: 942px;
     padding: 0px;
     margin-left: 2px;
-    border: 1px solid rgb(44, 44, 44);
+    border-bottom: 1px solid rgb(44, 44, 44);
+    border-left: 1px solid rgb(44, 44, 44);
+    border-right: 1px solid rgb(44, 44, 44);
 }
 
 .grid_row_phone td {

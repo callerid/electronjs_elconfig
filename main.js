@@ -59,17 +59,6 @@ const top_menu = [
          }
        ]
     },
-    {
-      label: 'Help',
-       submenu: [
-         {
-           label: 'Change Log'
-         },
-         {
-           label: 'Bound Status'
-         }
-       ]
-    }
  ];
 
 function createWindow () {
