@@ -26,6 +26,8 @@ var getting_toggles_flag = false;
 var last_call_record_reception = "";
 var last_detailed_record_reception = "";
 
+var last_x_command_reception = [];
+
 server3520.on('error', function(error){
 
     console.log('3520 failed to bind.');
@@ -172,6 +174,21 @@ function check_for_x_command(message, remote)
         send_to_ip = remote.address;
         connected_port = remote.port;
 
+        // Actual processing
+        var message_str = array_to_ascii(message);
+        var message_byte = message;
+
+        // Ignore duplicate X commands, as nothing on box has changed
+        if(last_x_command_reception == message_byte)
+        {
+            return;
+        }
+
+        // Update last reception
+        last_x_command_reception = message_byte;
+
+        // Parse all unit settings
+
         console.log("X Command returned.");
     }
 }
@@ -181,7 +198,6 @@ function check_for_v_command(message, remote)
     if(message.length == 57 && !processing_v_command)
     {
         var message_str = array_to_ascii(message);
-        var message_byte = message;
 
         // Do not process duplicates
         var chars_to_remove = 9;
