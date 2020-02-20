@@ -23,6 +23,8 @@ var processing_x_command = false;
 var last_v_command_reception = "";
 var getting_toggles_flag = false;
 
+var last_call_record_reception = "";
+
 server3520.on('error', function(error){
 
     console.log('3520 failed to bind.');
@@ -56,6 +58,7 @@ server3520.on('message', function(message, remote) {
     // Comm command -------------------------------------------------
     check_for_v_command(message, remote);
     check_for_x_command(message, remote);
+    check_for_call_record(message);
     //---------------------------------------------------------------
 
 });
@@ -65,9 +68,55 @@ server6699.on('message', function(message, remote) {
     // Comm command -------------------------------------------------
     check_for_v_command(message, remote);
     check_for_x_command(message, remote);
+    check_for_call_record(message);
     //---------------------------------------------------------------
 
 });
+
+function check_for_call_record(message)
+{
+    if(message.length == 83)
+    {
+        // UDP is a call record
+        var message_str = array_to_ascii(message);
+        message_str = message_str.substr(21, message_str.length - 21);
+
+        // Reset duplicate filtering after max wait time
+        setTimeout(function(){
+            last_call_record_reception = "";
+        }, 1100);
+        
+        // Do not process duplicates
+        if(document.getElementById('ckbIgnoreDups').checked)
+        {
+            if(last_call_record_reception == message_str)
+            {
+                return;
+            }
+        }
+                
+        last_call_record_reception = message_str;
+
+        var pattern = /.*(\d\d) ([IO]) ([ESB]) (\d{4}) ([GB]) (.\d) (\d\d\/\d\d) (\d\d:\d\d [AP]M) (.{8,15})(.*)/;
+        var groups = pattern.exec(message_str);
+
+        if(groups == null) return;
+
+        var ln = groups[1];
+        var io = groups[2];
+        var se = groups[3];
+        var dur = groups[4];
+        var cs = groups[5];
+        var rings = groups[6];
+        var date = groups[7];
+        var time = groups[8];
+        var num = groups[9];
+        var name = groups[10];
+        
+        write_to_phone(ln, io, se, dur, cs, rings, date, time, num, name, false);
+
+    }
+}
 
 function check_for_x_command(message, remote)
 {

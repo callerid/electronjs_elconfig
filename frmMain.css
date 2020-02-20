@@ -116,6 +116,7 @@ p {
 .grid_phone {
     overflow-y: auto;
     overflow-x: hidden;
+    height: 136px;
 }
 
 .grid_background_phone {
@@ -143,6 +144,11 @@ p {
     width: 942px;
     padding: 0px;
     margin-left: 2px;
+    border: 1px solid rgb(44, 44, 44);
+}
+
+.grid_row_phone td {
+    border-right: 1px solid rgb(44, 44, 44);
 }
 
 .grid_header_phone {

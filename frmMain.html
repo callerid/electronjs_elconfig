@@ -29,16 +29,16 @@
                 var template_text = `
                 <table id="gv_phone_row_id_xxx" class="grid_row_phone">
                     <tr>
-                    <td style="width:20px;">Ln</td>
-                    <td style="width:20px;">IO</td>
-                    <td style="width:20px;">SE</td>
-                    <td style="width:20px;">Dur</td>
-                    <td style="width:20px;">CS</td>
-                    <td style="width:20px;">Rings</td>
-                    <td style="width:50px;">Date</td>
-                    <td style="width:70px;">Time</td>
-                    <td style="padding-left: 20px; width: 353px;">Number</td>
-                    <td style="border:none; width: 353px;">Name</td>
+                    <td style="width:21px;">Ln</td>
+                    <td style="width:25px;">IO</td>
+                    <td style="width:28px;">SE</td>
+                    <td style="width:30px;">Dur</td>
+                    <td style="width:26px;">CS</td>
+                    <td style="width:46px;">Rings</td>
+                    <td style="width:46px;">Date</td>
+                    <td style="width:68px;">Time</td>
+                    <td style="padding-left: 20px; width: 320px;">Number</td>
+                    <td style="border:none; width: 323px;">Name</td>
                     </tr>
                 </table>
                 `;
@@ -357,9 +357,8 @@
             });
 
             $('#btnClearPhoneData').on('click', function(){
-                write_to_phone(01,"I","S","0001","G", "02", "02/19", "12:00 AM", "706-889-3199", "Samuel Penland");
+                write_to_phone("", "", "", "", "", "", "", "", "", "", true);
             });
-
 
         });
 
@@ -380,7 +379,7 @@
                     </td>
                     <td>
                         <label for="ckbIgnoreDups">
-                            <input type="checkbox" id="ckbIgnoreDups"/>Ignore Dups
+                            <input type="checkbox" id="ckbIgnoreDups" checked="true"/>Ignore Dups
                         </label>
                     </td>
                 </tr>
@@ -542,12 +541,12 @@
                   <td style="width:20px;">Ln</td>
                   <td style="width:20px;">IO</td>
                   <td style="width:20px;">SE</td>
-                  <td style="width:20px;">Dur</td>
+                  <td style="width:35px;">Dur</td>
                   <td style="width:20px;">CS</td>
                   <td style="width:20px;">Rings</td>
                   <td style="width:50px;">Date</td>
                   <td style="width:70px;">Time</td>
-                  <td style="padding-left: 20px; width: 353px;">Number</td>
+                  <td style="padding-left: 20px; width: 343px;">Number</td>
                   <td style="border:none; width: 353px;">Name</td>
                 </tr>
             </table>
