@@ -188,6 +188,59 @@ function check_for_x_command(message, remote)
         last_x_command_reception = message_byte;
 
         // Parse all unit settings
+        var unit_number = "";
+        for(var i = 4; i < 10; i++)
+        {
+            unit_number += message_byte[i].toString();
+        }
+        $("#tbUnitNumber").val(unit_number);
+        
+        var unit_ip = "";
+        for(var i = 33; i < 37; i++)
+        {
+            unit_ip += message_byte[i].toString() + ".";
+        }
+        unit_ip = unit_ip.substr(0, unit_ip.length - 1);
+        $("#tbUnitIP").val(unit_ip);
+
+        var unit_mac = "";
+        for(var i = 24; i < 30; i++)
+        {
+            unit_mac += message_byte[i].toString(16).padStart(2, '0') + ":";
+        }
+        unit_mac = unit_mac.substr(0, unit_mac.length - 1);
+        $("#tbUnitMAC").val(unit_mac);
+
+        var dest_port = "";
+        for (var i = 52; i <= 53; i++)
+        {
+            var int_value = message_byte[i];
+            var hex_value = int_value.toString(16).padStart(2, '0');
+            dest_port += hex_value;
+        }
+        dest_port = parseInt(dest_port, 16);
+        $("#tbDestPort").val(dest_port);
+
+        var dest_ip = "";
+        for(var i = 40; i < 44; i++)
+        {
+            dest_ip += message_byte[i].toString() + ".";
+        }
+        dest_ip = dest_ip.substr(0, dest_ip.length - 1);
+        $("#tbDestIP").val(dest_ip);
+
+        var dest_mac = "";
+        for(var i = 66; i < 72; i++)
+        {
+            dest_mac += message_byte[i].toString(16).toUpperCase().padStart(2, '0') + ":";
+        }
+        dest_mac = dest_mac.substr(0, dest_mac.length - 1);
+        $("#tbDestMAC").val(dest_mac);
+
+        var dups = "";
+        
+
+        console.log(message_byte);
 
         console.log("X Command returned.");
     }
@@ -231,7 +284,7 @@ function check_for_v_command(message, remote)
         var toggle_start = message_str.toUpperCase().indexOf('E');
         var t_chars_to_remove = 20;
         var toggles = message_str.substr(toggle_start, message_str.length - toggle_start - t_chars_to_remove);
-        console.log(message_str);
+        
         // Update toggles EcXudASoBKT
         var t_c = toggles[1];
         var t_u = toggles[3];

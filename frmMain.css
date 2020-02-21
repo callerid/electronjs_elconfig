@@ -32,6 +32,10 @@ p {
 
 }
 
+.edit_settings input {
+    padding-left: 5px;
+}
+
 .top_header {
 
     margin-left: 540px;
@@ -93,7 +97,7 @@ p {
 
 .grid_comm tr {
 
-    background-color: rgb(231, 231, 231);
+    background-color: rgb(255, 255, 255);
     display: block;
     width: 935px;
     margin-left: 3px;
