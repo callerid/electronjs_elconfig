@@ -1,9 +1,8 @@
 const dgram = require('dgram');
 const os = require('os');
 
-var socket = dgram.createSocket('udp4');
-var server3520 = dgram.createSocket('udp4');
-var server6699 = dgram.createSocket('udp4');
+var server3520 = dgram.createSocket({type:"udp4", reuseAddr:true});
+var server6699 = dgram.createSocket({type:"udp4", reuseAddr:true});
 
 const HOST = '0.0.0.0';
 var bound3520 = false;
@@ -545,11 +544,35 @@ function send_udp_string(to_send_str, port, ip)
 {
     // Send via UDP port
     console.log('Sending: ' + to_send_str + " on: " + port + " to: " + ip);
-    socket.send(Buffer.from(to_send_str), port, ip, function(err){
+    
+    switch(port)
+    {
+        case 3520:
 
-        if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+            server3520.send(Buffer.from(to_send_str), port, ip, function(err){
 
-    });
+                if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+        
+            });
+
+        break;
+
+        case 6699:
+
+            server6699.send(Buffer.from(to_send_str), port, ip, function(err){
+
+                if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+        
+            });
+
+        break;
+
+        default:
+
+            // Non typical UDP send port
+
+        break;
+    }
 
 }
 
