@@ -123,6 +123,11 @@ p {
 
 }
 
+.custom_input {
+    border: 1px solid rgb(44, 44, 44);
+    width: 80px;
+}
+
 .grid_background_comm {
 
     background-color: rgb(173, 173, 173);
