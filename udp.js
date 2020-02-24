@@ -204,13 +204,13 @@ function check_for_x_command(message, remote)
             cnt++;
         }
 
-        var unit_mac = "";
+        cnt = 1;
         for(var i = 24; i < 30; i++)
         {
-            unit_mac += message_byte[i].toString(16).padStart(2, '0') + ":";
-        }
-        unit_mac = unit_mac.substr(0, unit_mac.length - 1);
-        $("#tbUnitMAC").val(unit_mac);
+            var part = message_byte[i].toString(16).padStart(2, '0');
+            $("#tbUnitMAC_" + cnt).val(part);
+            cnt++;
+        }        
 
         var dest_port = "";
         for (var i = 52; i <= 53; i++)
@@ -222,21 +222,21 @@ function check_for_x_command(message, remote)
         dest_port = parseInt(dest_port, 16);
         $("#tbDestPort").val(dest_port);
 
-        var dest_ip = "";
+        cnt = 1;
         for(var i = 40; i < 44; i++)
         {
-            dest_ip += message_byte[i].toString() + ".";
+            var part = message_byte[i].toString();
+            $("#tbDestIP_" + cnt).val(part);
+            cnt++;
         }
-        dest_ip = dest_ip.substr(0, dest_ip.length - 1);
-        $("#tbDestIP").val(dest_ip);
 
-        var dest_mac = "";
+        cnt = 1;
         for(var i = 66; i < 72; i++)
         {
-            dest_mac += message_byte[i].toString(16).toUpperCase().padStart(2, '0') + ":";
+            var part = message_byte[i].toString(16).toUpperCase().padStart(2, '0');
+            $("#tbDestMAC_" + cnt).val(part);
+            cnt++;
         }
-        dest_mac = dest_mac.substr(0, dest_mac.length - 1);
-        $("#tbDestMAC").val(dest_mac);
 
         var dups = "";
         dups = message_byte[75].toString();

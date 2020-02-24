@@ -41,7 +41,7 @@ p {
 
     padding-left: 10px; 
     padding-right: 15px;
-    padding-top: 0px;
+    padding-top: 10px;
     padding-bottom: 0px;
     vertical-align: text-top;
 
@@ -64,11 +64,32 @@ p {
   
 .input_ip input {
 
-    border-bottom: 1px solid rgb(44, 44, 44);
-    border-top: none;
-    border-right: none;
-    border-left: none;
+    border: none;
     width:24px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0px;
+    text-align: center;
+
+}
+
+.input_mac {
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(52, 57, 58);
+    display:block;
+    padding: 2px;
+    margin: 0px;
+    width: 170px;
+
+}
+  
+.input_mac input {
+
+    border: none;
+    width:14px;
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 2px;
