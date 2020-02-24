@@ -29,6 +29,7 @@ p {
     padding-top: 15px;
     padding-bottom: 0px;
     height: 220px;
+    width: 555px;
 
 }
 
@@ -36,14 +37,28 @@ p {
     padding-left: 5px;
 }
 
+.info_area {
+
+    padding-left: 10px; 
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    vertical-align: text-top;
+
+}
+
+.info_area p {
+    line-height: 16px;
+}
+
 .input_ip {
 
     background-color: rgb(255, 255, 255);
     border: 1px solid rgb(52, 57, 58);
     display:block;
-    text-align: center;
     padding: 2px;
     margin: 0px;
+    width: 150px;
 
 }
   
@@ -218,20 +233,6 @@ p {
     background-color: rgb(199, 150, 150);
     height: 30px;
     width: 100%;
-}
-
-.info_area {
-
-    padding-left: 10px; 
-    padding-right: 15px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    vertical-align: text-top;
-
-}
-
-.info_area p {
-    line-height: 16px;
 }
 
 [type="checkbox"]

@@ -43,6 +43,7 @@ server6699.on('error', function(error){
 server3520.on('listening', function() {
 
     bound3520 = true;
+    server3520.setBroadcast(true);
     var address = server3520.address();
     console.log('UDP Server listening on ' + address.address + ':' + address.port);
 
@@ -51,6 +52,7 @@ server3520.on('listening', function() {
 server6699.on('listening', function() {
 
     bound6699 = true;
+    server6699.setBroadcast(true);
     var address = server6699.address();
     console.log('UDP Server listening on ' + address.address + ':' + address.port);
 
