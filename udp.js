@@ -195,13 +195,13 @@ function check_for_x_command(message, remote)
         }
         $("#tbUnitNumber").val(unit_number);
         
-        var unit_ip = "";
+        var cnt = 1;
         for(var i = 33; i < 37; i++)
         {
-            unit_ip += message_byte[i].toString() + ".";
+            var part = message_byte[i].toString();
+            $("#tbUnitIP_" + cnt).val(part);
+            cnt++;
         }
-        unit_ip = unit_ip.substr(0, unit_ip.length - 1);
-        $("#tbUnitIP").val(unit_ip);
 
         var unit_mac = "";
         for(var i = 24; i < 30; i++)
@@ -238,7 +238,9 @@ function check_for_x_command(message, remote)
         $("#tbDestMAC").val(dest_mac);
 
         var dups = "";
-        
+        dups = message_byte[75].toString();
+        $("#lbDups").text(dups);
+
 
         console.log(message_byte);
 
@@ -248,6 +250,7 @@ function check_for_x_command(message, remote)
 
 function check_for_v_command(message, remote)
 {
+    console.log(array_to_ascii(message));
     if(message.length == 57 && !processing_v_command)
     {
         var message_str = array_to_ascii(message);

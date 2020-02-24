@@ -83,7 +83,7 @@ function createWindow () {
   win.loadFile('frmMain.html');
   
   // Uncomment below for JS debugging
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
 }
 

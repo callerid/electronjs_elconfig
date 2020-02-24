@@ -36,6 +36,33 @@ p {
     padding-left: 5px;
 }
 
+.input_ip {
+
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(52, 57, 58);
+    display:block;
+    text-align: center;
+    padding: 2px;
+    margin: 0px;
+
+}
+  
+.input_ip input {
+
+    border-bottom: 1px solid rgb(44, 44, 44);
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    width:24px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 0px;
+    text-align: center;
+
+}
+
 .top_header {
 
     margin-left: 540px;

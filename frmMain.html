@@ -351,6 +351,10 @@
 
             });
 
+            $('#btnV').on('click', function(){
+                // v Command
+            });
+
             $('#btnClearCommData').on('click', function(){
 
                 write_to_comm("", true);
@@ -413,7 +417,16 @@
                             <p align="right"><b>Unit IP: </b></p>
                         </td>
                         <td>
-                            <input type="text" id = "tbUnitIP"/><br/>
+                            
+                            <div class="input_ip">
+
+                                <input type="text" maxlength="3" id="tbUnitIP_1"/> .
+                                <input type="text" maxlength="3" id="tbUnitIP_2"/> .
+                                <input type="text" maxlength="3" id="tbUnitIP_3"/> .
+                                <input type="text" maxlength="3" id="tbUnitIP_4"/>
+                            
+                            </div>
+
                         </td>
                         <td style="width:100px;">
                             <input type="button" width="80px" id="btnSuggestIP" value="Set IP to Suggested"/><br/>
@@ -487,13 +500,10 @@
                 Communication Data &nbsp;<input type="button" id="btnClearCommData" value="Clear"/>
             </td>
 
-            <!-- Production uses -->
+            <!-- Locked commands -->
 
             <td style="width: 300px;">
-                <input type="button" id="btnClockingConfig" value="Blocking Config"/>
-                <input type="button" id="btnQ" value="Q"/>
-                <input type="button" id="btnJ" value="J"/>
-                <input type="button" id="btnR" value="R"/>
+                <input type="button" id="btnV" value="v"/>
             </td>
 
             <!--------------------->
