@@ -40,7 +40,10 @@ const top_menu = [
       label: 'Tools',
        submenu: [
          {
-           label: 'Computer MAC / IP Address'
+           label: 'Computer MAC / IP Address',
+           click(item, focused_window){
+             focused_window.webContents.executeJavaScript("open_computer_info()");
+           }
          },
          {
            label: 'Ping'
@@ -59,7 +62,7 @@ const top_menu = [
          }
        ]
     },
- ];
+];
 
 function createWindow () {
   

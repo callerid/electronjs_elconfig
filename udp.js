@@ -12,6 +12,8 @@ var connected_port = 0;
 var found_unit = false;
 var is_deluxe_unit = false;
 var all_known_pc_ips = [];
+var computer_info_ip;
+var computer_info_mac;
 var all_subnets = [];
 var send_to_ip = '';
 var ping_alternator = 0;
@@ -188,6 +190,9 @@ function check_for_x_command(message, remote)
         // Update last reception
         last_x_command_reception = message_byte;
 
+        // Computer Info
+        handle_computer_info();
+
         // Parse all unit settings
         var unit_number = "";
         for(var i = 4; i < 10; i++)
@@ -251,7 +256,7 @@ function check_for_x_command(message, remote)
 
 function check_for_v_command(message, remote)
 {
-    console.log(array_to_ascii(message));
+    
     if(message.length == 57 && !processing_v_command)
     {
         var message_str = array_to_ascii(message);
@@ -574,6 +579,86 @@ function send_udp_string(to_send_str, port, ip)
         break;
     }
 
+}
+
+function handle_computer_info()
+{
+    determine_computer_info();
+    
+    info_content_unit_ip = info_content_unit_ip.replace("[computer_ip]", "<b>" + computer_info_ip + "</b>");
+
+    var suggested_ip_parts = computer_info_ip.split('.');
+    var suggested_ip = suggested_ip_parts[0] + "." + suggested_ip_parts[1] + "." + suggested_ip_parts[2] + ".90";
+    info_content_unit_ip = info_content_unit_ip.replace("[suggested_ip]", "<b>" + suggested_ip + "</b>");
+
+    // Populate popup Computer Info
+    $("#pWin_computer_info_com_ip").text(computer_info_ip);
+    $("#pWin_computer_info_com_mac").text(computer_info_mac);
+}
+
+function determine_computer_info()
+{
+    
+    if(all_known_pc_ips.length == 1)
+    {
+        computer_info_ip = all_known_pc_ips[0];
+        computer_info_mac = get_mac_of_ip(computer_info_ip);
+        return;
+    }
+
+    if(all_known_pc_ips.length == 0) return;
+
+    if(send_to_ip.length == 0)
+    {
+        computer_info_ip = all_known_pc_ips[0];
+        computer_info_mac = get_mac_of_ip(computer_info_ip);
+        return;
+    }
+
+    // More than one ethernet card on pc so find closest match
+    var best_rating = 0;
+    var best_pick_for_ip = all_known_pc_ips[0];
+    all_known_pc_ips.forEach(function(ip){
+
+        var rating = ip_match_rating(ip, send_to_ip);
+
+        if(rating > best_rating)
+        {
+            best_rating = rating;
+            best_pick_for_ip = ip;
+        }
+
+    });
+
+    computer_info_ip = best_pick_for_ip;
+    computer_info_mac = get_mac_of_ip(best_pick_for_ip);
+
+}
+
+function ip_match_rating(ip_1, ip_2)
+{
+    var ip_1_parts = ip_1.split('.');
+    var ip_2_parts = ip_2.split('.');
+    var rating = 0;
+
+    for(var i=0; i < ip_1_parts.length; i++)
+    {
+        if(parseInt(ip_1_parts[i]) == parseInt(ip_2_parts[i]))
+        {
+            rating++;
+        }
+        else
+        {
+            return rating;
+        }
+    }
+
+    return rating;
+}
+
+function get_mac_of_ip(this_ip)
+{
+    return "11-11-11-11-11-11";
 }
 
 function send_udp_string_and_bytes(to_send_str, to_send_bytes, ip)

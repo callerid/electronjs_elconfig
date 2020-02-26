@@ -107,9 +107,39 @@
             $('#gv_comm_data').scrollTop(rowpos.top);
         }
 
+        // --------------------------------------------------
+        //                 Popups/Windows
+        // --------------------------------------------------
+        var pWin_computer_info = null;
+        function open_computer_info()
+        {
+            pWin_computer_info = $("#pWin_computer_info").dialog({
+                    autoOpen: false,
+                    width: 500,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_computer_info.dialog('open');
+        }
+        // ------------------------------------------------------------
+        var info_content_unit_ip = `
+            Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
+        `;
         $(document).ready(function(){
             
+            // Clear comm data
             write_to_comm("", true);
+
+            // Populate computer info
+            handle_computer_info();
 
             // --------------------------------------------------------
             // Check bound status
@@ -165,6 +195,8 @@
                     }
             });
 
+            // --------------------------------------------------
+
             if(get_bound_status(3520) && get_bound_status(6699))
             {
                 $('#lbBoundTo').text("Bound: 3520 & 6699");
@@ -204,10 +236,6 @@
 
             let info_content_unit_number = `
                 Some applications use unit numbers to match data arriving from multiple units.
-            `;
-
-            let info_content_unit_ip = `
-                Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
             `;
 
             let info_content_dest_port = `
@@ -363,6 +391,11 @@
 
             $('#btnClearPhoneData').on('click', function(){
                 write_to_phone("", "", "", "", "", "", "", "", "", "", true);
+            });
+
+            // ----------- Popups/Windows -------------------
+            $("#pWin_computer_info_btnClose").on('click', function(){
+                pWin_computer_info.dialog('close');
             });
 
         });
@@ -637,4 +670,55 @@
 <div id="bind_warning_3520_6699" title="Bind Failure">
     <p style="padding-top: 10px;">Failed to bind to 3520 and 6699, ports already in use.</p>
 </div>
+<!-------------------------------------------------------->
+<!--                 Popups/Windows                     -->
+<!-------------------------------------------------------->
+
+<div id="pWin_computer_info" style="background-color: rgb(244, 252, 253);">
+
+    <center>
+        <table>
+        
+            <tr>
+            
+                <td style="padding-top:20px;text-align:center;padding-right:10px;">
+                
+                <b>Computer IP</b><br/>
+                <span id="pWin_computer_info_com_ip">0.0.0.0</span><br/>
+                <br/>
+                <b>Computer MAC</b><br/>
+                <span id="pWin_computer_info_com_mac">00-00-00-00-00-00</span>
+                
+                </td>
+                
+                <td style="padding-top:5px;">
+                
+                    <center>
+                        <b>Set Destination</b>
+                        <br/>
+                        <input style="margin-bottom:5px;margin-top:10px;" type="button" id="pWin_computer_info_btnSetToComputer" value="Set to this Computer"/>
+                        <br/>
+                        <input type="button" id="pWin_computer_info_btnSetToBroadcast" value="Set to Broadcast"/>
+                        <br/><br/>
+                        <input type="button" id="pWin_computer_info_btnClose" value="Close"/>
+                    </center>
+                
+                </td>
+                
+                <td style="padding-top:20px;text-align:center;padding-left:10px;">
+                
+                <b>Destination IP</b><br/>
+                <span id="pWin_computer_info_dest_ip">0.0.0.0</span><br/>
+                <br/>
+                <b>Destination MAC</b><br/>
+                <span id="pWin_computer_info_dest_mac">00-00-00-00-00-00</span>
+                
+                </td>
+            
+            </tr>
+        
+        </table>
+    </center>
+</div>
+
 <!-------------------------------------------------------->
