@@ -111,6 +111,25 @@
         //                 Popups/Windows
         // --------------------------------------------------
         var pWin_computer_info = null;
+        var pWin_duplicates = null;
+        function open_duplicates()
+        {
+            pWin_duplicates = $("#pWin_duplicates").dialog({
+                    autoOpen: false,
+                    width: 400,
+                    height: 330,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_duplicates.dialog('open');  
+        }
         function open_computer_info()
         {
             pWin_computer_info = $("#pWin_computer_info").dialog({
@@ -438,10 +457,10 @@
                             <p align="right"><b>Unit Number: </b></p>
                         </td>
                         <td style="width:100px;">
-                            <input type="text" id="tbUnitNumber" maxlength="6" class="custom_input"/><br/>
+                            <input type="text" id="tbUnitNumber" disabled="true" maxlength="6" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
-                            <input type="button" width="80px" id="btnChangeUnitNumber" value="Change"/><br/>
+                            <button width="80px" id="btnChangeUnitNumber">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -451,18 +470,18 @@
                         </td>
                         <td>
                             
-                            <div class="input_ip">
+                            <div class="input_ip" disabled="true">
 
-                                <input type="text" maxlength="3" id="tbUnitIP_1"/> .
-                                <input type="text" maxlength="3" id="tbUnitIP_2"/> .
-                                <input type="text" maxlength="3" id="tbUnitIP_3"/> .
-                                <input type="text" maxlength="3" id="tbUnitIP_4"/>
+                                <input type="text" maxlength="3" disabled="true" id="tbUnitIP_1"/> .
+                                <input type="text" maxlength="3" disabled="true" id="tbUnitIP_2"/> .
+                                <input type="text" maxlength="3" disabled="true" id="tbUnitIP_3"/> .
+                                <input type="text" maxlength="3" disabled="true" id="tbUnitIP_4"/>
                             
                             </div>
 
                         </td>
-                        <td style="width:100px;">
-                            <input type="button" width="80px" id="btnSuggestIP" value="Set IP to Suggested"/><br/>
+                        <td style="width:165px;">
+                            <button id="btnSuggestIP">Set to Suggested IP <span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -472,14 +491,14 @@
                         </td>
                         <td>
                             
-                            <div class="input_mac">
+                            <div class="input_mac" disabled="true">
 
-                                <input type="text" id="tbUnitMAC_1"/> -
-                                <input type="text" id="tbUnitMAC_2"/> -
-                                <input type="text" id="tbUnitMAC_3"/> -
-                                <input type="text" id="tbUnitMAC_4"/> -
-                                <input type="text" id="tbUnitMAC_5"/> -
-                                <input type="text" id="tbUnitMAC_6"/>
+                                <input type="text" disabled="true" id="tbUnitMAC_1"/> -
+                                <input type="text" disabled="true" id="tbUnitMAC_2"/> -
+                                <input type="text" disabled="true" id="tbUnitMAC_3"/> -
+                                <input type="text" disabled="true" id="tbUnitMAC_4"/> -
+                                <input type="text" disabled="true" id="tbUnitMAC_5"/> -
+                                <input type="text" disabled="true" id="tbUnitMAC_6"/>
                             
                             </div>
 
@@ -491,10 +510,10 @@
                             <p align="right"><b>Destination Port: </b></p>
                         </td>
                         <td>
-                            <input type="text" id="tbDestPort" class="custom_input"/><br/>
+                            <input type="text" id="tbDestPort" disabled="true" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
-                            <input type="button" width="80px" id="btnChangeDestPort" value="Change"/><br/>
+                            <button width="80px" id="btnChangeDestPort">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -504,18 +523,18 @@
                         </td>
                         <td>
                             
-                            <div class="input_ip">
+                            <div class="input_ip" disabled="true">
 
-                                <input type="text" maxlength="3" id="tbDestIP_1"/> .
-                                <input type="text" maxlength="3" id="tbDestIP_2"/> .
-                                <input type="text" maxlength="3" id="tbDestIP_3"/> .
-                                <input type="text" maxlength="3" id="tbDestIP_4"/>
+                                <input type="text" disabled="true" maxlength="3" id="tbDestIP_1"/> .
+                                <input type="text" disabled="true" maxlength="3" id="tbDestIP_2"/> .
+                                <input type="text" disabled="true" maxlength="3" id="tbDestIP_3"/> .
+                                <input type="text" disabled="true" maxlength="3" id="tbDestIP_4"/>
                             
                             </div>
 
                         </td>
                         <td style="width:100px;">
-                            <input type="button" width="80px" id="btnChangeDestIP" value="Change"/><br/>
+                            <button width="80px" id="btnChangeDestIP">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -525,20 +544,20 @@
                         </td>
                         <td>
                             
-                            <div class="input_mac">
+                            <div class="input_mac" disabled="true">
 
-                                <input type="text" id="tbDestMAC_1"/> -
-                                <input type="text" id="tbDestMAC_2"/> -
-                                <input type="text" id="tbDestMAC_3"/> -
-                                <input type="text" id="tbDestMAC_4"/> -
-                                <input type="text" id="tbDestMAC_5"/> -
-                                <input type="text" id="tbDestMAC_6"/>
+                                <input type="text" disabled="true" id="tbDestMAC_1"/> -
+                                <input type="text" disabled="true" id="tbDestMAC_2"/> -
+                                <input type="text" disabled="true" id="tbDestMAC_3"/> -
+                                <input type="text" disabled="true" id="tbDestMAC_4"/> -
+                                <input type="text" disabled="true" id="tbDestMAC_5"/> -
+                                <input type="text" disabled="true" id="tbDestMAC_6"/>
                             
                             </div>
 
                         </td>
                         <td style="width:100px;">
-                            <input type="button" width="80px" id="btnChangeDestMAC" value="Change"/><br/>
+                            <button width="80px" id="btnChangeDestMAC">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
 
@@ -673,15 +692,45 @@
 <!-------------------------------------------------------->
 <!--                 Popups/Windows                     -->
 <!-------------------------------------------------------->
+<div id="pWin_duplicates" title="Duplicate Call Records" class="hidden">
 
-<div id="pWin_computer_info" style="background-color: rgb(244, 252, 253);">
+    <p>This option sends duplicate packets for each call record.</p>
+    <p>Normally used for wireless tablets which routinely ignore UDP broadcast packets when busy with other processes.</p>
+    <p>Setting this number to 8 should increase throughput to well above 99%.  Sending more duplicates than necessary may actually decrease throughput.</p>
+    <br/><br/>
+
+    <center>
+        Number of Packets sent: <input type="number" style="width: 50px;text-align: center;" id="pWin_duplicates_dups"/>
+
+        <br/><br/>
+        <p><span style="color:red">
+            The Caller ID capture routine within your application must
+            be able to ignore duplicate call records received.
+        </span></p>
+    </center>
+    <br/>
+
+    <table>
+        <tr>
+            <td style="padding-left: 0px;">
+                <button id="pWin_duplicates_btnCancel">Cancel <span class="ui-icon ui-icon-close"></span></button>
+            </td>
+            <td style="float:right;">
+                <button id="pWin_duplicates_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
+<div id="pWin_computer_info" title="Computer IP & MAC Address" class="hidden">
 
     <center>
         <table>
         
             <tr>
             
-                <td style="padding-top:20px;text-align:center;padding-right:10px;">
+                <td style="padding-top:20px;text-align:center;padding-right:40px;">
                 
                 <b>Computer IP</b><br/>
                 <span id="pWin_computer_info_com_ip">0.0.0.0</span><br/>
@@ -696,16 +745,16 @@
                     <center>
                         <b>Set Destination</b>
                         <br/>
-                        <input style="margin-bottom:5px;margin-top:10px;" type="button" id="pWin_computer_info_btnSetToComputer" value="Set to this Computer"/>
+                        <button style="width:150px;margin-bottom:5px;margin-top:10px;" id="pWin_computer_info_btnSetToComputer">Set to this Computer</button><span class="ui-icon ui-icon-radio-off"></span>
                         <br/>
-                        <input type="button" id="pWin_computer_info_btnSetToBroadcast" value="Set to Broadcast"/>
+                        <button style="width:150px;" id="pWin_computer_info_btnSetToBroadcast">Set to Broadcast</button><span class="ui-icon ui-icon-radio-on"></span>
                         <br/><br/>
-                        <input type="button" id="pWin_computer_info_btnClose" value="Close"/>
+                        <button id="pWin_computer_info_btnClose">Close <span class="ui-icon ui-icon-close"></span></button>
                     </center>
                 
                 </td>
                 
-                <td style="padding-top:20px;text-align:center;padding-left:10px;">
+                <td style="padding-top:20px;text-align:center;padding-left:40px;">
                 
                 <b>Destination IP</b><br/>
                 <span id="pWin_computer_info_dest_ip">0.0.0.0</span><br/>

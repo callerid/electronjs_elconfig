@@ -26,7 +26,10 @@ const top_menu = [
              type: 'separator'
           },
           {
-            label: 'Set Duplicate Call Records'
+            label: 'Set Duplicate Call Records',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_duplicates()");
+            }
           },
           {
             type: 'separator'
@@ -86,7 +89,7 @@ function createWindow () {
   win.loadFile('frmMain.html');
   
   // Uncomment below for JS debugging
-  win.webContents.openDevTools()
+  //win.webContents.openDevTools()
 
 }
 
