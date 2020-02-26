@@ -20,7 +20,10 @@ const top_menu = [
             label: 'Set Deluxe Unit to Basic Unit'
           },
           {
-            label: 'Set Line Count'
+            label: 'Set Line Count',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_line_count()");
+            }
           },
           {
              type: 'separator'
@@ -35,7 +38,10 @@ const top_menu = [
             type: 'separator'
           },
           {
-            label: 'Listening Port'
+            label: 'Listening Port',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_listening_port()");
+            }
           },
        ],
     },
@@ -49,7 +55,10 @@ const top_menu = [
            }
          },
          {
-           label: 'Ping'
+           label: 'Ping',
+           click(item, focused_window){
+            focused_window.webContents.executeJavaScript("open_ping()");
+          }
          },
          {
             type: 'separator'

@@ -112,6 +112,66 @@
         // --------------------------------------------------
         var pWin_computer_info = null;
         var pWin_duplicates = null;
+        var pWin_line_count = null;
+        var pWin_listening_port = null;
+        var pWin_ping = null;
+
+        function open_ping()
+        {
+            pWin_ping = $("#pWin_ping").dialog({
+                    autoOpen: false,
+                    width: 350,
+                    height: 80,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_ping.dialog('open');
+        }
+
+        function open_listening_port()
+        {
+            pWin_listening_port = $("#pWin_listening_port").dialog({
+                    autoOpen: false,
+                    width: 450,
+                    height: 190,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_listening_port.dialog('open');
+        }
+        function open_line_count()
+        {
+            pWin_line_count = $("#pWin_line_count").dialog({
+                    autoOpen: false,
+                    width: 235,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_line_count.dialog('open');
+        }
+
         function open_duplicates()
         {
             pWin_duplicates = $("#pWin_duplicates").dialog({
@@ -460,7 +520,7 @@
                             <input type="text" id="tbUnitNumber" disabled="true" maxlength="6" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeUnitNumber">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
+                            <button width="80px" id="btnChangeUnitNumber">Change<span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -481,7 +541,7 @@
 
                         </td>
                         <td style="width:165px;">
-                            <button id="btnSuggestIP">Set to Suggested IP <span class="ui-icon ui-icon-locked"></span></button><br/>
+                            <button id="btnSuggestIP">Set to Suggested IP<span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -513,7 +573,7 @@
                             <input type="text" id="tbDestPort" disabled="true" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestPort">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
+                            <button width="80px" id="btnChangeDestPort">Change<span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -534,7 +594,7 @@
 
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestIP">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
+                            <button width="80px" id="btnChangeDestIP">Change<span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
             
@@ -557,7 +617,7 @@
 
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestMAC">Change <span class="ui-icon ui-icon-locked"></span></button><br/>
+                            <button width="80px" id="btnChangeDestMAC">Change<span class="ui-icon ui-icon-locked"></span></button><br/>
                         </td>
                     </tr>
 
@@ -692,6 +752,62 @@
 <!-------------------------------------------------------->
 <!--                 Popups/Windows                     -->
 <!-------------------------------------------------------->
+<div id="pWin_ping" title="Ping IP Address" class="hidden">
+
+    <center>
+        Ping This IP:
+        <div class="input_ip" style="display:inline;margin-right:5px;">
+
+            <input type="text" maxlength="3" id="pWin_ping_1" value="255"/> .
+            <input type="text" maxlength="3" id="pWin_ping_2" value="255"/> .
+            <input type="text" maxlength="3" id="pWin_ping_3" value="255"/> .
+            <input type="text" maxlength="3" id="pWin_ping_4" value="255"/>
+
+        </div>
+
+        <button id="pWin_ping_btnPing">Ping <span class="ui-icon ui-icon-arrowthick-1-e"></span></button>
+    </center>
+
+</div>
+
+<div id="pWin_listening_port" title="Set ELConfig Listening Port" class="hidden">
+
+    <div style="color:red;padding-left:15px;padding-right:15px;padding-top:15px;">
+    
+        By default, ELConfig listens to Network ports 3520 and 6699.<br/> 
+        If the unit has previously been set to a different Network port, 
+        you must specify the listening port in order to communicate.
+    
+    </div>
+    <br/><br/>
+
+    <center>
+        ELConfig Listening Port: <input type="number" style="width:80px;padding-right:5px;text-align:center;" id="pWin_listening_port_port" value="3520"/>
+        <button id="pWin_listening_port_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
+    </center>
+
+</div>
+
+<div id="pWin_line_count" title="Set Line Count" class="hidden">
+
+    <p>Current Starting Line Count: <span style="font-weight:bold;" id="pWin_line_count_current_count">01</span></p>
+    <br/>
+    Reset Line Count To: <input type="number" style="width:60px;text-align:center;" id="pWin_line_count_set_to" value="1">
+    <br/><br/>
+
+    <table>
+        <tr>
+            <td style="padding-left: 0px;">
+                <button id="pWin_line_count_btnCancel">Cancel <span class="ui-icon ui-icon-close"></span></button>
+            </td>
+            <td style="float:right;">
+                <button id="pWin_line_count_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
+            </td>
+        </tr>
+    </table>
+
+</div>
+
 <div id="pWin_duplicates" title="Duplicate Call Records" class="hidden">
 
     <p>This option sends duplicate packets for each call record.</p>
@@ -700,7 +816,7 @@
     <br/><br/>
 
     <center>
-        Number of Packets sent: <input type="number" style="width: 50px;text-align: center;" id="pWin_duplicates_dups"/>
+        Number of Packets sent: <input type="number" style="width: 50px;text-align: center;" id="pWin_duplicates_dups" value="8"/>
 
         <br/><br/>
         <p><span style="color:red">
