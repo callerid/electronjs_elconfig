@@ -1,5 +1,7 @@
 const dgram = require('dgram');
 const os = require('os');
+const app = require('electron').remote.app;
+const file_reader = require('fs');
 
 var server3520 = dgram.createSocket({type:"udp4", reuseAddr:true});
 var server6699 = dgram.createSocket({type:"udp4", reuseAddr:true});
@@ -7,6 +9,7 @@ var server6699 = dgram.createSocket({type:"udp4", reuseAddr:true});
 const HOST = '0.0.0.0';
 var bound3520 = false;
 var bound6699 = false;
+var program_bound_6699 = "";
 
 var connected_port = 0;
 var found_unit = false;
@@ -28,6 +31,8 @@ var last_call_record_reception = "";
 var last_detailed_record_reception = "";
 
 var last_x_command_reception = [];
+
+var this_os = process.platform;
 
 server3520.on('error', function(error){
 
@@ -579,6 +584,71 @@ function send_udp_string(to_send_str, port, ip)
         break;
     }
 
+}
+
+function get_bound_program()
+{
+
+    switch(this_os)
+    {
+        case "win32":
+
+            var spawn = require("child_process").spawn,child;
+            child = spawn("powershell.exe", ["Start-Process cmd -Verb RunAs '/c netstat -ab -p udp > " + app.getAppPath() + "/bound_programs.txt'"]);
+            child.on("exit",function(){
+                
+                filter_bound_programs_win();
+
+            });
+            child.stdin.end(); //end input
+
+        break;
+
+        case "darwin":
+
+        break;
+    }    
+
+}
+
+function filter_bound_programs_win()
+{
+
+    file_reader.readFile(app.getAppPath() + "/bound_programs.txt", (err, data) => {
+        
+        if (err) {
+          console.error(err)
+          return
+        }
+
+        var b_program = get_program_bound_to_port(array_to_ascii(data), 6699);
+
+        if(b_program != "No Program Bound")
+        {
+            program_bound_6699 = b_program;
+            console.log("Program: " + program_bound_6699);
+        }
+
+      });
+    
+}
+
+function get_program_bound_to_port(read_in, port)
+{
+    
+    var index = read_in.indexOf("0.0.0.0:" + port);
+
+    if(index == -1) return "No Program Bound";
+
+    var start_index = index;
+    var part_read_in = read_in.substr(start_index);
+    var end_index = part_read_in.indexOf("]");
+    var part = part_read_in.substr(0, end_index + 1);
+
+    var pattern = /(\[(.+)\])/;
+    var names = pattern.exec(part);
+    
+    return names[1].replace("[","").replace("]","");
 }
 
 function handle_computer_info()

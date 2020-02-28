@@ -61,6 +61,12 @@ const top_menu = [
           }
          },
          {
+           label: 'Get Names of Programs Bound to Ports',
+           click(item, focused_window){
+             focused_window.webContents.executeJavaScript("open_bound_programs()");
+           }
+         },
+         {
             type: 'separator'
          },
          {
@@ -98,7 +104,7 @@ function createWindow () {
   win.loadFile('frmMain.html');
   
   // Uncomment below for JS debugging
-  //win.webContents.openDevTools()
+  win.webContents.openDevTools()
 
 }
 

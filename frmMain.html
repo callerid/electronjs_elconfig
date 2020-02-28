@@ -115,6 +115,26 @@
         var pWin_line_count = null;
         var pWin_listening_port = null;
         var pWin_ping = null;
+        var pWin_bound_programs = null;
+
+        function open_bound_programs()
+        {
+            pWin_bound_programs = $("#pWin_bound_programs").dialog({
+                    autoOpen: false,
+                    width: 350,
+                    height: 110,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_bound_programs.dialog('open');
+        }
 
         function open_ping()
         {
@@ -752,6 +772,18 @@
 <!-------------------------------------------------------->
 <!--                 Popups/Windows                     -->
 <!-------------------------------------------------------->
+<div id="pWin_bound_programs" title="Bound Programs" class="hidden">
+
+    <div style="margin-bottom: 5px;">
+        <span id="pWin_bound_programs_3520_bound_icon"></span> Port 3520 <span id="pWin_bound_programs_lb_3520_program"></span>
+    </div>
+
+    <div>
+        <span id="pWin_bound_programs_3520_bound_icon"></span> Port 6699 <span id="pWin_bound_programs_lb_3520_program"></span>
+    </div>
+
+</div>
+
 <div id="pWin_ping" title="Ping IP Address" class="hidden">
 
     <center>
