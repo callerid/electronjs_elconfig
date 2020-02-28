@@ -119,10 +119,47 @@
 
         function open_bound_programs()
         {
+            get_bound_programs();
+        }
+
+        function finish_open_bound_programs()
+        {
+            // Update values
+            if(program_bound_3520 == "No Program Bound")
+            {
+                bound3520 = false;
+                $("#pWin_bound_programs_3520_bound_icon").addClass("ui-icon-unlocked");
+                $("#pWin_bound_programs_3520_bound_icon").removeClass("ui-icon-locked");
+            }
+            else
+            {
+                $("#pWin_bound_programs_3520_bound_icon").addClass("ui-icon-locked");
+                $("#pWin_bound_programs_3520_bound_icon").removeClass("ui-icon-unlocked");
+            }
+            $("#pWin_bound_programs_lb_3520_program").text(program_bound_3520);
+
+            if(program_bound_6699 == "No Program Bound")
+            {
+                bound6699 = false;
+                $("#pWin_bound_programs_6699_bound_icon").addClass("ui-icon-unlocked");
+                $("#pWin_bound_programs_6699_bound_icon").removeClass("ui-icon-locked");
+            }
+            else
+            {
+                $("#pWin_bound_programs_6699_bound_icon").addClass("ui-icon-locked");
+                $("#pWin_bound_programs_6699_bound_icon").removeClass("ui-icon-unlocked");
+            }
+            $("#pWin_bound_programs_lb_6699_program").text(program_bound_6699);
+            
+            if(pWin_bound_programs != null)
+            {
+                if(pWin_bound_programs.dialog('isOpen')) return;
+            }
+
             pWin_bound_programs = $("#pWin_bound_programs").dialog({
                     autoOpen: false,
                     width: 350,
-                    height: 110,
+                    height: 180,
                     show: {
                         effect: "blind",
                         duration: 400
@@ -130,6 +167,21 @@
                     hide: {
                         effect: "fade",
                         duration: 400
+                    },
+                    buttons: {
+                        "Attempt Rebind": function(){
+                            
+                            bind();
+                            get_pc_ips();
+                            find_unit();
+
+                        },
+                        "Update": function(){
+                            open_bound_programs();
+                        },
+                        "Close": function() {
+                        $( this ).dialog( "close" );
+                        },
                     }
             });
 
@@ -775,11 +827,16 @@
 <div id="pWin_bound_programs" title="Bound Programs" class="hidden">
 
     <div style="margin-bottom: 5px;">
-        <span id="pWin_bound_programs_3520_bound_icon"></span> Port 3520 <span id="pWin_bound_programs_lb_3520_program"></span>
+        <span class="ui-icon" id="pWin_bound_programs_3520_bound_icon"></span> Port 3520: <b><span id="pWin_bound_programs_lb_3520_program"></span></b>
     </div>
 
     <div>
-        <span id="pWin_bound_programs_3520_bound_icon"></span> Port 6699 <span id="pWin_bound_programs_lb_3520_program"></span>
+        <span class="ui-icon" id="pWin_bound_programs_6699_bound_icon"></span> Port 6699: <b><span id="pWin_bound_programs_lb_6699_program"></span></b>
+    </div>
+
+    <br/>
+    <div style="color:red;">
+        Updating a few times may be required to see changes.
     </div>
 
 </div>

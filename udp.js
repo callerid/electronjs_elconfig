@@ -10,6 +10,7 @@ const HOST = '0.0.0.0';
 var bound3520 = false;
 var bound6699 = false;
 var program_bound_6699 = "";
+var program_bound_3520 = "";
 
 var connected_port = 0;
 var found_unit = false;
@@ -37,12 +38,14 @@ var this_os = process.platform;
 server3520.on('error', function(error){
 
     console.log('3520 failed to bind.');
+    bound3520 = false;
 
 });
 
 server6699.on('error', function(error){
 
     console.log('6699 failed to bind.');
+    bound6699 = false;
 
 });
 
@@ -411,8 +414,15 @@ find_unit();
 
 function bind()
 {
-    server3520.bind(3520, HOST);
-    server6699.bind(6699, HOST);
+    if(!bound3520)
+    {
+        server3520.bind(3520, HOST);
+    }
+
+    if(!bound6699)
+    {
+        server6699.bind(6699, HOST);
+    }
 }
 
 function find_unit()
@@ -586,7 +596,7 @@ function send_udp_string(to_send_str, port, ip)
 
 }
 
-function get_bound_program()
+function get_bound_programs()
 {
 
     switch(this_os)
@@ -621,13 +631,13 @@ function filter_bound_programs_win()
           return
         }
 
-        var b_program = get_program_bound_to_port(array_to_ascii(data), 6699);
+        program_bound_6699 = get_program_bound_to_port(array_to_ascii(data), 6699);
+        program_bound_3520 = get_program_bound_to_port(array_to_ascii(data), 3520);
 
-        if(b_program != "No Program Bound")
-        {
-            program_bound_6699 = b_program;
-            console.log("Program: " + program_bound_6699);
-        }
+        if(program_bound_6699 == "electron.exe") program_bound_6699 = "ELConfig 5";
+        if(program_bound_3520 == "electron.exe") program_bound_3520 = "ELConfig 5";
+
+        setTimeout(finish_open_bound_programs(), 1000);
 
       });
     
