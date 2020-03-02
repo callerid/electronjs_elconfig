@@ -170,6 +170,7 @@ function check_for_call_record(message)
 
 function check_for_x_command(message, remote)
 {
+    
     if(message.length == 90 && !processing_x_command)
     {
         processing_x_command = true;
@@ -179,7 +180,7 @@ function check_for_x_command(message, remote)
 
         if(send_to_ip != remote.address)
         {
-            $("#lbSendingTo").text("Sending To: " + remote.address + ":" + remote.port);
+            $("#lbSendingTo").html("Sending To: <b>" + remote.address + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
         }
 
         send_to_ip = remote.address;
@@ -547,8 +548,8 @@ function get_pc_ips()
 
 function convert_to_subnet_broadcast(ip)
 {
-    var breakpoint = nth_pattern_occurance_in_string(ip, '.', 3);
-    return ip.substr(0, breakpoint) + ".255";
+    var breakpoint = nth_pattern_occurance_in_string(ip, '.', 2);
+    return ip.substr(0, breakpoint) + ".255.255";
 }
 
 function nth_pattern_occurance_in_string(str, pat, n){
