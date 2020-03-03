@@ -16,6 +16,7 @@ var connected_port = 0;
 var found_unit = false;
 var is_deluxe_unit = false;
 var all_known_pc_ips = [];
+var pc_suggested_ip = "192.168.0.90";
 var computer_info_ip;
 var computer_info_mac;
 var all_subnets = [];
@@ -516,7 +517,8 @@ function set_unit_number(unit_number)
 
 function set_unit_ip(unit_ip)
 {
-
+    var hex_ip = make_ip_hex_string(unit_ip);
+    send_udp_string("^^IdI" + hex_ip, connected_port, send_to_ip);
 }
 
 function set_unit_mac(unit_mac)
@@ -730,6 +732,9 @@ function handle_computer_info()
 
     var suggested_ip_parts = computer_info_ip.split('.');
     var suggested_ip = suggested_ip_parts[0] + "." + suggested_ip_parts[1] + "." + suggested_ip_parts[2] + ".90";
+
+    pc_suggested_ip_parts = [suggested_ip_parts[0], suggested_ip_parts[1], suggested_ip_parts[2], "90"]
+
     info_content_unit_ip = info_content_unit_ip.replace("[suggested_ip]", "<b>" + suggested_ip + "</b>");
 
     // Populate popup Computer Info
@@ -802,7 +807,7 @@ function get_mac_of_ip(this_ip)
     return "11-11-11-11-11-11";
 }
 
-function send_udp_string_and_bytes(to_send_str, to_send_bytes, ip)
+function send_udp_string_and_bytes(to_send_str, to_send_bytes, port, ip)
 {
     // Send via UDP port
     socket.send(Buffer.from(to_send_str) + to_send_bytes, port, ip);
@@ -818,6 +823,24 @@ function get_bound_status(port)
     {
         return bound3520;
     }
+}
+
+function make_ip_hex_string(ip)
+{
+    var parts = ip.split(".");
+
+    if(parts.length != 4) return "00000000";
+
+    var hex = "";
+
+    parts.forEach(function(part){
+
+        var hex_str = parseInt(part).toString(16).padStart(2, "0");
+        hex += hex_str;
+
+    });
+
+    return hex.toUpperCase();
 }
 
 function array_to_ascii(array)

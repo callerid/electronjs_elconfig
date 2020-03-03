@@ -460,6 +460,67 @@
                     $('#lbInfoContent').html(info_content_main);
             });
 
+            $('#btnSuggestIP').on('click', function(){
+
+                var btn_text = $('#btnSuggestIP').text();
+
+                if(btn_text == "Set to Suggested IP")
+                {
+                    editing_unit_ip = true;
+
+                    $('#tbUnitIP_1').val(pc_suggested_ip_parts[0]);
+                    $('#tbUnitIP_2').val(pc_suggested_ip_parts[1]);
+                    $('#tbUnitIP_3').val(pc_suggested_ip_parts[2]);
+                    $('#tbUnitIP_4').val(pc_suggested_ip_parts[3]);
+
+                    document.getElementById("tbUnitIP").setAttribute("disabled", false);
+                    document.getElementById("tbUnitIP_1").disabled = false;
+                    document.getElementById("tbUnitIP_2").disabled = false;
+                    document.getElementById("tbUnitIP_3").disabled = false;
+                    document.getElementById("tbUnitIP_4").disabled = false;
+
+                    $('#btnSuggestIP').addClass("highlight");
+
+                    $('#tbUnitIP').addClass("highlight");
+                    $('#tbUnitIP_1').addClass("highlight");
+                    $('#tbUnitIP_2').addClass("highlight");
+                    $('#tbUnitIP_3').addClass("highlight");
+                    $('#tbUnitIP_4').addClass("highlight");
+
+                    $('#btnSuggestIP').text("Save");
+                }
+                else
+                {
+                    // Save
+                    var new_unit_ip = $('#tbUnitIP_1').val();
+                    new_unit_ip += "." + $('#tbUnitIP_2').val();
+                    new_unit_ip += "." + $('#tbUnitIP_3').val();
+                    new_unit_ip += "." + $('#tbUnitIP_4').val();
+                    
+                    set_unit_ip(new_unit_ip);
+
+                    // Reset
+                    editing_unit_ip = false;
+
+                    document.getElementById("tbUnitIP").setAttribute("disabled", true);
+                    document.getElementById("tbUnitIP_1").disabled = true;
+                    document.getElementById("tbUnitIP_2").disabled = true;
+                    document.getElementById("tbUnitIP_3").disabled = true;
+                    document.getElementById("tbUnitIP_4").disabled = true;
+
+                    $('#btnSuggestIP').removeClass("highlight");
+
+                    $('#tbUnitIP').removeClass("highlight");
+                    $('#tbUnitIP_1').removeClass("highlight");
+                    $('#tbUnitIP_2').removeClass("highlight");
+                    $('#tbUnitIP_3').removeClass("highlight");
+                    $('#tbUnitIP_4').removeClass("highlight");
+
+                    $('#btnSuggestIP').text("Set to Suggested IP");
+                }
+
+            });
+
             $('#btnChangeDestPort').hover(
                 
                 // Hover
@@ -630,7 +691,7 @@
                         </td>
                         <td>
                             
-                            <div class="input_ip" disabled="true">
+                            <div id="tbUnitIP" class="input_ip" disabled="true">
 
                                 <input type="text" maxlength="3" disabled="true" id="tbUnitIP_1"/> .
                                 <input type="text" maxlength="3" disabled="true" id="tbUnitIP_2"/> .
