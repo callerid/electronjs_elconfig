@@ -549,6 +549,62 @@
                     $('#lbInfoContent').html(info_content_main);
             });
 
+            $('#btnChangeDestIP').on('click', function(){
+
+                var btn_text = $('#btnChangeDestIP').text();
+
+                if(btn_text == "Change")
+                {
+                    editing_dest_ip = true;
+
+                    document.getElementById("tbDestIP").setAttribute("disabled", false);
+                    document.getElementById("tbDestIP_1").disabled = false;
+                    document.getElementById("tbDestIP_2").disabled = false;
+                    document.getElementById("tbDestIP_3").disabled = false;
+                    document.getElementById("tbDestIP_4").disabled = false;
+
+                    $('#btnChangeDestIP').addClass("highlight");
+
+                    $('#tbDestIP').addClass("highlight");
+                    $('#tbDestIP_1').addClass("highlight");
+                    $('#tbDestIP_2').addClass("highlight");
+                    $('#tbDestIP_3').addClass("highlight");
+                    $('#tbDestIP_4').addClass("highlight");
+
+                    $('#btnChangeDestIP').text("Save");
+                }
+                else
+                {
+                    // Save
+                    var new_unit_ip = $('#tbDestIP_1').val();
+                    new_unit_ip += "." + $('#tbDestIP_2').val();
+                    new_unit_ip += "." + $('#tbDestIP_3').val();
+                    new_unit_ip += "." + $('#tbDestIP_4').val();
+                    
+                    set_dest_ip(new_unit_ip);
+
+                    // Reset
+                    editing_dest_ip = false;
+
+                    document.getElementById("tbDestIP").setAttribute("disabled", true);
+                    document.getElementById("tbDestIP_1").disabled = true;
+                    document.getElementById("tbDestIP_2").disabled = true;
+                    document.getElementById("tbDestIP_3").disabled = true;
+                    document.getElementById("tbDestIP_4").disabled = true;
+
+                    $('#btnChangeDestIP').removeClass("highlight");
+
+                    $('#tbDestIP').removeClass("highlight");
+                    $('#tbDestIP_1').removeClass("highlight");
+                    $('#tbDestIP_2').removeClass("highlight");
+                    $('#tbDestIP_3').removeClass("highlight");
+                    $('#tbDestIP_4').removeClass("highlight");
+
+                    $('#btnChangeDestIP').text("Change");
+                }
+
+            });
+
             $('#btnChangeDestMAC').hover(
                 
                 // Hover
@@ -744,7 +800,7 @@
                         </td>
                         <td>
                             
-                            <div class="input_ip" disabled="true">
+                            <div id="tbDestIP" class="input_ip" disabled="true">
 
                                 <input type="text" disabled="true" maxlength="3" id="tbDestIP_1"/> .
                                 <input type="text" disabled="true" maxlength="3" id="tbDestIP_2"/> .

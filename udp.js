@@ -533,7 +533,8 @@ function set_unit_port(port)
 
 function set_dest_ip(dest_ip)
 {
-
+    var hex_ip = make_ip_hex_string(dest_ip);
+    send_udp_string("^^IdD" + hex_ip, connected_port, send_to_ip);
 }
 
 function set_dest_mac(dest_mac)
