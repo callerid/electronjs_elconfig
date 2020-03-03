@@ -418,8 +418,36 @@
                     $('#lbInfoContent').html(info_content_main);
              });
 
-             $('#btnSuggestIP').hover(
-                
+            $('#btnChangeUnitNumber').on('click', function(){
+
+                var btn_text = $('#btnChangeUnitNumber').text();
+
+                if(btn_text == "Change")
+                {
+                    editing_unit_number = true;
+                    document.getElementById("tbUnitNumber").disabled = false;
+                    $('#btnChangeUnitNumber').addClass("highlight");
+                    $('#tbUnitNumber').addClass("highlight");
+                    $('#btnChangeUnitNumber').text("Save");
+                }
+                else
+                {
+                    // Save
+                    var new_unit_number = $('#tbUnitNumber').val();
+                    set_unit_number(new_unit_number);
+
+                    // Reset
+                    editing_unit_number = false;
+                    document.getElementById("tbUnitNumber").disabled = true;
+                    $('#btnChangeUnitNumber').removeClass("highlight");
+                    $('#tbUnitNumber').removeClass("highlight");
+                    $('#btnChangeUnitNumber').text("Change");
+                }
+
+            });
+
+            $('#btnSuggestIP').hover(
+            
                 // Hover
                 function(){
                     $('#lbInfoTitle').text('Unit IP Address:');

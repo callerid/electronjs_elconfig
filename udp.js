@@ -35,6 +35,14 @@ var last_x_command_reception = [];
 
 var this_os = process.platform;
 
+// Edit Settings
+var editing_unit_number = false;
+var editing_unit_ip = false;
+var editing_unit_mac = false;
+var editing_unit_port = false;
+var editing_dest_ip = false;
+var editing_dest_mac = false;
+
 server3520.on('error', function(error){
 
     console.log('3520 failed to bind.');
@@ -203,54 +211,72 @@ function check_for_x_command(message, remote)
         handle_computer_info();
 
         // Parse all unit settings
-        var unit_number = "";
-        for(var i = 4; i < 10; i++)
+        if(!editing_unit_number)
         {
-            unit_number += message_byte[i].toString();
+            var unit_number = "";
+            for(var i = 4; i < 10; i++)
+            {
+                unit_number += message_byte[i].toString();
+            }
+            $("#tbUnitNumber").val(unit_number);
         }
-        $("#tbUnitNumber").val(unit_number);
         
         var cnt = 1;
-        for(var i = 33; i < 37; i++)
+        if(!editing_unit_ip)
         {
-            var part = message_byte[i].toString();
-            $("#tbUnitIP_" + cnt).val(part);
-            cnt++;
+            for(var i = 33; i < 37; i++)
+            {
+                var part = message_byte[i].toString();
+                $("#tbUnitIP_" + cnt).val(part);
+                cnt++;
+            }
         }
 
-        cnt = 1;
-        for(var i = 24; i < 30; i++)
+        if(!editing_unit_mac)
         {
-            var part = message_byte[i].toString(16).padStart(2, '0');
-            $("#tbUnitMAC_" + cnt).val(part);
-            cnt++;
+            cnt = 1;
+            for(var i = 24; i < 30; i++)
+            {
+                var part = message_byte[i].toString(16).padStart(2, '0');
+                $("#tbUnitMAC_" + cnt).val(part);
+                cnt++;
+            }
+        }
+
+        if(!editing_unit_port)
+        {
+            var dest_port = "";
+            for (var i = 52; i <= 53; i++)
+            {
+                var int_value = message_byte[i];
+                var hex_value = int_value.toString(16).padStart(2, '0');
+                dest_port += hex_value;
+            }
+            dest_port = parseInt(dest_port, 16);
+            $("#tbDestPort").val(dest_port);
+        }
+        
+        if(!editing_dest_ip)
+        {
+            cnt = 1;
+            for(var i = 40; i < 44; i++)
+            {
+                var part = message_byte[i].toString();
+                $("#tbDestIP_" + cnt).val(part);
+                cnt++;
+            }
         }        
 
-        var dest_port = "";
-        for (var i = 52; i <= 53; i++)
+        if(!editing_dest_mac)
         {
-            var int_value = message_byte[i];
-            var hex_value = int_value.toString(16).padStart(2, '0');
-            dest_port += hex_value;
-        }
-        dest_port = parseInt(dest_port, 16);
-        $("#tbDestPort").val(dest_port);
-
-        cnt = 1;
-        for(var i = 40; i < 44; i++)
-        {
-            var part = message_byte[i].toString();
-            $("#tbDestIP_" + cnt).val(part);
-            cnt++;
-        }
-
-        cnt = 1;
-        for(var i = 66; i < 72; i++)
-        {
-            var part = message_byte[i].toString(16).toUpperCase().padStart(2, '0');
-            $("#tbDestMAC_" + cnt).val(part);
-            cnt++;
-        }
+            cnt = 1;
+            for(var i = 66; i < 72; i++)
+            {
+                var part = message_byte[i].toString(16).toUpperCase().padStart(2, '0');
+                $("#tbDestMAC_" + cnt).val(part);
+                cnt++;
+            }
+        }        
 
         var dups = "";
         dups = message_byte[75].toString();
@@ -481,6 +507,40 @@ function send_pinging_commands()
 // -----------------------------------------------------------
 //                       Low-level/Misc commands
 // -----------------------------------------------------------
+
+// Functions for editing settings
+function set_unit_number(unit_number)
+{
+    send_udp_string("^^IdU000000" + unit_number.padStart(6, "0"), connected_port, send_to_ip);
+}
+
+function set_unit_ip(unit_ip)
+{
+
+}
+
+function set_unit_mac(unit_mac)
+{
+
+}
+
+function set_unit_port(port)
+{
+
+}
+
+function set_dest_ip(dest_ip)
+{
+
+}
+
+function set_dest_mac(dest_mac)
+{
+
+}
+
+// ----------------------------------
+
 function set_toggle(button_text)
 {
     if(button_text == button_text.toUpperCase())
@@ -745,7 +805,7 @@ function get_mac_of_ip(this_ip)
 function send_udp_string_and_bytes(to_send_str, to_send_bytes, ip)
 {
     // Send via UDP port
-    socket.send(to_send_bytes + Buffer.from(to_send_str), port, ip);
+    socket.send(Buffer.from(to_send_str) + to_send_bytes, port, ip);
 }
 
 function get_bound_status(port)

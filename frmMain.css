@@ -255,6 +255,10 @@ p {
     background-color: rgb(197, 255, 195);
 }
 
+.highlight {
+    background-color: rgb(247, 244, 212);
+}
+
 .status_bar_connected{
 
     background-color: rgb(134, 209, 163);
