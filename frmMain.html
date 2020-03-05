@@ -619,6 +619,76 @@
                     $('#lbInfoContent').html(info_content_main);
             });
 
+            $('#btnChangeDestMAC').on('click', function(){
+
+                var btn_text = $('#btnChangeDestMAC').text();
+
+                if(btn_text == "Change")
+                {
+                    editing_dest_mac = true;
+
+                    document.getElementById("tbDestMAC").setAttribute("disabled", false);
+                    document.getElementById("tbDestMAC_1").disabled = false;
+                    document.getElementById("tbDestMAC_2").disabled = false;
+                    document.getElementById("tbDestMAC_3").disabled = false;
+                    document.getElementById("tbDestMAC_4").disabled = false;
+                    document.getElementById("tbDestMAC_5").disabled = false;
+                    document.getElementById("tbDestMAC_6").disabled = false;
+
+                    $('#btnChangeDestMAC').addClass("highlight");
+
+                    $('#tbDestMAC').addClass("highlight");
+                    $('#tbDestMAC_1').addClass("highlight");
+                    $('#tbDestMAC_2').addClass("highlight");
+                    $('#tbDestMAC_3').addClass("highlight");
+                    $('#tbDestMAC_4').addClass("highlight");
+                    $('#tbDestMAC_5').addClass("highlight");
+                    $('#tbDestMAC_6').addClass("highlight");
+
+                    $('#btnChangeDestMAC').text("Save");
+
+                }
+                else
+                {
+
+                    // Save
+                    var new_dest_mac = "";
+                    new_dest_mac += $('#tbDestMAC_1').val().padStart(2, "0").toUpperCase();
+                    new_dest_mac += $('#tbDestMAC_2').val().padStart(2, "0").toUpperCase();
+                    new_dest_mac += $('#tbDestMAC_3').val().padStart(2, "0").toUpperCase();
+                    new_dest_mac += $('#tbDestMAC_4').val().padStart(2, "0").toUpperCase();
+                    new_dest_mac += $('#tbDestMAC_5').val().padStart(2, "0").toUpperCase();
+                    new_dest_mac += $('#tbDestMAC_6').val().padStart(2, "0").toUpperCase();
+
+                    set_dest_mac(new_dest_mac);
+
+                    // Reset
+                    editing_dest_mac = false;
+
+                    document.getElementById("tbDestMAC").setAttribute("disabled", true);
+                    document.getElementById("tbDestMAC_1").disabled = true;
+                    document.getElementById("tbDestMAC_2").disabled = true;
+                    document.getElementById("tbDestMAC_3").disabled = true;
+                    document.getElementById("tbDestMAC_4").disabled = true;
+                    document.getElementById("tbDestMAC_5").disabled = true;
+                    document.getElementById("tbDestMAC_6").disabled = true;
+
+                    $('#btnChangeDestMAC').removeClass("highlight");
+
+                    $('#tbDestMAC').removeClass("highlight");
+                    $('#tbDestMAC_1').removeClass("highlight");
+                    $('#tbDestMAC_2').removeClass("highlight");
+                    $('#tbDestMAC_3').removeClass("highlight");
+                    $('#tbDestMAC_4').removeClass("highlight");
+                    $('#tbDestMAC_5').removeClass("highlight");
+                    $('#tbDestMAC_6').removeClass("highlight");
+
+                    $('#btnChangeDestMAC').text("Change");
+
+                }
+
+            });
+
             // --------------------------------------------------------
 
             $('#btnGetToggles').on('click', function(){
@@ -821,7 +891,7 @@
                         </td>
                         <td>
                             
-                            <div class="input_mac" disabled="true">
+                            <div id="tbDestMAC" class="input_mac" disabled="true">
 
                                 <input type="text" disabled="true" id="tbDestMAC_1"/> -
                                 <input type="text" disabled="true" id="tbDestMAC_2"/> -

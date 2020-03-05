@@ -521,11 +521,6 @@ function set_unit_ip(unit_ip)
     send_udp_string("^^IdI" + hex_ip, connected_port, send_to_ip);
 }
 
-function set_unit_mac(unit_mac)
-{
-
-}
-
 function set_unit_port(port)
 {
 
@@ -539,7 +534,7 @@ function set_dest_ip(dest_ip)
 
 function set_dest_mac(dest_mac)
 {
-
+    send_udp_string("^^IdC" + dest_mac, connected_port, send_to_ip);
 }
 
 // ----------------------------------
