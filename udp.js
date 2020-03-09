@@ -821,6 +821,17 @@ function get_bound_status(port)
     }
 }
 
+function ping_ip(ip)
+{
+    $("#pWin_ping_ip_return").text("Pinging...");
+    var exec = require('child_process').exec("ping " + ip, function(error, stdout, stderr){
+        
+        $("#pWin_ping_ip_return").html(stdout);
+
+    });
+
+}
+
 function make_ip_hex_string(ip)
 {
     var parts = ip.split(".");

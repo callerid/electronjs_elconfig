@@ -192,8 +192,8 @@
         {
             pWin_ping = $("#pWin_ping").dialog({
                     autoOpen: false,
-                    width: 350,
-                    height: 80,
+                    width: 400,
+                    height: 290,
                     show: {
                         effect: "blind",
                         duration: 400
@@ -947,6 +947,9 @@
 
                     $('#btnChangeDestMAC').text("Save");
 
+                    $("#tbDestMAC_1").focus();
+                    $("#tbDestMAC_1").select();
+
                 }
                 else
                 {
@@ -987,6 +990,156 @@
 
                 }
 
+            });
+
+            $("#tbDestMAC_1").on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_1').val();
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(key != 8 && text.length == 2 && is_valid != null) 
+                {
+                    $("#tbDestMAC_1").val($("#tbDestMAC_1").val().toUpperCase());
+                    $('#tbDestMAC_2').focus();
+                    $('#tbDestMAC_2').select();
+                }
+
+            });
+
+            $("#tbDestMAC_1").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#tbDestMAC_2").on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_2').val();
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(key != 8 && text.length == 2 && is_valid != null) 
+                {
+                    $("#tbDestMAC_2").val($("#tbDestMAC_2").val().toUpperCase());
+                    $('#tbDestMAC_3').focus();
+                    $('#tbDestMAC_3').select();
+                }
+
+            });
+
+            $("#tbDestMAC_2").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#tbDestMAC_3").on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_3').val();
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(key != 8 && text.length == 2 && is_valid != null) 
+                {
+                    $("#tbDestMAC_3").val($("#tbDestMAC_3").val().toUpperCase());
+                    $('#tbDestMAC_4').focus();
+                    $('#tbDestMAC_4').select();
+                }
+
+            });
+
+            $("#tbDestMAC_3").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#tbDestMAC_4").on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_4').val();
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(key != 8 && text.length == 2 && is_valid != null) 
+                {
+                    $("#tbDestMAC_4").val($("#tbDestMAC_4").val().toUpperCase());
+                    $('#tbDestMAC_5').focus();
+                    $('#tbDestMAC_5').select();
+                }
+
+            });
+
+            $("#tbDestMAC_4").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#tbDestMAC_5").on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_5').val();
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(key != 8 && text.length == 2 && is_valid != null) 
+                {
+                    $("#tbDestMAC_5").val($("#tbDestMAC_5").val().toUpperCase());
+                    $('#tbDestMAC_6').focus();
+                    $('#tbDestMAC_6').select();
+                }
+
+            });
+
+            $("#tbDestMAC_5").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#tbDestMAC_6").on('keydown', function(event){
+
+                var key = String.fromCharCode(event.keyCode);
+
+                var is_valid = /[0-9A-Fa-f]/.exec(key);
+
+                if(is_valid == null && event.keyCode != 8) return false;
+
+            });
+
+            $("#pWin_ping_btnPing").on('click', function(){
+                
+                var ip = $("#pWin_ping_1").val() + ".";
+                ip += $("#pWin_ping_2").val() + ".";
+                ip += $("#pWin_ping_3").val() + ".";
+                ip += $("#pWin_ping_4").val();
+
+                ping_ip(ip);
             });
 
             // --------------------------------------------------------
@@ -1140,12 +1293,12 @@
                             
                             <div class="input_mac" disabled="true">
 
-                                <input type="text" disabled="true" id="tbUnitMAC_1"/> -
-                                <input type="text" disabled="true" id="tbUnitMAC_2"/> -
-                                <input type="text" disabled="true" id="tbUnitMAC_3"/> -
-                                <input type="text" disabled="true" id="tbUnitMAC_4"/> -
-                                <input type="text" disabled="true" id="tbUnitMAC_5"/> -
-                                <input type="text" disabled="true" id="tbUnitMAC_6"/>
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_1"/> -
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_2"/> -
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_3"/> -
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_4"/> -
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_5"/> -
+                                <input type="text" maxlength="2" disabled="true" id="tbUnitMAC_6"/>
                             
                             </div>
 
@@ -1157,7 +1310,10 @@
                             <p align="right"><b>Destination Port: </b></p>
                         </td>
                         <td>
-                            <input type="text" id="tbDestPort" disabled="true" class="custom_input"/><br/>
+                            <select id="cbDestPort" disabled="true">
+                                <option selected="selected">3520</option>
+                                <option>6699</option>
+                            </select>
                         </td>
                         <td style="width:100px;">
                             <button width="80px" id="btnChangeDestPort">Change</button><br/>
@@ -1371,6 +1527,10 @@
 
         <button id="pWin_ping_btnPing">Ping <span class="ui-icon ui-icon-arrowthick-1-e"></span></button>
     </center>
+
+    <div style="margin-top:5px;padding: 10px;background-color: rgb(214, 241, 243);">
+        <span id="pWin_ping_ip_return" style="white-space: pre-wrap;">Type IP then click 'Ping'</span>
+    </div>
 
 </div>
 
