@@ -203,8 +203,10 @@
                         duration: 400
                     }
             });
-
+            
             pWin_ping.dialog('open');
+            $("#pWin_ping_1").focus();
+            $("#pWin_ping_1").select();
         }
 
         function open_listening_port()
@@ -685,6 +687,35 @@
                     $('#lbInfoContent').html(info_content_main);
             });
 
+            $('#btnChangeDestPort').on('click', function(){
+
+                var btn_text = $('#btnChangeDestPort').text();
+
+                if(btn_text == "Change")
+                {
+                    editing_dest_port = true;
+
+                    $('#btnChangeDestPort').addClass("highlight");
+                    document.getElementById("cbDestPort").removeAttribute("disabled", false);
+
+                    $('#btnChangeDestPort').text("Save");
+
+                }
+                else
+                {
+                    editing_dest_port = false;
+
+                    set_dest_port(document.getElementById("cbDestPort").value);
+
+                    $('#btnChangeDestPort').removeClass("highlight");
+                    document.getElementById("cbDestPort").setAttribute("disabled", true);
+
+                    $('#btnChangeDestPort').text("Change");
+
+                }
+
+            });
+
             $('#btnChangeDestIP').hover(
                 
                 // Hover
@@ -1140,6 +1171,153 @@
                 ip += $("#pWin_ping_4").val();
 
                 ping_ip(ip);
+            });
+
+            $('#pWin_ping_1').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#pWin_ping_1').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#pWin_ping_1').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#pWin_ping_1').val(text.substr(0, text.length - 1));
+                    $('#pWin_ping_2').focus();
+                    $('#pWin_ping_2').select();
+                    return;
+                }
+
+                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid) 
+                {
+                    $('#pWin_ping_2').focus();
+                    $('#pWin_ping_2').select();
+                }
+
+            });
+
+            $('#pWin_ping_1').on('keydown', function(event){
+
+                var key = event.keyCode;
+
+                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+            });
+
+            $('#pWin_ping_2').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#pWin_ping_2').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#pWin_ping_2').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#pWin_ping_2').val(text.substr(0, text.length - 1));
+                    $('#pWin_ping_3').focus();
+                    $('#pWin_ping_3').select();
+                    return;
+                }
+
+                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid) 
+                {
+                    $('#pWin_ping_3').focus();
+                    $('#pWin_ping_3').select();
+                }
+
+            });
+
+            $('#pWin_ping_2').on('keydown', function(event){
+
+                var key = event.keyCode;
+
+                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+            });
+
+            $('#pWin_ping_3').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#pWin_ping_3').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#pWin_ping_3').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#pWin_ping_3').val(text.substr(0, text.length - 1));
+                    $('#pWin_ping_4').focus();
+                    $('#pWin_ping_4').select();
+                    return;
+                }
+
+                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid) 
+                {
+                    $('#pWin_ping_4').focus();
+                    $('#pWin_ping_4').select();
+                }
+
+            });
+
+            $('#pWin_ping_3').on('keydown', function(event){
+
+                var key = event.keyCode;
+
+                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+            });
+
+            $("#pWin_ping_4").on('keyup', function(event){
+
+                var text = $('#pWin_ping_4').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#pWin_ping_4').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+            });
+
+            $('#pWin_ping_4').on('keydown', function(event){
+
+                var key = event.keyCode;
+
+                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
             });
 
             // --------------------------------------------------------

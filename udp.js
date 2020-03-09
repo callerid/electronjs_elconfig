@@ -40,7 +40,7 @@ var this_os = process.platform;
 var editing_unit_number = false;
 var editing_unit_ip = false;
 var editing_unit_mac = false;
-var editing_unit_port = false;
+var editing_dest_port = false;
 var editing_dest_ip = false;
 var editing_dest_mac = false;
 
@@ -187,7 +187,7 @@ function check_for_x_command(message, remote)
         // Update target unit location
         found_unit = true;
 
-        if(send_to_ip != remote.address)
+        if(send_to_ip != remote.address || connected_port != remote.port)
         {
             $("#lbSendingTo").html("Sending To: <b>" + remote.address + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
         }
@@ -244,7 +244,7 @@ function check_for_x_command(message, remote)
             }
         }
 
-        if(!editing_unit_port)
+        if(!editing_dest_port)
         {
             var dest_port = "";
             for (var i = 52; i <= 53; i++)
@@ -254,7 +254,7 @@ function check_for_x_command(message, remote)
                 dest_port += hex_value;
             }
             dest_port = parseInt(dest_port, 16);
-            $("#tbDestPort").val(dest_port);
+            $("#cbDestPort").val(dest_port);
         }
         
         if(!editing_dest_ip)
@@ -521,9 +521,17 @@ function set_unit_ip(unit_ip)
     send_udp_string("^^IdI" + hex_ip, connected_port, send_to_ip);
 }
 
-function set_unit_port(port)
+function set_dest_port(port)
 {
-
+    console.log(port);
+    if(port == "6699")
+    {
+        send_udp_string("^^IdT1A2B", connected_port, send_to_ip);
+    }
+    else
+    {
+        send_udp_string("^^IdT0DC0", connected_port, send_to_ip);
+    }
 }
 
 function set_dest_ip(dest_ip)
