@@ -545,6 +545,11 @@ function set_dest_mac(dest_mac)
     send_udp_string("^^IdC" + dest_mac, connected_port, send_to_ip);
 }
 
+function set_dups(dup_count)
+{
+    send_udp_string("^^IdO" + dup_count, connected_port, send_to_ip);
+}
+
 // ----------------------------------
 
 function set_toggle(button_text)

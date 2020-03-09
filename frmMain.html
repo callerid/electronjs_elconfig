@@ -1395,6 +1395,31 @@
                 pWin_computer_info.dialog('close');
             });
 
+            $("#pWin_duplicates_btnSave").on('click', function(){
+                
+                var dups = $("#pWin_duplicates_dups").val();
+
+                set_dups(dups.padStart(2, '0'));
+
+            });
+
+            $("#pWin_duplicates_btnCancel").on('click', function(){
+                
+                pWin_duplicates.dialog('close');
+
+            });
+
+            $("#pWin_duplicates_dups").on('keyup', function(){
+                
+                var dups = $("#pWin_duplicates_dups").val();
+
+                if(parseInt(dups) > 20)
+                {
+                    $("#pWin_duplicates_dups").val(20);
+                }
+
+            });
+
         });
 
     </script>
@@ -1758,7 +1783,7 @@
     <br/><br/>
 
     <center>
-        Number of Packets sent: <input type="number" style="width: 50px;text-align: center;" id="pWin_duplicates_dups" value="8"/>
+        Number of Packets sent: <input type="number" style="width: 50px;text-align: center;" id="pWin_duplicates_dups" value="8" min="1" max="20"/>
 
         <br/><br/>
         <p><span style="color:red">
@@ -1771,10 +1796,10 @@
     <table>
         <tr>
             <td style="padding-left: 0px;">
-                <button id="pWin_duplicates_btnCancel">Cancel <span class="ui-icon ui-icon-close"></span></button>
+                <button id="pWin_duplicates_btnCancel">Cancel</button>
             </td>
             <td style="float:right;">
-                <button id="pWin_duplicates_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
+                <button id="pWin_duplicates_btnSave">Save</button>
             </td>
         </tr>
     </table>
