@@ -605,16 +605,21 @@ function get_pc_ips()
 
     all_known_pc_ips.forEach(function(ip){
         
-        var subnet_address = convert_to_subnet_broadcast(ip);
+        var subnet_address = convert_to_subnet_broadcast(ip, false);
+        var subnet_limited_address = convert_to_subnet_broadcast(ip, true);
 
         if(!all_subnets.includes(subnet_address)) all_subnets.push(subnet_address);
+        if(!all_subnets.includes(subnet_limited_address)) all_subnets.push(subnet_limited_address);
 
     });
 }
 
-function convert_to_subnet_broadcast(ip)
+function convert_to_subnet_broadcast(ip, limited)
 {
     var breakpoint = nth_pattern_occurance_in_string(ip, '.', 2);
+    var breakpoint_limited = nth_pattern_occurance_in_string(ip, '.', 3);
+
+    if(limited) return ip.substr(0, breakpoint_limited) + ".255";
     return ip.substr(0, breakpoint) + ".255.255";
 }
 
