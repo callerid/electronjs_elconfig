@@ -113,7 +113,6 @@
         var pWin_computer_info = null;
         var pWin_duplicates = null;
         var pWin_line_count = null;
-        var pWin_listening_port = null;
         var pWin_ping = null;
         var pWin_bound_programs = null;
 
@@ -128,26 +127,12 @@
             if(program_bound_3520 == "No Program Bound")
             {
                 bound3520 = false;
-                $("#pWin_bound_programs_3520_bound_icon").addClass("ui-icon-unlocked");
-                $("#pWin_bound_programs_3520_bound_icon").removeClass("ui-icon-locked");
-            }
-            else
-            {
-                $("#pWin_bound_programs_3520_bound_icon").addClass("ui-icon-locked");
-                $("#pWin_bound_programs_3520_bound_icon").removeClass("ui-icon-unlocked");
             }
             $("#pWin_bound_programs_lb_3520_program").text(program_bound_3520);
 
             if(program_bound_6699 == "No Program Bound")
             {
                 bound6699 = false;
-                $("#pWin_bound_programs_6699_bound_icon").addClass("ui-icon-unlocked");
-                $("#pWin_bound_programs_6699_bound_icon").removeClass("ui-icon-locked");
-            }
-            else
-            {
-                $("#pWin_bound_programs_6699_bound_icon").addClass("ui-icon-locked");
-                $("#pWin_bound_programs_6699_bound_icon").removeClass("ui-icon-unlocked");
             }
             $("#pWin_bound_programs_lb_6699_program").text(program_bound_6699);
             
@@ -209,24 +194,6 @@
             $("#pWin_ping_1").select();
         }
 
-        function open_listening_port()
-        {
-            pWin_listening_port = $("#pWin_listening_port").dialog({
-                    autoOpen: false,
-                    width: 450,
-                    height: 190,
-                    show: {
-                        effect: "blind",
-                        duration: 400
-                    },
-                    hide: {
-                        effect: "fade",
-                        duration: 400
-                    }
-            });
-
-            pWin_listening_port.dialog('open');
-        }
         function open_line_count()
         {
             pWin_line_count = $("#pWin_line_count").dialog({
@@ -1420,6 +1387,19 @@
 
             });
 
+            $("#pWin_line_count_btnCancel").on('click', function(){
+
+                pWin_line_count.dialog('close');
+
+            });
+
+            $("#pWin_line_count_btnSave").on('click', function(){
+
+                var line_count = $("#pWin_line_count_set_to").val();
+                set_line_count(line_count);
+
+            });
+
         });
 
     </script>
@@ -1701,11 +1681,11 @@
 <div id="pWin_bound_programs" title="Bound Programs" class="hidden">
 
     <div style="margin-bottom: 5px;">
-        <span class="ui-icon" id="pWin_bound_programs_3520_bound_icon"></span> Port 3520: <b><span id="pWin_bound_programs_lb_3520_program"></span></b>
+        Port 3520: <b><span id="pWin_bound_programs_lb_3520_program"></span></b>
     </div>
 
     <div>
-        <span class="ui-icon" id="pWin_bound_programs_6699_bound_icon"></span> Port 6699: <b><span id="pWin_bound_programs_lb_6699_program"></span></b>
+        Port 6699: <b><span id="pWin_bound_programs_lb_6699_program"></span></b>
     </div>
 
     <br/>
@@ -1737,24 +1717,6 @@
 
 </div>
 
-<div id="pWin_listening_port" title="Set ELConfig Listening Port" class="hidden">
-
-    <div style="color:red;padding-left:15px;padding-right:15px;padding-top:15px;">
-    
-        By default, ELConfig listens to Network ports 3520 and 6699.<br/> 
-        If the unit has previously been set to a different Network port, 
-        you must specify the listening port in order to communicate.
-    
-    </div>
-    <br/><br/>
-
-    <center>
-        ELConfig Listening Port: <input type="number" style="width:80px;padding-right:5px;text-align:center;" id="pWin_listening_port_port" value="3520"/>
-        <button id="pWin_listening_port_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
-    </center>
-
-</div>
-
 <div id="pWin_line_count" title="Set Line Count" class="hidden">
 
     <p>Current Starting Line Count: <span style="font-weight:bold;" id="pWin_line_count_current_count">01</span></p>
@@ -1765,10 +1727,10 @@
     <table>
         <tr>
             <td style="padding-left: 0px;">
-                <button id="pWin_line_count_btnCancel">Cancel <span class="ui-icon ui-icon-close"></span></button>
+                <button id="pWin_line_count_btnCancel">Close</button>
             </td>
             <td style="float:right;">
-                <button id="pWin_line_count_btnSave">Save <span class="ui-icon ui-icon-circle-check"></span></button>
+                <button id="pWin_line_count_btnSave">Save</button>
             </td>
         </tr>
     </table>
@@ -1830,9 +1792,9 @@
                         <br/>
                         <button style="width:150px;margin-bottom:5px;margin-top:10px;" id="pWin_computer_info_btnSetToComputer">Set to this Computer</button><span class="ui-icon ui-icon-radio-off"></span>
                         <br/>
-                        <button style="width:150px;" id="pWin_computer_info_btnSetToBroadcast">Set to Broadcast</button><span class="ui-icon ui-icon-radio-on"></span>
+                        <button style="width:150px;" id="pWin_computer_info_btnSetToBroadcast">Set to Broadcast</button>
                         <br/><br/>
-                        <button id="pWin_computer_info_btnClose">Close <span class="ui-icon ui-icon-close"></span></button>
+                        <button id="pWin_computer_info_btnClose">Close</button>
                     </center>
                 
                 </td>

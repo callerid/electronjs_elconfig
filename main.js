@@ -37,12 +37,6 @@ const top_menu = [
           {
             type: 'separator'
           },
-          {
-            label: 'Listening Port',
-            click(item, focused_window){
-              focused_window.webContents.executeJavaScript("open_listening_port()");
-            }
-          },
        ],
     },
     {
@@ -65,15 +59,6 @@ const top_menu = [
            click(item, focused_window){
              focused_window.webContents.executeJavaScript("open_bound_programs()");
            }
-         },
-         {
-            type: 'separator'
-         },
-         {
-           label: 'Setup Uni-cast'
-         },
-         {
-           type: 'separator'
          },
          {
            label: 'Start Logging Call Records'

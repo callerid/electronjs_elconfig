@@ -21,6 +21,7 @@ var computer_info_ip;
 var computer_info_mac;
 var all_subnets = [];
 var send_to_ip = '';
+var last_sent_ip = '';
 var ping_alternator = 0;
 
 var processing_v_command = false;
@@ -187,12 +188,12 @@ function check_for_x_command(message, remote)
         // Update target unit location
         found_unit = true;
 
-        if(send_to_ip != remote.address || connected_port != remote.port)
+        if(send_to_ip != last_sent_ip || connected_port != remote.port)
         {
-            $("#lbSendingTo").html("Sending To: <b>" + remote.address + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
+            $("#lbSendingTo").html("Sending To: <b>" + last_sent_ip + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
         }
 
-        send_to_ip = remote.address;
+        send_to_ip = last_sent_ip;
         connected_port = remote.port;
 
         // Actual processing
@@ -325,6 +326,12 @@ function check_for_v_command(message, remote)
         // Write to COMM data
         write_to_comm(message_str.substr(start_index), false);
 
+        var pattern = /L=([0-9]){2}/;
+        var line_count = pattern.exec(message_str);
+
+        $("#lbLineCount").text(line_count[1]);
+        $("#pWin_line_count_current_count").text(line_count[1]);
+
         // Check toggles
         var toggle_start = message_str.toUpperCase().indexOf('E');
         var t_chars_to_remove = 20;
@@ -339,7 +346,6 @@ function check_for_v_command(message, remote)
         var t_o = toggles[7];
         var t_b = toggles[8];
         var t_k = toggles[9];
-
         
         // -- Update toggle text
         $("#btnToggleC").val(t_c);
@@ -550,6 +556,11 @@ function set_dups(dup_count)
     send_udp_string("^^IdO" + dup_count, connected_port, send_to_ip);
 }
 
+function set_line_count(line_count)
+{
+    send_udp_string("^^Id-N00000077" + line_count.padStart(2, '0') + "\r\n", connected_port, send_to_ip);
+}
+
 // ----------------------------------
 
 function set_toggle(button_text)
@@ -640,6 +651,7 @@ function nth_pattern_occurance_in_string(str, pat, n){
 function send_udp_string(to_send_str, port, ip)
 {
     // Send via UDP port
+    last_sent_ip = ip;
     console.log('Sending: ' + to_send_str + " on: " + port + " to: " + ip);
     
     switch(port)
