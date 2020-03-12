@@ -1530,6 +1530,8 @@
 
             });
 
+            setTimeout(watch_for_status_change, 1000);
+
         });
 
     </script>
@@ -1560,7 +1562,19 @@
     
     <table style="width: 100%;">
 
-        <tr>
+        <tr id="not_connected">
+
+            <td style="padding-bottom:85px;padding-top:85px;padding-left: 280px;">
+
+                <p><b>Unit Not Found</b></p>
+                <p>Please make sure Ethernet Port on the Caller ID unit is connected to the
+                    network.
+                </p>
+
+            </td>
+
+        </tr>
+        <tr id="edit_settings" class="hidden">
             <td>
             
                 <table class="edit_settings">
@@ -1695,15 +1709,15 @@
 
         <tr>
 
-            <td style="width: 300px;">
+            <td id="comm_data_button" style="width: 300px;">
                 Communication Data &nbsp;<input type="button" id="btnClearCommData" value="Clear"/>
             </td>
             
             <!-- Toggles -->
-            <td style="width: 300px;"></td>
-            <td>
-                <input type="button"  id="btnGetToggles" value="Retrieve Toggles"/>
-                <input type="button"  id="btnToggleC" value="C"/>
+            <td style="width: 300px"></td>
+            <td id="toggle_settings" class="hidden">
+                <input type="button" id="btnGetToggles" value="Retrieve Toggles"/>
+                <input type="button" id="btnToggleC" value="C"/>
                 <input type="button" id="btnToggleU" value="U"/>
                 <input type="button" id="btnToggleD" value="D"/>
                 <input type="button" id="btnToggleA" value="A"/>

@@ -25,6 +25,7 @@ var send_to_ip = '';
 var last_sent_ip = '';
 var ping_alternator = 0;
 var setting_to_basic = false;
+var last_connect_seconds = 7;
 
 var processing_v_command = false;
 var processing_x_command = false;
@@ -85,6 +86,8 @@ server3520.on('message', function(message, remote) {
     check_for_v_command(message, remote);
     check_for_x_command(message, remote);
     check_for_call_record(message);
+    check_boot(message);
+    check_updated(message);
     //---------------------------------------------------------------
 
 });
@@ -95,9 +98,85 @@ server6699.on('message', function(message, remote) {
     check_for_v_command(message, remote);
     check_for_x_command(message, remote);
     check_for_call_record(message);
+    check_boot(message);
+    check_updated(message);
     //---------------------------------------------------------------
 
 });
+
+function watch_for_status_change()
+{
+    last_connect_seconds++;
+
+    var status = $("#lbStatus").text();
+
+    if(last_connect_seconds > 6)
+    {
+        if(status == "NOT Connected")
+        {
+            setTimeout(watch_for_status_change, 1000);
+            return;
+        }
+
+        $("#lbStatus").text("NOT Connected");
+        $("#imgConnected").addClass("hidden");
+        $("#lbDeluxeUnit").text("Deluxe Unit NOT Detected");
+        $("#status_bar").removeClass("status_bar_connected");
+        $("#status_bar").addClass("status_bar_disconnected");
+
+        $("#edit_settings").addClass("hidden");
+        $("#not_connected").removeClass("hidden");
+        $("#toggle_settings").addClass("hidden");
+
+    }
+    else
+    {
+        if(status == "NOT Connected")
+        {
+            $("#lbStatus").text("Connected");
+            $("#imgConnected").removeClass("hidden");
+            $("#status_bar").removeClass("status_bar_disconnected");
+            $("#status_bar").addClass("status_bar_connected");
+            $("#edit_settings").removeClass("hidden");
+
+            $("#edit_settings").removeClass("hidden");
+            $("#not_connected").addClass("hidden");
+            $("#toggle_settings").removeClass("hidden");
+        }
+    }
+
+
+    setTimeout(watch_for_status_change, 1000);
+
+}
+
+function check_updated(message)
+{
+    var message_str = array_to_ascii(message);
+    
+    if(message.length < 57 && message_str.indexOf("ok") > 0)
+    {
+        write_to_comm("Unit Updated");
+    }
+}
+
+function check_boot(message)
+{
+    if(message.length == 52)
+    {
+        var message_str = array_to_ascii(message);
+        var pattern = /(\d{1,2}) V/;
+
+        var results = pattern.exec(message_str);
+        
+        if(results == null) return;
+        if(results.length > 0)
+        {
+            write_to_comm(message_str.substr(21, message.length - 21));
+        }
+
+    }
+}
 
 function check_for_call_record(message)
 {
@@ -105,6 +184,14 @@ function check_for_call_record(message)
     if(message.length == 52)
     {
         var message_str = array_to_ascii(message);
+
+        var pattern = /(\d{1,2}) V/;
+
+        var results = pattern.exec(message_str);
+        
+        if(results == null) return;
+        if(results.length > 0) return;
+
         message_str = message_str.substr(21, message_str.length - 21);
 
         // Reset duplicate filtering after max wait time
@@ -185,6 +272,8 @@ function check_for_x_command(message, remote)
     
     if(message.length == 90 && !processing_x_command)
     {
+        last_connect_seconds = 0;
+
         processing_x_command = true;
 
         // Update target unit location
