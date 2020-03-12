@@ -20,9 +20,11 @@ var pc_suggested_ip = "192.168.0.90";
 var computer_info_ip;
 var computer_info_mac;
 var all_subnets = [];
+var macs_of_ips = [];
 var send_to_ip = '';
 var last_sent_ip = '';
 var ping_alternator = 0;
+var setting_to_basic = false;
 
 var processing_v_command = false;
 var processing_x_command = false;
@@ -261,23 +263,29 @@ function check_for_x_command(message, remote)
         if(!editing_dest_ip)
         {
             cnt = 1;
+            var dest_ip = "";
             for(var i = 40; i < 44; i++)
             {
                 var part = message_byte[i].toString();
                 $("#tbDestIP_" + cnt).val(part);
+                dest_ip += part + ".";
                 cnt++;
             }
+            $("#pWin_computer_info_dest_ip").text(dest_ip.substr(0, dest_ip.length - 1));
         }        
 
         if(!editing_dest_mac)
         {
             cnt = 1;
+            var dest_mac = "";
             for(var i = 66; i < 72; i++)
             {
                 var part = message_byte[i].toString(16).toUpperCase().padStart(2, '0');
                 $("#tbDestMAC_" + cnt).val(part);
+                dest_mac += part + "-";
                 cnt++;
             }
+            $("#pWin_computer_info_dest_mac").text(dest_mac.substr(0, dest_mac.length - 1));
         }        
 
         var dups = "";
@@ -498,6 +506,12 @@ function send_pinging_commands()
     }
     else
     {
+        if(setting_to_basic)
+        {
+            setTimeout(send_pinging_commands, 1500);
+            return;
+        }
+
         if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
         if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
         
@@ -553,12 +567,253 @@ function set_dest_mac(dest_mac)
 
 function set_dups(dup_count)
 {
+    var hex_dup = parseInt(dup_count).toString(16);
     send_udp_string("^^IdO" + dup_count, connected_port, send_to_ip);
 }
 
 function set_line_count(line_count)
 {
     send_udp_string("^^Id-N00000077" + line_count.padStart(2, '0') + "\r\n", connected_port, send_to_ip);
+}
+
+function set_deluxe_unit_output_defaults()
+{
+    open_setting_deluxe_output();
+
+    var ms_between_sends = 500;
+
+    $("#pWin_deluxe_output_progressbar").progressbar( "option", {
+        value: 50 * 1
+    });
+
+    send_udp_string("^^Id-N0000007701", connected_port, send_to_ip);
+
+    setTimeout(function(){
+
+        send_udp_string("^^Id-R", connected_port, send_to_ip);
+
+        $("#pWin_deluxe_output_progressbar").progressbar( "option", {
+            value: 50 * 2
+        });
+
+        setTimeout(function(){
+
+            pWin_setting_deluxe_output.dialog('close');
+
+        }, ms_between_sends);
+
+    }, ms_between_sends);
+
+}
+
+function reset_ethernet_defaults()
+{
+    open_resetting_el_defaults();
+
+    var ms_between_sends = 500;
+
+    send_udp_string("^^IdDFFFFFFFF", connected_port, send_to_ip);
+
+    $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+        value: 16 * 1
+    });
+
+    setTimeout(function(){
+
+        send_udp_string("^^IdU000000000001", connected_port, send_to_ip);
+
+        $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+            value: 16 * 2
+        });
+
+        setTimeout(function(){
+
+            send_udp_string("^^IdIC0A8005A", connected_port, send_to_ip);
+
+            $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+                value: 16 * 3
+            });
+
+            setTimeout(function(){
+
+                send_udp_string("^^IdCFFFFFFFFFFFF", connected_port, send_to_ip);
+
+                $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+                    value: 16 * 4
+                });
+
+                setTimeout(function(){
+
+                    send_udp_string("^^IdT0DC0", connected_port, send_to_ip);
+
+                    $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+                        value: 16 * 5
+                    });
+
+                    setTimeout(function(){
+
+                        set_dups("01");
+
+                        $("#pWin_reseting_to_el_defaults_progressbar").progressbar( "option", {
+                            value: 16 * 6
+                        });
+
+                        setTimeout(function(){
+
+                            pWin_reseting_to_el_defaults.dialog('close');
+
+                        }, ms_between_sends);
+
+                    }, ms_between_sends);
+
+                }, ms_between_sends);
+
+            }, ms_between_sends);
+
+        }, ms_between_sends);
+
+    }, ms_between_sends);
+}
+
+function set_pc_time()
+{
+    var now = new Date();
+
+    var send_str = parseInt(now.getMonth()).toString().padStart(2, "0") + parseInt(now.getDay()).toString().padStart(2, "0") + 
+    parseInt(now.getHours()).toString().padStart(2, "0") + parseInt(now.getMinutes()).toString().padStart(2, "0");
+        
+    send_udp_string("^^Id-Z" + send_str + "\r", connected_port, send_to_ip);
+
+    alert_time_changed();
+
+}
+
+function set_deluxe_to_basic()
+{
+
+    setting_to_basic = true;
+
+    open_deluxe_to_basic();
+
+    var ms_between_sends = 100;
+
+    $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+        value: 7 * 1
+    });
+
+    set_toggle("A");
+
+    setTimeout(function(){
+
+        $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+            value: 7 * 2
+        });
+
+        set_toggle("e");
+
+        setTimeout(function(){
+
+            $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                value: 7 * 3
+            });
+
+            set_toggle("c");
+
+            setTimeout(function(){
+
+                $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                    value: 7 * 4
+                });
+
+                set_toggle("x");
+
+                setTimeout(function(){
+
+                    $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                        value: 7 * 5
+                    });
+
+                    set_toggle("u");
+
+                    setTimeout(function(){
+
+                        $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                            value: 7 * 6
+                        });
+
+                        set_toggle("k");
+
+                        setTimeout(function(){
+
+                            $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                value: 7 * 7
+                            });
+
+                            set_toggle("s");
+
+                            setTimeout(function(){
+
+                                $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                    value: 7 * 8
+                                });
+
+                                set_toggle("b");
+
+                                setTimeout(function(){
+
+                                    $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                        value: 7 * 9
+                                    });
+
+                                    set_toggle("d");
+
+                                    setTimeout(function(){
+
+                                        $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                            value: 7 * 10
+                                        });
+
+                                        set_toggle("o");
+
+                                        setTimeout(function(){
+
+                                            $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                                value: 7 * 11
+                                            });
+
+                                            set_toggle("t");
+
+                                            setTimeout(function(){
+
+                                                $("#pWin_deluxe_to_basic_progressbar").progressbar( "option", {
+                                                    value: 7 * 13
+                                                });
+
+                                                setting_to_basic = false;
+                                                pWin_deluxe_to_basic.dialog('close');
+                                        
+                                            }, ms_between_sends);
+                                    
+                                        }, ms_between_sends);
+                                
+                                    }, ms_between_sends);
+                            
+                                }, ms_between_sends);
+                        
+                            }, ms_between_sends);
+                    
+                        }, ms_between_sends);
+                
+                    }, ms_between_sends);
+            
+                }, ms_between_sends);
+        
+            }, ms_between_sends);
+    
+        }, ms_between_sends);
+
+    }, ms_between_sends);
+
 }
 
 // ----------------------------------
@@ -574,7 +829,8 @@ function set_toggle(button_text)
         send_udp_string("^^Id-" + button_text.toUpperCase(), connected_port, send_to_ip);
     }
 
-    setTimeout(get_toggles, 500);
+    if(setting_to_basic) return;
+    setTimeout(get_toggles, 750);
 }
 
 function get_toggles()
@@ -605,11 +861,19 @@ function get_pc_ips()
 
                 var single_ip = iface.address;
                 all_known_pc_ips.push(single_ip);
+                
+                var mac_entry = [iface.mac, single_ip];
+                macs_of_ips.push(mac_entry);
+
             } 
             else 
             {
                 var single_ip = iface.address;
                 all_known_pc_ips.push(single_ip);
+
+                var mac_entry = [iface.mac, single_ip];
+                macs_of_ips.push(mac_entry);
+
             }
 
             ++alias;
@@ -830,7 +1094,15 @@ function ip_match_rating(ip_1, ip_2)
 
 function get_mac_of_ip(this_ip)
 {
-    return "11-11-11-11-11-11";
+    var mac = "00-00-00-00-00-00";
+    macs_of_ips.forEach(function(entry){
+
+        if(entry[1] == this_ip) mac = entry[0];
+
+    });
+
+    mac = mac.split(/:/).join("-");
+    return mac.toUpperCase();
 }
 
 function send_udp_string_and_bytes(to_send_str, to_send_bytes, port, ip)

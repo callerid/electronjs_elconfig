@@ -115,6 +115,10 @@
         var pWin_line_count = null;
         var pWin_ping = null;
         var pWin_bound_programs = null;
+        var pWin_reseting_to_el_defaults = null;
+        var pWin_setting_deluxe_output = null;
+        var pWin_deluxe_to_basic = null;
+        var pWin_time_change = null;
 
         function open_bound_programs()
         {
@@ -249,12 +253,112 @@
 
             pWin_computer_info.dialog('open');
         }
+
+        function open_resetting_el_defaults()
+        {
+            pWin_reseting_to_el_defaults = $("#pWin_reseting_to_el_defaults").dialog({
+                    autoOpen: false,
+                    width: 400,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_reseting_to_el_defaults.dialog('open');
+        }
+
+        function open_setting_deluxe_output()
+        {
+            pWin_setting_deluxe_output = $("#pWin_setting_deluxe_output").dialog({
+                    autoOpen: false,
+                    width: 400,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_setting_deluxe_output.dialog('open');
+        }
+
+        function open_deluxe_to_basic()
+        {
+            pWin_deluxe_to_basic = $("#pWin_deluxe_to_basic").dialog({
+                    autoOpen: false,
+                    width: 400,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    }
+            });
+
+            pWin_deluxe_to_basic.dialog('open');
+        }
+
+        function alert_time_changed()
+        {
+            pWin_time_change = $("#pWin_time_change").dialog({
+                    autoOpen: false,
+                    width: 260,
+                    height: 160,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    },
+                    buttons: {
+                        "OK": function() {
+                            $( this ).dialog( "close" );
+                        },
+                    }
+            });
+
+            pWin_time_change.dialog('open');
+        }
+
         // ------------------------------------------------------------
         var info_content_unit_ip = `
             Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
         `;
         $(document).ready(function(){
             
+            $( function() {
+                $( "#pWin_reseting_to_el_defaults_progressbar" ).progressbar({
+                    value: 4
+                    });
+            });
+
+            $( function() {
+                $( "#pWin_deluxe_output_progressbar" ).progressbar({
+                    value: 1
+                    });
+            });
+
+            $( function() {
+                $( "#pWin_deluxe_to_basic_progressbar" ).progressbar({
+                    value: 1
+                    });
+            });
+
             // Clear comm data
             write_to_comm("", true);
 
@@ -1400,6 +1504,32 @@
 
             });
 
+            $("#pWin_computer_info_btnSetToBroadcast").on('click', function(){
+
+                set_dest_ip("255.255.255.255");
+
+                setTimeout(function(){
+
+                    set_dest_mac("FFFFFFFFFFFF");
+
+                }, 300);
+
+            });
+
+            $("#pWin_computer_info_btnSetToComputer").on('click', function(){
+
+                set_dest_ip($("#pWin_computer_info_com_ip").text());
+
+                setTimeout(function(){
+
+                    var mac = $("#pWin_computer_info_com_mac").text();
+                    mac = mac.split(/-/).join("");
+                    set_dest_mac(mac);
+
+                }, 300);
+
+            });
+
         });
 
     </script>
@@ -1568,16 +1698,9 @@
             <td style="width: 300px;">
                 Communication Data &nbsp;<input type="button" id="btnClearCommData" value="Clear"/>
             </td>
-
-            <!-- Locked commands -->
-
-            <td style="width: 300px;">
-                <input type="button" id="btnV" value="v"/>
-            </td>
-
-            <!--------------------->
             
             <!-- Toggles -->
+            <td style="width: 300px;"></td>
             <td>
                 <input type="button"  id="btnGetToggles" value="Retrieve Toggles"/>
                 <input type="button"  id="btnToggleC" value="C"/>
@@ -1717,6 +1840,36 @@
 
 </div>
 
+<div id="pWin_reseting_to_el_defaults" title="Resetting..." class="hidden">
+
+    <p>Resetting to Ethernet Defaults</p>
+    <br/>
+    <div id="pWin_reseting_to_el_defaults_progressbar"></div>
+
+</div>
+
+<div id="pWin_setting_deluxe_output" title="Setting Deluxe Output Defaults" class="hidden">
+
+    <p>Setting Deluxe Unit Output Defaults</p>
+    <br/>
+    <div id="pWin_deluxe_output_progressbar"></div>
+
+</div>
+
+<div id="pWin_deluxe_to_basic" title="Setting Deluxe Unit to Basic Settings" class="hidden">
+
+    <p>Setting Deluxe Unit to Basic Settings</p>
+    <br/>
+    <div id="pWin_deluxe_to_basic_progressbar"></div>
+
+</div>
+
+<div id="pWin_time_change" title="Time changed to PC time" class="hidden">
+
+    <p>Time on Caller ID Unit has been changed to this PC's time.</p>
+
+</div>
+
 <div id="pWin_line_count" title="Set Line Count" class="hidden">
 
     <p>Current Starting Line Count: <span style="font-weight:bold;" id="pWin_line_count_current_count">01</span></p>
@@ -1790,7 +1943,7 @@
                     <center>
                         <b>Set Destination</b>
                         <br/>
-                        <button style="width:150px;margin-bottom:5px;margin-top:10px;" id="pWin_computer_info_btnSetToComputer">Set to this Computer</button><span class="ui-icon ui-icon-radio-off"></span>
+                        <button style="width:150px;margin-bottom:5px;margin-top:10px;" id="pWin_computer_info_btnSetToComputer">Set to this Computer</button>
                         <br/>
                         <button style="width:150px;" id="pWin_computer_info_btnSetToBroadcast">Set to Broadcast</button>
                         <br/><br/>

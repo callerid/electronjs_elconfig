@@ -5,19 +5,31 @@ const top_menu = [
        label: 'Configure',
        submenu: [
           {
-            label: 'Reset Ethernet Defaults'
+            label: 'Reset Ethernet Defaults',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("reset_ethernet_defaults()");
+            }
           },
           {
-            label: 'Set Deluxe Unit Output Defaults'
+            label: 'Set Deluxe Unit Output Defaults',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_deluxe_unit_output_defaults()");
+            }
           },
           {
              type: 'separator'
           },
           {
-            label: 'Set Unit to Current Time'
+            label: 'Set Unit to Current Time',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_pc_time()");
+            }
           },
           {
-            label: 'Set Deluxe Unit to Basic Unit'
+            label: 'Set Deluxe Unit to Basic Unit',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_deluxe_to_basic()");
+            }
           },
           {
             label: 'Set Line Count',
@@ -60,9 +72,6 @@ const top_menu = [
              focused_window.webContents.executeJavaScript("open_bound_programs()");
            }
          },
-         {
-           label: 'Start Logging Call Records'
-         }
        ]
     },
 ];
@@ -71,7 +80,7 @@ function createWindow () {
   
     // Create the browser window.
     let win = new BrowserWindow({
-    title: 'ELConfig 5 v.0.0.1',
+    title: 'ELConfig 5 v.1.0.00',
     width: 1000,
     minWidth: 1000,
     maxWidth: 1000,

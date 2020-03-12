@@ -282,6 +282,18 @@ p {
     color: rgb(245, 245, 245) !important;
 }
 
+#pWin_reseting_to_el_defaults_progressbar .ui-progressbar-value {
+    background-color: rgb(214, 241, 243);
+}
+
+#pWin_deluxe_output_progressbar .ui-progressbar-value {
+    background-color: rgb(214, 241, 243);
+}
+
+#pWin_deluxe_to_basic_progressbar .ui-progressbar-value {
+    background-color: rgb(214, 241, 243);
+}
+
 [type="checkbox"]
 {
     vertical-align: middle;
