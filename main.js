@@ -1,22 +1,45 @@
 const { app, BrowserWindow, Menu, MenuItem } = require('electron')
+const this_os = require('process').platform;
 
 function createWindow () {
 
     // Create the browser window.
-    let win = new BrowserWindow({
-    title: 'ELConfig 5 v.1.0.00',
-    width: 1000,
-    minWidth: 1000,
-    maxWidth: 1000,
-    height: 690,
-    minHeight: 690,
-    maxHeight: 690,
-    fullscreenable: false,
-    maximizable: false,
-    webPreferences: {
-      nodeIntegration: true
+    var win;
+    if(this_os == "darwin")
+    {
+      win = new BrowserWindow({
+        title: 'ELConfig 5 v.1.0.00',
+        width: 1000,
+        minWidth: 1000,
+        maxWidth: 1000,
+        x: 0,
+        y: 0,
+        height: 690,
+        minHeight: 690,
+        maxHeight: 690,
+        fullscreenable: false,
+        maximizable: false,
+        webPreferences: {
+          nodeIntegration: true
+        }
+      });
     }
-  });
+    else{
+      win = new BrowserWindow({
+        title: 'ELConfig 5 v.1.0.00',
+        width: 1000,
+        minWidth: 1000,
+        maxWidth: 1000,
+        height: 690,
+        minHeight: 690,
+        maxHeight: 690,
+        fullscreenable: false,
+        maximizable: false,
+        webPreferences: {
+          nodeIntegration: true
+        }
+      });
+    }
 
   var top_menu = [
     {
