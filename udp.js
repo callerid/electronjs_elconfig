@@ -1103,9 +1103,9 @@ function get_bound_programs()
 
         case "darwin":
 
-            var exec = require('child_process').exec("netstat -ab -p udp", function(error, stdout, stderr){
+            var exec = require('child_process').exec("lsof -nP -i4UDP:3520,6699", function(error, stdout, stderr){
         
-                console.log(stdout);
+                filter_bound_programs_mac(stdout);
         
             });
 
@@ -1136,9 +1136,45 @@ function filter_bound_programs_win()
     
 }
 
-function get_program_bound_to_port(read_in, port)
+function filter_bound_programs_mac(data)
 {
+
+    program_bound_6699 = get_program_bound_to_port(data, 6699, true);
+    program_bound_3520 = get_program_bound_to_port(data, 3520, true);
+
+    if(program_bound_6699 == "Electron") program_bound_6699 = "ELConfig 5";
+    if(program_bound_3520 == "Electron") program_bound_3520 = "ELConfig 5";
+
+    setTimeout(finish_open_bound_programs(), 1000);
     
+}
+
+function get_program_bound_to_port(read_in, port, is_mac)
+{
+    if(is_mac)
+    {
+
+        var lines = read_in.split('\n');
+        
+        var rtn_program = "No Program Bound";
+
+        lines.forEach(function(line){
+
+            var program = line.substr(0, line.indexOf(" "));
+            var program_port = 3520;
+            if(line.indexOf(":3520") > -1) program_port = 3520;
+            if(line.indexOf(":6699") > -1) program_port = 6699;
+
+            if(program_port == port.toString() && program != "COMMAND" && rtn_program == "No Program Bound")
+            {
+                rtn_program = program;
+            }
+
+        });
+
+        return rtn_program;
+    }
+
     var index = read_in.indexOf("0.0.0.0:" + port);
 
     if(index == -1) return "No Program Bound";
