@@ -1260,12 +1260,10 @@ function ping_ip(ip)
     {
         $("#pWin_ping_ip_return").text("Pinging...");
 
-        var shell = require('child_process').spawn("ping 192.168.10.90");
-
-        shell.on('data', function(data){
-
-            $("#pWin_ping_ip_return").html(data);
-
+        var exec = require('child_process').exec("ping -c 4 " + ip, function(error, stdout, stderr){
+        
+            $("#pWin_ping_ip_return").html(stdout);
+    
         });
 
     }
