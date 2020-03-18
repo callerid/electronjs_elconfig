@@ -1103,6 +1103,12 @@ function get_bound_programs()
 
         case "darwin":
 
+            var exec = require('child_process').exec("netstat -ab -p udp", function(error, stdout, stderr){
+        
+                console.log(stdout);
+        
+            });
+
         break;
     }    
 
