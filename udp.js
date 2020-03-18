@@ -189,8 +189,7 @@ function check_for_call_record(message)
 
         var results = pattern.exec(message_str);
         
-        if(results == null) return;
-        if(results.length > 0) return;
+        if(results != null) return;
 
         message_str = message_str.substr(21, message_str.length - 21);
 
@@ -423,7 +422,7 @@ function check_for_v_command(message, remote)
         // Write to COMM data
         write_to_comm(message_str.substr(start_index), false);
 
-        var pattern = /L=([0-9]){2}/;
+        var pattern = /L=([0-9]{2})/;
         var line_count = pattern.exec(message_str);
 
         $("#lbLineCount").text(line_count[1]);
@@ -662,7 +661,40 @@ function set_dups(dup_count)
 
 function set_line_count(line_count)
 {
-    send_udp_string("^^Id-N00000077" + line_count.padStart(2, '0') + "\r\n", connected_port, send_to_ip);
+    var send_str = "";
+    switch (line_count)
+    {
+
+        case "01":
+            send_str = "^^Id-N0000007701\r\n";
+            break;
+
+        case "05":
+            send_str = "^^Id-N0000007705\r\n";
+            break;
+
+        case "09":
+            send_str = "^^Id-N0000007709\r\n";
+            break;
+
+        case "17":
+            send_str = "^^Id-N0000007711\r\n";
+            break;
+
+        case "21":
+            send_str = "^^Id-N0000007715\r\n";
+            break;
+
+        case "25":
+            send_str = "^^Id-N0000007719\r\n";
+            break;
+
+        case "33":
+            send_str = "^^Id-N0000007721\r\n";
+            break;
+    }
+
+    send_udp_string(send_str, connected_port, send_to_ip);
 }
 
 function set_deluxe_unit_output_defaults()

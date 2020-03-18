@@ -1499,7 +1499,7 @@
 
             $("#pWin_line_count_btnSave").on('click', function(){
 
-                var line_count = $("#pWin_line_count_set_to").val();
+                var line_count = document.getElementById("pWin_line_count_set_to").value;
                 set_line_count(line_count);
 
             });
@@ -1584,7 +1584,7 @@
                             <p align="right"><b>Unit Number: </b></p>
                         </td>
                         <td style="width:100px;">
-                            <input type="text" id="tbUnitNumber" disabled="true" maxlength="6" class="custom_input"/><br/>
+                            <input type="text" style="width:54px" id="tbUnitNumber" disabled="true" maxlength="6" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
                             <button width="80px" id="btnChangeUnitNumber">Change</button><br/>
@@ -1838,10 +1838,10 @@
         Ping This IP:
         <div class="input_ip" style="display:inline;margin-right:5px;">
 
-            <input type="text" maxlength="3" id="pWin_ping_1" value="255"/> .
-            <input type="text" maxlength="3" id="pWin_ping_2" value="255"/> .
-            <input type="text" maxlength="3" id="pWin_ping_3" value="255"/> .
-            <input type="text" maxlength="3" id="pWin_ping_4" value="255"/>
+            <input type="text" maxlength="3" id="pWin_ping_1" value="192"/> .
+            <input type="text" maxlength="3" id="pWin_ping_2" value="168"/> .
+            <input type="text" maxlength="3" id="pWin_ping_3" value="0"/> .
+            <input type="text" maxlength="3" id="pWin_ping_4" value="90"/>
 
         </div>
 
@@ -1884,11 +1884,20 @@
 
 </div>
 
-<div id="pWin_line_count" title="Set Line Count" class="hidden">
+<div id="pWin_line_count" title="Set Line Numbers Reported" class="hidden">
 
-    <p>Current Starting Line Count: <span style="font-weight:bold;" id="pWin_line_count_current_count">01</span></p>
+    <p>Current Starting Line Number: <span style="font-weight:bold;" id="pWin_line_count_current_count">01</span></p>
     <br/>
-    Reset Line Count To: <input type="number" style="width:60px;text-align:center;" id="pWin_line_count_set_to" value="1">
+    Starting Line Number: 
+    <select id="pWin_line_count_set_to">
+        <option selected="selected">01</option>
+        <option>05</option>
+        <option>09</option>
+        <option>17</option>
+        <option>21</option>
+        <option>25</option>
+        <option>33</option>
+    </select>
     <br/><br/>
 
     <table>
@@ -1925,7 +1934,7 @@
     <table>
         <tr>
             <td style="padding-left: 0px;">
-                <button id="pWin_duplicates_btnCancel">Cancel</button>
+                <button id="pWin_duplicates_btnCancel">Close</button>
             </td>
             <td style="float:right;">
                 <button id="pWin_duplicates_btnSave">Save</button>

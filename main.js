@@ -73,7 +73,7 @@ function createWindow () {
             }
           },
           {
-            label: 'Set Line Count',
+            label: 'Set Line Numbers Reported from Unit',
             click(item, focused_window){
               focused_window.webContents.executeJavaScript("open_line_count()");
             }
