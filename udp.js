@@ -1246,12 +1246,33 @@ function get_bound_status(port)
 
 function ping_ip(ip)
 {
-    $("#pWin_ping_ip_return").text("Pinging...");
-    var exec = require('child_process').exec("ping " + ip, function(error, stdout, stderr){
+    
+    if(this_os == "win32")
+    {
+        $("#pWin_ping_ip_return").text("Pinging...");
+        var exec = require('child_process').exec("ping " + ip, function(error, stdout, stderr){
         
-        $("#pWin_ping_ip_return").html(stdout);
+            $("#pWin_ping_ip_return").html(stdout);
+    
+        });
+    }
+    else if(this_os == "darwin")
+    {
+        $("#pWin_ping_ip_return").text("Pinging...");
 
-    });
+        var shell = require('child_process').spawn("ping 192.168.10.90");
+
+        shell.on('data', function(data){
+
+            $("#pWin_ping_ip_return").html(data);
+
+        });
+
+    }
+    else
+    {
+        $("#pWin_ping_ip_return").text("Pinging not supported on OS.");
+    }
 
 }
 
