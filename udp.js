@@ -26,6 +26,7 @@ var last_sent_ip = '';
 var ping_alternator = 0;
 var setting_to_basic = false;
 var last_connect_seconds = 7;
+var ping_address = "192.168.0.90";
 
 var processing_v_command = false;
 var processing_x_command = false;
@@ -181,7 +182,7 @@ function check_boot(message)
 function check_for_call_record(message)
 {
     // Detailed call record
-    if(message.length == 52)
+    if(message.length == 52 || message.length == 53)
     {
         var message_str = array_to_ascii(message);
 
@@ -223,7 +224,7 @@ function check_for_call_record(message)
     }
     
     // Full call record
-    if(message.length == 83)
+    if(message.length == 83 || message.length == 84)
     {
         // UDP is a call record
         var message_str = array_to_ascii(message);
@@ -285,6 +286,18 @@ function check_for_x_command(message, remote)
 
         send_to_ip = last_sent_ip;
         connected_port = remote.port;
+
+        if(ping_address != remote.address)
+        {
+            ping_address = remote.address;
+
+            var parts = ping_address.split('.');
+
+            $("#pWin_ping_1").val(parts[0]);
+            $("#pWin_ping_2").val(parts[1]);
+            $("#pWin_ping_3").val(parts[2]);
+            $("#pWin_ping_4").val(parts[3]);
+        }
 
         // Actual processing
         var message_str = array_to_ascii(message);
@@ -1002,7 +1015,7 @@ function get_pc_ips()
         });
     });
 
-    all_subnets = [];
+    all_subnets = ["192.168.255.255", "10.255.255.255", "172.16.255.255"];
 
     all_known_pc_ips.forEach(function(ip){
         
