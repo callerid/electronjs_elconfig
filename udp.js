@@ -3,8 +3,8 @@ const os = require('os');
 const app = require('electron').remote.app;
 const file_reader = require('fs');
 
-var server3520 = dgram.createSocket({type:"udp4", reuseAddr:true});
-var server6699 = dgram.createSocket({type:"udp4", reuseAddr:true});
+var server3520;
+var server6699;
 
 const HOST = '0.0.0.0';
 var bound3520 = false;
@@ -49,62 +49,6 @@ var editing_dest_port = false;
 var editing_dest_ip = false;
 var editing_dest_mac = false;
 
-server3520.on('error', function(error){
-
-    console.log('3520 failed to bind.');
-    bound3520 = false;
-
-});
-
-server6699.on('error', function(error){
-
-    console.log('6699 failed to bind.');
-    bound6699 = false;
-
-});
-
-server3520.on('listening', function() {
-
-    bound3520 = true;
-    server3520.setBroadcast(true);
-    var address = server3520.address();
-    console.log('UDP Server listening on ' + address.address + ':' + address.port);
-
-});
-
-server6699.on('listening', function() {
-
-    bound6699 = true;
-    server6699.setBroadcast(true);
-    var address = server6699.address();
-    console.log('UDP Server listening on ' + address.address + ':' + address.port);
-
-});
-
-server3520.on('message', function(message, remote) {
-
-    // Comm command -------------------------------------------------
-    check_for_v_command(message, remote);
-    check_for_x_command(message, remote);
-    check_for_call_record(message);
-    check_boot(message);
-    check_updated(message);
-    //---------------------------------------------------------------
-
-});
-
-server6699.on('message', function(message, remote) {
-
-    // Comm command -------------------------------------------------
-    check_for_v_command(message, remote);
-    check_for_x_command(message, remote);
-    check_for_call_record(message);
-    check_boot(message);
-    check_updated(message);
-    //---------------------------------------------------------------
-
-});
-
 function watch_for_status_change()
 {
     last_connect_seconds++;
@@ -113,42 +57,109 @@ function watch_for_status_change()
 
     if(last_connect_seconds > 6)
     {
-        if(status == "NOT Connected")
+        if(status == "NOT Connected" && !($("#not_bound").hasClass("hidden")))
         {
             setTimeout(watch_for_status_change, 1000);
             return;
         }
 
-        $("#lbStatus").text("NOT Connected");
-        $("#imgConnected").addClass("hidden");
-        $("#lbDeluxeUnit").text("Deluxe Unit NOT Detected");
-        $("#status_bar").removeClass("status_bar_connected");
-        $("#status_bar").addClass("status_bar_disconnected");
+        if(!bound3520 || !bound6699)
+        {
+            update_bind_failed();
+            
+            if(this_os == "win32")
+            {
+                var pWin_admin_mode = $("#pWin_admin_mode").dialog({
+                    autoOpen: false,
+                    width: 400,
+                    height: 160,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    },
+                    buttons:
+                    {
+                        "Elevate to Admin": function(){
+                            get_bound_programs();
+                            $(this).dialog('close');
+                        },
+                        "Do not Elevate to Admin": function(){
+                            $(this).dialog('close');
+                        }
+                    }
+                });
+                
+                pWin_admin_mode.dialog('open');
+            }
+            else
+            {
+                get_bound_programs();
+            }
 
-        $("#edit_settings").addClass("hidden");
-        $("#not_connected").removeClass("hidden");
-        $("#toggle_settings").addClass("hidden");
+        }
+        else
+        {
+            update_not_connected();
+        }
 
     }
     else
     {
         if(status == "NOT Connected")
         {
-            $("#lbStatus").text("Connected");
-            $("#imgConnected").removeClass("hidden");
-            $("#status_bar").removeClass("status_bar_disconnected");
-            $("#status_bar").addClass("status_bar_connected");
-            $("#edit_settings").removeClass("hidden");
-
-            $("#edit_settings").removeClass("hidden");
-            $("#not_connected").addClass("hidden");
-            $("#toggle_settings").removeClass("hidden");
+            update_connected();
         }
     }
 
 
     setTimeout(watch_for_status_change, 1000);
 
+}
+
+function update_not_connected()
+{
+    $("#lbStatus").text("NOT Connected");
+    $("#imgConnected").addClass("hidden");
+    $("#lbDeluxeUnit").text("Deluxe Unit NOT Detected");
+    $("#status_bar").removeClass("status_bar_connected");
+    $("#status_bar").addClass("status_bar_disconnected");
+
+    $("#edit_settings").addClass("hidden");
+    $("#not_connected").removeClass("hidden");
+    $("#not_bound").addClass("hidden");
+    $("#toggle_settings").addClass("hidden");
+}
+
+function update_bind_failed()
+{
+    $("#lbStatus").text("NOT Connected");
+    $("#imgConnected").addClass("hidden");
+    $("#lbDeluxeUnit").text("Deluxe Unit NOT Detected");
+    $("#status_bar").removeClass("status_bar_connected");
+    $("#status_bar").addClass("status_bar_disconnected");
+
+    $("#edit_settings").addClass("hidden");
+    $("#not_connected").addClass("hidden");
+    $("#not_bound").removeClass("hidden");
+    $("#toggle_settings").addClass("hidden");
+}
+
+function update_connected()
+{
+    $("#lbStatus").text("Connected");
+    $("#imgConnected").removeClass("hidden");
+    $("#status_bar").removeClass("status_bar_disconnected");
+    $("#status_bar").addClass("status_bar_connected");
+    $("#edit_settings").removeClass("hidden");
+
+    $("#edit_settings").removeClass("hidden");
+    $("#not_connected").addClass("hidden");
+    $("#not_bound").addClass("hidden");
+    $("#toggle_settings").removeClass("hidden");
 }
 
 function check_updated(message)
@@ -559,12 +570,72 @@ function bind()
 {
     if(!bound3520)
     {
+        server3520 = dgram.createSocket({type:"udp4", reuseAddr:true});
         server3520.bind(3520, HOST);
+
+        server3520.on('error', function(error){
+
+            console.log('3520 failed to bind.');
+            bound3520 = false;
+        
+        });
+        
+        server3520.on('listening', function() {
+        
+            bound3520 = true;
+            server3520.setBroadcast(true);
+            var address = server3520.address();
+            console.log('UDP Server listening on ' + address.address + ':' + address.port);
+        
+        });
+        
+        server3520.on('message', function(message, remote) {
+        
+            // Comm command -------------------------------------------------
+            check_for_v_command(message, remote);
+            check_for_x_command(message, remote);
+            check_for_call_record(message);
+            check_boot(message);
+            check_updated(message);
+            //---------------------------------------------------------------
+        
+        });
+
     }
 
     if(!bound6699)
     {
+        server6699 = dgram.createSocket({type:"udp4", reuseAddr:true});
         server6699.bind(6699, HOST);
+
+        server6699.on('error', function(error){
+
+            console.log('6699 failed to bind.');
+            bound6699 = false;
+        
+        });
+        
+        server6699.on('listening', function() {
+        
+            bound6699 = true;
+            server6699.setBroadcast(true);
+            var address = server6699.address();
+            console.log('UDP Server listening on ' + address.address + ':' + address.port);
+        
+        });
+        
+        server6699.on('message', function(message, remote) {
+        
+            // Comm command -------------------------------------------------
+            check_for_v_command(message, remote);
+            check_for_x_command(message, remote);
+            check_for_call_record(message);
+            check_boot(message);
+            check_updated(message);
+            //---------------------------------------------------------------
+        
+        });
+
     }
 }
 
@@ -1090,11 +1161,16 @@ function get_bound_programs()
     {
         case "win32":
 
+            var exec = require('child_process').exec("del " + app.getAppPath() + "/bound_programs.txt", function(){
+                // Delete if exists
+            });
+
             var spawn = require("child_process").spawn,child;
+            
             child = spawn("powershell.exe", ["Start-Process cmd -Verb RunAs '/c netstat -ab -p udp > " + app.getAppPath() + "/bound_programs.txt'"]);
             child.on("exit",function(){
                 
-                filter_bound_programs_win();
+                setTimeout(filter_bound_programs_win, 1500);
 
             });
             child.stdin.end(); //end input

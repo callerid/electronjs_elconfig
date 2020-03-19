@@ -148,7 +148,7 @@
             pWin_bound_programs = $("#pWin_bound_programs").dialog({
                     autoOpen: false,
                     width: 350,
-                    height: 180,
+                    height: 200,
                     show: {
                         effect: "blind",
                         duration: 400
@@ -420,7 +420,6 @@
             });
 
             // --------------------------------------------------
-
             if(get_bound_status(3520) && get_bound_status(6699))
             {
                 $('#lbBoundTo').text("Bound: 3520 & 6699");
@@ -428,17 +427,17 @@
             else if(!get_bound_status(3520) && get_bound_status(6699))
             {
                 $('#lbBoundTo').text("Bound: 6699");
-                dialog_bind_warning_3520.dialog('open');
+                //dialog_bind_warning_3520.dialog('open');
             }
             else if(get_bound_status(3520) && !get_bound_status(6699))
             {
                 $('#lbBoundTo').text("Bound: 3520");
-                dialog_bind_warning_6699.dialog('open');
+                //dialog_bind_warning_6699.dialog('open');
             }
             else
             {
                 $('#lbBoundTo').text("Bound: Failed");
-                dialog_bind_warning_3520_6699.dialog('open');
+                //dialog_bind_warning_3520_6699.dialog('open');
             }
 
             // --------------------------------------------------------
@@ -1558,19 +1557,56 @@
     
     <table style="width: 100%;">
 
-        <tr id="not_connected">
+        <tr id="not_bound" class="hidden">
 
-            <td style="padding-bottom:85px;padding-top:85px;padding-left: 280px;">
+            <td style="padding-bottom:100px;padding-top:100px;padding-left:240px;line-height: 125%;">
 
-                <p><b>Unit Not Found</b></p>
-                <p>Please make sure Ethernet Port on the Caller ID unit is connected to the
-                    network.
-                </p>
+                <span style="color:red;font-size: large;font-weight: bold;">A program is blocking ELConfig's connection to the unit.</span>
 
             </td>
 
         </tr>
-        <tr id="edit_settings" class="hidden">
+
+        <tr id="not_connected" class="hidden">
+
+            <td style="padding-bottom:5px;padding-top:5px;padding-left: 100px;line-height: 125%;">
+
+                <b>Facts:</b>
+                <ul>
+                    <li>Both the Caller ID device and the computer running ELConfig 5 must 
+                        be connected to the LAN side of the same router.
+                    </li>
+                    <li>
+                        The Caller ID device is not capable of DHCP (automatic IP 
+                        assignment). It can only be set statically.
+                    </li>
+                    <li>
+                        The factory default IP address on the device is 192.168.0.90. 
+                        This cannot be reset without connecting to the unit.
+                    </li>
+                </ul>
+
+                <b>Troubleshooting Steps:</b>
+                <ol>
+                    <li>
+                        Set all DIP switches to the down position
+                    </li>
+                    <li>
+                        Un-power the Caller ID device and connect it to the LAN side of the same router 
+                        that this computer is connected.  Then, power on the Caller ID device.
+                    </li>
+                    <li>
+                        Use <span id="pingLink" style="text-decoration: underline; font-weight: bold;">Tools/Ping</span> and try pinging the Caller ID device's default  IP address: 192.168.0.90.
+                    </li>
+                    <li>
+                        Connect the device directly to PC or laptop and set IP of unit within IP scheme of subnet.
+                    </li>
+                </ol>
+
+            </td>
+
+        </tr>
+        <tr id="edit_settings">
             <td>
             
                 <table class="edit_settings">
@@ -1822,9 +1858,7 @@
     </div>
 
     <br/>
-    <div style="color:red;">
-        Updating a few times may be required to see changes.
-    </div>
+    After closing program listed above, click 'Update' then 'Attempt Rebind'.
 
 </div>
 
@@ -1877,6 +1911,14 @@
 <div id="pWin_time_change" title="Time changed to PC time" class="hidden">
 
     <p>Time on Caller ID Unit has been changed to this PC's time.</p>
+
+</div>
+
+<div id="pWin_admin_mode" title="Admin Permissions Required" class="hidden">
+
+    <p>A program is blocking ELConfig's port. Elevate to Admin Mode to have computer 
+        automatically check which program this is.
+    </p>
 
 </div>
 
