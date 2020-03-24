@@ -51,6 +51,7 @@ var editing_dest_mac = false;
 
 function watch_for_status_change()
 {
+    
     last_connect_seconds++;
 
     var status = $("#lbStatus").text();
@@ -1157,23 +1158,37 @@ function send_udp_string(to_send_str, port, ip)
 function get_bound_programs()
 {
 
+    
     switch(this_os)
     {
         case "win32":
 
-            var exec = require('child_process').exec("del " + app.getAppPath() + "/bound_programs.txt", function(){
+            var exec = require('child_process').exec("del " + __dirname + "\\bound_programs.txt", function(){
                 // Delete if exists
             });
 
-            var spawn = require("child_process").spawn,child;
+            file_reader.writeFile(__dirname + "\\bound_programs.txt", "None", function(err)
+            {
+                if(err)
+                {
+                    console.log("Error refreshing bound programs.");
+                }
+                else
+                {
+                    var spawn = require("child_process").spawn,child;
             
-            child = spawn("powershell.exe", ["Start-Process cmd -Verb RunAs '/c netstat -ab -p udp > " + app.getAppPath() + "/bound_programs.txt'"]);
-            child.on("exit",function(){
-                
-                setTimeout(filter_bound_programs_win, 1500);
+                    child = spawn("powershell.exe", ["Start-Process cmd -Verb RunAs '/c netstat -ab -p udp > " + __dirname + "\\bound_programs.txt'"]);
+                    child.on("exit",function(){
+                        
+                        $("#lbBoundProgramStatus").text("- Searching for programs. Please wait...");
+                        setTimeout(filter_bound_programs_win, 4200);
+
+                    });
+
+                    child.stdin.end(); //end input
+                }
 
             });
-            child.stdin.end(); //end input
 
         break;
 
@@ -1193,13 +1208,14 @@ function get_bound_programs()
 function filter_bound_programs_win()
 {
 
-    file_reader.readFile(app.getAppPath() + "/bound_programs.txt", (err, data) => {
+    file_reader.readFile(__dirname + "\\bound_programs.txt", (err, data) => {
         
         if (err) {
           console.error(err)
           return
         }
 
+        console.log(array_to_ascii(data));
         program_bound_6699 = get_program_bound_to_port(array_to_ascii(data), 6699);
         program_bound_3520 = get_program_bound_to_port(array_to_ascii(data), 3520);
 

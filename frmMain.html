@@ -128,6 +128,7 @@
         function finish_open_bound_programs()
         {
             // Update values
+            $("#lbBoundProgramStatus").text("");
             if(program_bound_3520 == "No Program Bound")
             {
                 bound3520 = false;
@@ -142,7 +143,42 @@
             
             if(pWin_bound_programs != null)
             {
-                if(pWin_bound_programs.dialog('isOpen')) return;
+                if(pWin_bound_programs.dialog('isOpen'))
+                {
+                    pWin_bound_programs.dialog('close');
+                }
+            }
+
+            var bound_buttons;
+
+            if(!((program_bound_3520 == "No Program Bound" || program_bound_3520 == "ELConfig 5")
+                && (program_bound_6699 == "No Program Bound" || program_bound_6699 == "ELConfig 5")))
+            {
+                bound_buttons = {
+                    "Refresh": function(){
+                        
+                        open_bound_programs();
+
+                    },
+                    "Close": function() {
+                        $( this ).dialog( "close" );
+                    }
+                };
+            }
+            else
+            {
+                bound_buttons = {
+                    "Retry Bind": function(){
+                        
+                        bind();
+                        get_pc_ips();
+                        find_unit();
+
+                    },
+                    "Close": function() {
+                        $( this ).dialog( "close" );
+                    }
+                };
             }
 
             pWin_bound_programs = $("#pWin_bound_programs").dialog({
@@ -157,21 +193,7 @@
                         effect: "fade",
                         duration: 400
                     },
-                    buttons: {
-                        "Attempt Rebind": function(){
-                            
-                            bind();
-                            get_pc_ips();
-                            find_unit();
-
-                        },
-                        "Update": function(){
-                            open_bound_programs();
-                        },
-                        "Close": function() {
-                        $( this ).dialog( "close" );
-                        },
-                    }
+                    buttons: bound_buttons,
             });
 
             pWin_bound_programs.dialog('open');
@@ -341,6 +363,8 @@
         `;
         $(document).ready(function(){
             
+            
+
             $( function() {
                 $( "#pWin_reseting_to_el_defaults_progressbar" ).progressbar({
                     value: 4
@@ -1562,6 +1586,9 @@
             <td style="padding-bottom:100px;padding-top:100px;padding-left:240px;line-height: 125%;">
 
                 <span style="color:red;font-size: large;font-weight: bold;">A program is blocking ELConfig's connection to the unit.</span>
+                <br/><br/>
+                <span style="padding-left:10px;padding-top:15px;color:red;font-size: medium;font-weight: bold;" id="lbBoundProgramStatus"></span>
+
 
             </td>
 
@@ -1571,8 +1598,9 @@
 
             <td style="padding-bottom:5px;padding-top:5px;padding-left: 100px;line-height: 125%;">
 
-                <b>Facts:</b>
-                <ul>
+                <p style="font-weight: bold; padding-bottom: 0px; padding-top: 0px;margin-bottom: 0px; margin-top: 0px;">CallerID.com Device Not Detected</p>
+                <p>Facts:</p>
+                <ul style="padding-bottom: 0px; padding-top: 4px;margin-bottom: 0px; margin-top: 0px;">
                     <li>Both the Caller ID device and the computer running ELConfig 5 must 
                         be connected to the LAN side of the same router.
                     </li>
@@ -1586,8 +1614,8 @@
                     </li>
                 </ul>
 
-                <b>Troubleshooting Steps:</b>
-                <ol>
+                <p>Troubleshooting Steps:</p>
+                <ol style="padding-bottom: 0px; padding-top: 4px;margin-bottom: 0px; margin-top: 0px;">
                     <li>
                         If Whozz Calling? Basic model, set all DIP switches to the down position.
                     </li>
@@ -1811,7 +1839,7 @@
     <table id="status_bar" class="status_bar_disconnected">
         <tr>
             <td style="padding-left: 20px;">
-                <img id="imgConnected" class="hidden" src="./build/connected.png" style="width: 20px; height:25px;"/>
+                
             </td>
             <td>
                 <span id="lbStatus">NOT Connected</span>
