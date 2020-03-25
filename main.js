@@ -108,12 +108,6 @@ function createWindow () {
           }
         },
         {
-          label: 'Get Names of Programs Bound to Ports',
-          click(item, focused_window){
-            focused_window.webContents.executeJavaScript("open_bound_programs()");
-          }
-        },
-        {
           label: 'Debug Window',
           click(item, focused_window){
             win.webContents.openDevTools();

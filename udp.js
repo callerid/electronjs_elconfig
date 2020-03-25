@@ -1,7 +1,6 @@
 const dgram = require('dgram');
 const os = require('os');
 const app = require('electron').remote.app;
-const file_reader = require('fs');
 
 var server3520;
 var server6699;
@@ -9,8 +8,6 @@ var server6699;
 const HOST = '0.0.0.0';
 var bound3520 = false;
 var bound6699 = false;
-var program_bound_6699 = "";
-var program_bound_3520 = "";
 
 var connected_port = 0;
 var found_unit = false;
@@ -58,7 +55,8 @@ function watch_for_status_change()
 
     if(last_connect_seconds > 6)
     {
-        if(status == "NOT Connected" && !($("#not_bound").hasClass("hidden")))
+        if(status == "NOT Connected" && 
+        (!($("#not_bound_win").hasClass("hidden") || !($("#not_bound_mac").hasClass("hidden")))))
         {
             setTimeout(watch_for_status_change, 1000);
             return;
@@ -67,40 +65,6 @@ function watch_for_status_change()
         if(!bound3520 || !bound6699)
         {
             update_bind_failed();
-            
-            if(this_os == "win32")
-            {
-                var pWin_admin_mode = $("#pWin_admin_mode").dialog({
-                    autoOpen: false,
-                    width: 400,
-                    height: 160,
-                    show: {
-                        effect: "blind",
-                        duration: 400
-                    },
-                    hide: {
-                        effect: "fade",
-                        duration: 400
-                    },
-                    buttons:
-                    {
-                        "Elevate to Admin": function(){
-                            get_bound_programs();
-                            $(this).dialog('close');
-                        },
-                        "Do not Elevate to Admin": function(){
-                            $(this).dialog('close');
-                        }
-                    }
-                });
-                
-                pWin_admin_mode.dialog('open');
-            }
-            else
-            {
-                get_bound_programs();
-            }
-
         }
         else
         {
@@ -110,10 +74,7 @@ function watch_for_status_change()
     }
     else
     {
-        if(status == "NOT Connected")
-        {
-            update_connected();
-        }
+        update_connected();
     }
 
 
@@ -131,7 +92,8 @@ function update_not_connected()
 
     $("#edit_settings").addClass("hidden");
     $("#not_connected").removeClass("hidden");
-    $("#not_bound").addClass("hidden");
+    $("#not_bound_win").addClass("hidden");
+    $("#not_bound_mac").addClass("hidden");
     $("#toggle_settings").addClass("hidden");
 }
 
@@ -145,7 +107,28 @@ function update_bind_failed()
 
     $("#edit_settings").addClass("hidden");
     $("#not_connected").addClass("hidden");
-    $("#not_bound").removeClass("hidden");
+
+    this_os = process.platform;
+    if(this_os == "win32")
+    {
+        $("#not_bound_win").removeClass("hidden");
+        $("#not_bound_mac").addClass("hidden");
+
+        var port_str = "";
+        if(!bound3520 && !bound6699) port_str = "3520 and/or 6699";
+        if(!bound3520 && bound6699) port_str = "3520";
+        if(bound3520 && !bound6699) port_str = "6699";
+
+        $("#win_resmon_port").text(port_str);
+        $("#win_resmon_port_2").text(port_str);
+
+    }
+    else
+    {
+        $("#not_bound_mac").removeClass("hidden");
+        $("#not_bound_win").addClass("hidden");
+    }
+
     $("#toggle_settings").addClass("hidden");
 }
 
@@ -159,7 +142,8 @@ function update_connected()
 
     $("#edit_settings").removeClass("hidden");
     $("#not_connected").addClass("hidden");
-    $("#not_bound").addClass("hidden");
+    $("#not_bound_win").addClass("hidden");
+    $("#not_bound_mac").addClass("hidden");
     $("#toggle_settings").removeClass("hidden");
 }
 
@@ -566,6 +550,22 @@ get_pc_ips();
 
 // Find Unit
 find_unit();
+
+function rebind()
+{
+    // Auto bind at start
+    bound3520 = false;
+    bound6699 = false;
+    found_unit = false;
+
+    bind();
+
+    // Get all PC addresses to use for subnet broadcasting/multicasting
+    get_pc_ips();
+
+    // Find Unit
+    find_unit();
+}
 
 function bind()
 {
@@ -1153,133 +1153,6 @@ function send_udp_string(to_send_str, port, ip)
         break;
     }
 
-}
-
-function get_bound_programs()
-{
-
-    
-    switch(this_os)
-    {
-        case "win32":
-
-            var exec = require('child_process').exec("del " + __dirname + "\\bound_programs.txt", function(){
-                // Delete if exists
-            });
-
-            file_reader.writeFile(__dirname + "\\bound_programs.txt", "None", function(err)
-            {
-                if(err)
-                {
-                    console.log("Error refreshing bound programs.");
-                }
-                else
-                {
-                    var spawn = require("child_process").spawn,child;
-            
-                    child = spawn("powershell.exe", ["Start-Process cmd -Verb RunAs '/c netstat -ab -p udp > " + __dirname + "\\bound_programs.txt'"]);
-                    child.on("exit",function(){
-                        
-                        $("#lbBoundProgramStatus").text("- Searching for programs. Please wait...");
-                        setTimeout(filter_bound_programs_win, 4200);
-
-                    });
-
-                    child.stdin.end(); //end input
-                }
-
-            });
-
-        break;
-
-        case "darwin":
-
-            var exec = require('child_process').exec("lsof -nP -i4UDP:3520,6699", function(error, stdout, stderr){
-        
-                filter_bound_programs_mac(stdout);
-        
-            });
-
-        break;
-    }    
-
-}
-
-function filter_bound_programs_win()
-{
-
-    file_reader.readFile(__dirname + "\\bound_programs.txt", (err, data) => {
-        
-        if (err) {
-          console.error(err)
-          return
-        }
-
-        console.log(array_to_ascii(data));
-        program_bound_6699 = get_program_bound_to_port(array_to_ascii(data), 6699);
-        program_bound_3520 = get_program_bound_to_port(array_to_ascii(data), 3520);
-
-        if(program_bound_6699 == "electron.exe") program_bound_6699 = "ELConfig 5";
-        if(program_bound_3520 == "electron.exe") program_bound_3520 = "ELConfig 5";
-
-        setTimeout(finish_open_bound_programs(), 1000);
-
-      });
-    
-}
-
-function filter_bound_programs_mac(data)
-{
-
-    program_bound_6699 = get_program_bound_to_port(data, 6699, true);
-    program_bound_3520 = get_program_bound_to_port(data, 3520, true);
-
-    if(program_bound_6699 == "Electron") program_bound_6699 = "ELConfig 5";
-    if(program_bound_3520 == "Electron") program_bound_3520 = "ELConfig 5";
-
-    setTimeout(finish_open_bound_programs(), 1000);
-    
-}
-
-function get_program_bound_to_port(read_in, port, is_mac)
-{
-    if(is_mac)
-    {
-
-        var lines = read_in.split('\n');
-        
-        var rtn_program = "No Program Bound";
-
-        lines.forEach(function(line){
-
-            var program = line.substr(0, line.indexOf(" "));
-            var program_port = 3520;
-            if(line.indexOf(":3520") > -1) program_port = 3520;
-            if(line.indexOf(":6699") > -1) program_port = 6699;
-
-            if(program_port == port.toString() && program != "COMMAND" && rtn_program == "No Program Bound")
-            {
-                rtn_program = program;
-            }
-
-        });
-
-        return rtn_program;
-    }
-
-    var index = read_in.indexOf("0.0.0.0:" + port);
-
-    if(index == -1) return "No Program Bound";
-
-    var start_index = index;
-    var part_read_in = read_in.substr(start_index);
-    var end_index = part_read_in.indexOf("]");
-    var part = part_read_in.substr(0, end_index + 1);
-
-    var pattern = /(\[(.+)\])/;
-    var names = pattern.exec(part);
-    
-    return names[1].replace("[","").replace("]","");
 }
 
 function handle_computer_info()

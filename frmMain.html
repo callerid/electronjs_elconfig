@@ -114,90 +114,10 @@
         var pWin_duplicates = null;
         var pWin_line_count = null;
         var pWin_ping = null;
-        var pWin_bound_programs = null;
         var pWin_reseting_to_el_defaults = null;
         var pWin_setting_deluxe_output = null;
         var pWin_deluxe_to_basic = null;
         var pWin_time_change = null;
-
-        function open_bound_programs()
-        {
-            get_bound_programs();
-        }
-
-        function finish_open_bound_programs()
-        {
-            // Update values
-            $("#lbBoundProgramStatus").text("");
-            if(program_bound_3520 == "No Program Bound")
-            {
-                bound3520 = false;
-            }
-            $("#pWin_bound_programs_lb_3520_program").text(program_bound_3520);
-
-            if(program_bound_6699 == "No Program Bound")
-            {
-                bound6699 = false;
-            }
-            $("#pWin_bound_programs_lb_6699_program").text(program_bound_6699);
-            
-            if(pWin_bound_programs != null)
-            {
-                if(pWin_bound_programs.dialog('isOpen'))
-                {
-                    pWin_bound_programs.dialog('close');
-                }
-            }
-
-            var bound_buttons;
-
-            if(!((program_bound_3520 == "No Program Bound" || program_bound_3520 == "ELConfig 5")
-                && (program_bound_6699 == "No Program Bound" || program_bound_6699 == "ELConfig 5")))
-            {
-                bound_buttons = {
-                    "Refresh": function(){
-                        
-                        open_bound_programs();
-
-                    },
-                    "Close": function() {
-                        $( this ).dialog( "close" );
-                    }
-                };
-            }
-            else
-            {
-                bound_buttons = {
-                    "Retry Bind": function(){
-                        
-                        bind();
-                        get_pc_ips();
-                        find_unit();
-
-                    },
-                    "Close": function() {
-                        $( this ).dialog( "close" );
-                    }
-                };
-            }
-
-            pWin_bound_programs = $("#pWin_bound_programs").dialog({
-                    autoOpen: false,
-                    width: 350,
-                    height: 200,
-                    show: {
-                        effect: "blind",
-                        duration: 400
-                    },
-                    hide: {
-                        effect: "fade",
-                        duration: 400
-                    },
-                    buttons: bound_buttons,
-            });
-
-            pWin_bound_programs.dialog('open');
-        }
 
         function open_ping()
         {
@@ -363,7 +283,74 @@
         `;
         $(document).ready(function(){
             
-            
+            $("#btnOpenResourceMon").on('click', function(){
+
+                require("child_process").exec("resmon");
+                $("#win_resmon_step_1").addClass("hidden");
+                $("#win_resmon_step_2").removeClass("hidden");
+                $("#win_resmon_step_3").addClass("hidden");
+                set_resmon_1();
+
+            });
+
+            $("#win_resmon_step_2_back").on('click', function(){
+
+                $("#win_resmon_step_1").removeClass("hidden");
+                $("#win_resmon_step_2").addClass("hidden");
+                $("#win_resmon_step_3").addClass("hidden");
+
+            });
+
+            $("#win_resmon_step_2_next").on('click', function(){
+
+                $("#win_resmon_step_1").addClass("hidden");
+                $("#win_resmon_step_2").addClass("hidden");
+                $("#win_resmon_step_3").removeClass("hidden");
+                set_resmon_2();
+
+            });
+
+            $("#win_resmon_step_3_back").on('click', function(){
+
+                $("#win_resmon_step_1").addClass("hidden");
+                $("#win_resmon_step_2").removeClass("hidden");
+                $("#win_resmon_step_3").addClass("hidden");
+                set_resmon_1();
+
+            });
+
+            $("#btnKillTask").on('click', function(){
+
+                var pid = $("#pid").val();
+                var elc_pid = process.pid.toString();
+
+                if(pid == elc_pid) return;
+
+                process.kill(pid);
+                
+                setTimeout(rebind, 1200);
+
+            });
+
+            $("#btnKillTaskMac").on('click', function(){
+
+                var pid = $("#pid_mac").val();
+                var elc_pid = process.pid.toString();
+
+                if(pid == elc_pid) return;
+                process.kill(pid);
+
+                setTimeout(rebind, 1000);
+
+            });
+
+            function set_resmon_1() {
+                $('#resmon_fades').fadeIn(750).html('<img style="float:right;padding-top:10px;padding-right:40px;" src="./resmon_1.png" />');
+            }
+
+            function set_resmon_2() {
+                $('#resmon_fades').fadeIn(750).html('<img style="float:right;padding-top:10px;padding-right:40px;" src="./resmon_2.png" />');
+            }
 
             $( function() {
                 $( "#pWin_reseting_to_el_defaults_progressbar" ).progressbar({
@@ -1581,14 +1568,56 @@
     
     <table style="width: 100%;">
 
-        <tr id="not_bound" class="hidden">
+        <tr id="not_bound_win" class="hidden">
 
-            <td style="padding-bottom:100px;padding-top:100px;padding-left:240px;line-height: 125%;">
+            <td style="width:330px;padding-bottom:2px;padding-top:15px;padding-left:20px;line-height: 125%;">
+                <span style="color:red;font-size: large;font-weight: bold;">A program is blocking ELConfig's connection to the unit.</span>
+                <br/><br/><br/>
+                
+                <div id="win_resmon_step_1" style="padding-bottom: 10px;">
+                    Follow the 3 Steps below to Resolve Issue:<br/>
+                    <br/>
+                    <b>Step One:</b><br/><br/>
+                    <button id="btnOpenResourceMon">Open Resource Monitor</button><br/><br/>
+                </div>
 
+                <div id="win_resmon_step_2" style="padding-bottom: 10px;" class="hidden">
+                    <b>Step Two:</b><br/><br/>
+                    Go to "Network" Tab. Then expand "Listening Ports" and look for port <span id="win_resmon_port">nnnn</span>. Refer to the image shown.<br/><br/>
+                    <button id="win_resmon_step_2_back">Back</button>
+                    <button id="win_resmon_step_2_next" style="margin-right:15px;">Next</button>
+                    
+                </div>
+
+                <div id="win_resmon_step_3" style="padding-bottom: 10px;" class="hidden">
+                    <b>Step Three:</b><br/><br/>
+                    Enter PID of the program bound to <span id="win_resmon_port_2">nnnn</span>: <input id="pid" style="width:60px;" maxlength="6"/> <button id="btnKillTask">Close Bound Program</button><br/>
+                    <br/>
+                    <button id="win_resmon_step_3_back">Back</button>
+                </div>
+                
+            </td>
+
+            <td style="height:230px;">
+
+                <div id="resmon_fades"></div>
+
+            </td>
+
+        </tr>
+
+        <tr id="not_bound_mac" class="hidden">
+
+            <td style="width:330px;padding-bottom:2px;padding-top:2px;padding-left:20px;line-height: 125%;">
                 <span style="color:red;font-size: large;font-weight: bold;">A program is blocking ELConfig's connection to the unit.</span>
                 <br/><br/>
-                <span style="padding-left:10px;padding-top:15px;color:red;font-size: medium;font-weight: bold;" id="lbBoundProgramStatus"></span>
+                <span>Please close any programs using ports 3520 or 6699.</span>
+                <br/>                
+            </td>
 
+            <td style="height:230px;">
+
+                
 
             </td>
 
@@ -1859,37 +1888,9 @@
     </body>
 </html>
 
-
-<!---------------------- Alerts -------------------------->
-<div id="bind_warning_3520" title="Bind Warning">
-    <p style="padding-top: 10px;">Bound to 6699. Failed to bind to 3520, port already in use.</p>
-</div>
-
-<div id="bind_warning_6699" title="Bind Warning">
-    <p style="padding-top: 10px;">Bound to 3520. Failed to bind to 6699, port already in use.</p>
-</div>
-
-<div id="bind_warning_3520_6699" title="Bind Failure">
-    <p style="padding-top: 10px;">Failed to bind to 3520 and 6699, ports already in use.</p>
-</div>
 <!-------------------------------------------------------->
 <!--                 Popups/Windows                     -->
 <!-------------------------------------------------------->
-<div id="pWin_bound_programs" title="Bound Programs" class="hidden">
-
-    <div style="margin-bottom: 5px;">
-        Port 3520: <b><span id="pWin_bound_programs_lb_3520_program"></span></b>
-    </div>
-
-    <div>
-        Port 6699: <b><span id="pWin_bound_programs_lb_6699_program"></span></b>
-    </div>
-
-    <br/>
-    After closing program listed above, click 'Update' then 'Attempt Rebind'.
-
-</div>
-
 <div id="pWin_ping" title="Ping IP Address" class="hidden">
 
     <center>
@@ -1939,14 +1940,6 @@
 <div id="pWin_time_change" title="Time changed to PC time" class="hidden">
 
     <p>Time on Caller ID Unit has been changed to this PC's time.</p>
-
-</div>
-
-<div id="pWin_admin_mode" title="Admin Permissions Required" class="hidden">
-
-    <p>A program is blocking ELConfig's port. Elevate to Admin Mode to have computer 
-        automatically check which program this is.
-    </p>
 
 </div>
 

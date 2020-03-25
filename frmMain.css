@@ -115,8 +115,8 @@ p {
 
 .header_row {
 
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
     margin: 0px;
     background-color: rgb(98, 109, 110);
     border-bottom: 3px solid rgb(52, 57, 58);
@@ -206,7 +206,7 @@ p {
     margin-left: 10px;
     margin-right: 10px;
     width: 950px;
-    height: 162px;
+    height: 142px;
     margin-bottom: 4px;
 }
 
@@ -262,14 +262,14 @@ p {
 .status_bar_connected{
 
     background-color: rgb(134, 209, 163);
-    height: 30px;
+    height: 22px;
     width: 100%;
 }
 
 .status_bar_disconnected{
 
     background-color: rgb(199, 150, 150);
-    height: 30px;
+    height: 22px;
     width: 100%;
 }
 
