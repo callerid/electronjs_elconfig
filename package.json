@@ -21,7 +21,7 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist_mac": "electron-builder --mac --ia32",
+    "dist_mac": "electron-builder --macos",
     "dist": "electron-builder --ia32"
   },
   "build": {
