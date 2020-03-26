@@ -1,6 +1,6 @@
 {
   "name": "elconfig_5cp",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "main.js",
   "dependencies": {
@@ -21,8 +21,8 @@
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",
-    "dist_mac": "electron-builder --mac",
-    "dist": "electron-builder"
+    "dist_mac": "electron-builder --mac --ia32",
+    "dist": "electron-builder --ia32"
   },
   "build": {
     "appId": "elconfig.callerid.com",
