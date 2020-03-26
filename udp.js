@@ -32,6 +32,7 @@ var getting_toggles_flag = false;
 
 var last_call_record_reception = "";
 var last_detailed_record_reception = "";
+var last_boot_reception = "";
 
 var last_x_command_reception = [];
 
@@ -158,9 +159,23 @@ function check_updated(message)
 
 function check_boot(message)
 {
-    if(message.length == 52)
+    if(message.length == 52 || message.length == 53)
     {
         var message_str = array_to_ascii(message);
+
+        // Reset duplicate filtering after max wait time
+        setTimeout(function(){
+            last_detailed_record_reception = "";
+        }, 500);
+
+        // Ignore dups (always - for detailed)
+        if(last_boot_reception == message_str)
+        {
+            return;
+        }
+
+        last_detailed_record_reception = message_str;
+
         var pattern = /(\d{1,2}) V/;
 
         var results = pattern.exec(message_str);
