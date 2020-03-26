@@ -1,5 +1,8 @@
-﻿dist
+dist
 node_modules
 
 dist/
 bound_programs.txt
+
+CertificateSigningRequest.certSigningRequest
+developerID_installer.cer
