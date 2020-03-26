@@ -16,7 +16,6 @@ var all_known_pc_ips = [];
 var pc_suggested_ip = "192.168.0.90";
 var computer_info_ip;
 var computer_info_mac;
-var all_subnets = [];
 var macs_of_ips = [];
 var send_to_ip = '';
 var last_sent_ip = '';
@@ -545,11 +544,11 @@ function check_for_v_command(message, remote)
 // Auto bind at start
 bind();
 
-// Get all PC addresses to use for subnet broadcasting/multicasting
+// Get all PC addresses 
 get_pc_ips();
 
 // Find Unit
-find_unit();
+setTimeout(find_unit, 1500);
 
 function rebind()
 {
@@ -560,7 +559,7 @@ function rebind()
 
     bind();
 
-    // Get all PC addresses to use for subnet broadcasting/multicasting
+    // Get all PC addresses 
     get_pc_ips();
 
     // Find Unit
@@ -644,12 +643,9 @@ function find_unit()
 {
     if(!found_unit)
     {
-        all_subnets.forEach(function(ip){
-
-            send_udp_string("^^IdX", 3520, ip);
-            send_udp_string("^^IdX", 6699, ip);
-
-        });
+        
+        send_udp_string("^^IdX", 3520, "255.255.255.255");
+        send_udp_string("^^IdX", 6699, "255.255.255.255");
 
         // Continue till unit found
         setTimeout(find_unit, 1500);
@@ -1087,26 +1083,6 @@ function get_pc_ips()
         });
     });
 
-    all_subnets = ["192.168.255.255", "10.255.255.255", "172.16.255.255"];
-
-    all_known_pc_ips.forEach(function(ip){
-        
-        var subnet_address = convert_to_subnet_broadcast(ip, false);
-        var subnet_limited_address = convert_to_subnet_broadcast(ip, true);
-
-        if(!all_subnets.includes(subnet_address)) all_subnets.push(subnet_address);
-        if(!all_subnets.includes(subnet_limited_address)) all_subnets.push(subnet_limited_address);
-
-    });
-}
-
-function convert_to_subnet_broadcast(ip, limited)
-{
-    var breakpoint = nth_pattern_occurance_in_string(ip, '.', 2);
-    var breakpoint_limited = nth_pattern_occurance_in_string(ip, '.', 3);
-
-    if(limited) return ip.substr(0, breakpoint_limited) + ".255";
-    return ip.substr(0, breakpoint) + ".255.255";
 }
 
 function nth_pattern_occurance_in_string(str, pat, n){
@@ -1158,6 +1134,8 @@ function send_udp_string(to_send_str, port, ip)
 function handle_computer_info()
 {
     determine_computer_info();
+
+    if(computer_info_ip == null) return;
     
     info_content_unit_ip = info_content_unit_ip.replace("[computer_ip]", "<b>" + computer_info_ip + "</b>");
 
