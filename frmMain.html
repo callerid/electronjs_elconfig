@@ -283,11 +283,6 @@
             Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
         `;
         $(document).ready(function(){
-            
-            if(this_os != "win32")
-            {
-                $(document).attr("title", "Configure");
-            }
 
             $("#btnOpenResourceMon").on('click', function(){
 

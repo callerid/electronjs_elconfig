@@ -44,6 +44,14 @@ function createWindow () {
   var top_menu_mac = [
     {
       label: 'ELConfig 5m',
+      submenu: [
+        {
+          label: 'Quit',
+          role: 'quit'
+        }
+      ],
+    },
+    {
       label: 'Configure',
       submenu: [
           {
