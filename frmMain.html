@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>ELConfig 5m</title>
     <link rel="stylesheet" type="text/css" href="frmMain.css">
     <link rel="stylesheet" type="text/css" href="./plugins/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="./plugins/jquery-ui.structure.min.css">
@@ -283,6 +284,11 @@
         `;
         $(document).ready(function(){
             
+            if(this_os != "win32")
+            {
+                $(document).attr("title", "Configure");
+            }
+
             $("#btnOpenResourceMon").on('click', function(){
 
                 require("child_process").exec("resmon");

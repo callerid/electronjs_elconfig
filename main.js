@@ -41,6 +41,83 @@ function createWindow () {
       });
     }
 
+  var top_menu_mac = [
+    {
+      label: 'ELConfig 5m',
+      label: 'Configure',
+      submenu: [
+          {
+            label: 'Reset Ethernet Defaults',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("reset_ethernet_defaults()");
+            }
+          },
+          {
+            label: 'Set Deluxe Unit Output Defaults',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_deluxe_unit_output_defaults()");
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Set Unit to Current Time',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_pc_time()");
+            }
+          },
+          {
+            label: 'Set Deluxe Unit to Basic Unit',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("set_deluxe_to_basic()");
+            }
+          },
+          {
+            label: 'Set Line Numbers Reported from Unit',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_line_count()");
+            }
+          },
+          {
+            type: 'separator'
+          },
+          {
+            label: 'Set Duplicate Call Records',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_duplicates()");
+            }
+          },
+          {
+            type: 'separator'
+          },
+      ],
+    },
+    {
+      label: 'Tools',
+      submenu: [
+        {
+          label: 'Computer MAC / IP Address',
+          click(item, focused_window){
+            focused_window.webContents.executeJavaScript("open_computer_info()");
+          }
+        },
+        {
+          label: 'Ping',
+          click(item, focused_window){
+            focused_window.webContents.executeJavaScript("open_ping()");
+          }
+        },
+        {
+          label: 'Debug Window',
+          click(item, focused_window){
+            win.webContents.openDevTools();
+          }
+        },
+      ]
+    },
+  ];
+
   var top_menu = [
     {
       label: 'Configure',
@@ -117,7 +194,16 @@ function createWindow () {
     },
   ];
 
-  var template_menu = Menu.buildFromTemplate(top_menu);
+  var template_menu;
+  if(process.platform == "win32")
+  {
+    template_menu = Menu.buildFromTemplate(top_menu);
+  }
+  else
+  {
+    template_menu = Menu.buildFromTemplate(top_menu_mac);
+  }
+
   Menu.setApplicationMenu(template_menu);
   
   // and load the index.html of the app.
