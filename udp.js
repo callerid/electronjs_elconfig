@@ -84,6 +84,8 @@ function watch_for_status_change()
 
 function update_not_connected()
 {
+    is_deluxe_unit = false;
+
     $("#lbStatus").text("NOT Connected");
     $("#imgConnected").addClass("hidden");
     $("#lbDeluxeUnit").text("Deluxe Unit NOT Detected");
@@ -174,7 +176,7 @@ function check_boot(message)
             return;
         }
 
-        last_detailed_record_reception = message_str;
+        last_boot_reception = message_str;
 
         var pattern = /(\d{1,2}) V/;
 
@@ -329,9 +331,9 @@ function check_for_x_command(message, remote)
         if(!editing_unit_number)
         {
             var unit_number = "";
-            for(var i = 4; i < 10; i++)
+            for(var i = 60; i < 63; i++)
             {
-                unit_number += message_byte[i].toString();
+                unit_number += message_byte[i].toString(16);
             }
             $("#tbUnitNumber").val(unit_number);
         }
@@ -716,7 +718,7 @@ function send_pinging_commands()
 // Functions for editing settings
 function set_unit_number(unit_number)
 {
-    send_udp_string("^^IdU000000" + unit_number.padStart(6, "0"), connected_port, send_to_ip);
+    send_udp_string("^^IdU" + unit_number.padStart(12, "0"), connected_port, send_to_ip);
 }
 
 function set_unit_ip(unit_ip)
