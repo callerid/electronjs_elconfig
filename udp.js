@@ -335,7 +335,7 @@ function check_for_x_command(message, remote)
             {
                 unit_number += message_byte[i].toString(16);
             }
-            $("#tbUnitNumber").val(unit_number);
+            $("#tbUnitNumber").val(unit_number.padStart(6, "0"));
         }
         
         var cnt = 1;
