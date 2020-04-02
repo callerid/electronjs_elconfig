@@ -161,7 +161,7 @@ function check_updated(message)
 
 function check_boot(message)
 {
-    if(message.length == 52 || message.length == 53)
+    if(message.length == 52 || message.length == 53 || message.length == 28)
     {
         var message_str = array_to_ascii(message);
 
