@@ -295,7 +295,7 @@
 
                 if(firmware_version != "Unknown") return;
                 
-                if(e.which == 3)
+                if(e.which == 3 || this_os == "darwin")
                 {
                     dup_locked = !dup_locked;
 
