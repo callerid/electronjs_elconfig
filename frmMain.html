@@ -163,6 +163,12 @@
 
         function open_duplicates()
         {
+            if(firmware_version == "Unknown" && dup_locked)
+            {
+                alert("Firmware not supported for this action. Contact CallerID.com.");
+                return;
+            }
+
             pWin_duplicates = $("#pWin_duplicates").dialog({
                     autoOpen: false,
                     width: 400,
@@ -284,6 +290,26 @@
             Set a static IP address within the IP scheme either outside the DHCP range or a value that would not create an IP conflict with another device on the network.<br/><br/>Based on this computer’s IP address of: [computer_ip] the suggested IP of the unit should be: [suggested_ip].
         `;
         $(document).ready(function(){
+
+            $("#lbFirmwareVersion").mousedown(function(e){
+
+                if(firmware_version != "Unknown") return;
+                
+                if(e.which == 3)
+                {
+                    dup_locked = !dup_locked;
+
+                    if(dup_locked) 
+                    {
+                        alert("Setting of Duplicates is now unavailable.");
+                    }
+                    else
+                    {
+                        alert("Setting of Duplicates is now AVAILABLE.");
+                    }
+                }
+
+            });
 
             $("#btnOpenResourceMon").on('click', function(){
 
@@ -1802,6 +1828,7 @@
 
             <td id="comm_data_button" style="width: 300px;">
                 Communication Data &nbsp;<input type="button" id="btnClearCommData" value="Clear"/>
+                Firmware: <span style="display: inline;" id="lbFirmwareVersion">Unknown</span>
             </td>
             
             <!-- Toggles -->

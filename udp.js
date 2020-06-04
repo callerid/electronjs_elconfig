@@ -23,6 +23,9 @@ var ping_alternator = 0;
 var setting_to_basic = false;
 var last_connect_seconds = 7;
 var ping_address = "192.168.0.90";
+var firmware_version = "Unknown";
+var firmware_version_count = 0;
+var dup_locked = true;
 
 var processing_v_command = false;
 var processing_x_command = false;
@@ -188,6 +191,16 @@ function check_boot(message)
             write_to_comm(message_str.substr(21, message.length - 21));
         }
 
+    }
+}
+
+function check_for_firmware_version(message)
+{
+    if(message.length == 15)
+    {
+        firmware_version = message[7].toString(16);
+        $("#lbFirmwareVersion").text(firmware_version);
+        dup_locked = false;
     }
 }
 
@@ -613,6 +626,7 @@ function bind()
             check_for_x_command(message, remote);
             check_for_call_record(message);
             check_boot(message);
+            check_for_firmware_version(message);
             check_updated(message);
             //---------------------------------------------------------------
         
@@ -648,6 +662,7 @@ function bind()
             check_for_x_command(message, remote);
             check_for_call_record(message);
             check_boot(message);
+            check_for_firmware_version(message);
             check_updated(message);
             //---------------------------------------------------------------
         
@@ -700,12 +715,33 @@ function send_pinging_commands()
 
         if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
         if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
+        if(ping_alternator == 2 && firmware_version == "Unknown" && firmware_version_count < 10) 
+        {
+            send_udp_string("^^IdV", connected_port, send_to_ip);
+            firmware_version_count += 1;
+        }
         
         ping_alternator++;
-        if(ping_alternator > 1) ping_alternator = 0;
+
+        if(firmware_version == "Unknown")
+        {
+            if(firmware_version_count > 10)
+            {
+                if(ping_alternator > 1) ping_alternator = 0;
+            }
+            else
+            {
+                if(ping_alternator > 2) ping_alternator = 0;
+            }           
+        }
+        else
+        {
+            if(ping_alternator > 1) ping_alternator = 0;
+        }
+        
 
         // Reset timer
-        setTimeout(send_pinging_commands, 1500);
+        setTimeout(send_pinging_commands, 1200);
 
     }    
 
