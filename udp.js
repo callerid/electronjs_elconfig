@@ -53,35 +53,36 @@ function watch_for_status_change()
 {
     
     last_connect_seconds++;
+    console.log("Last Connect Seconds Ago: " + last_connect_seconds);
 
     var status = $("#lbStatus").text();
 
-    if(last_connect_seconds > 6)
+    if(last_connect_seconds > 10)
     {
         if(status == "NOT Connected" && 
         (!($("#not_bound_win").hasClass("hidden") || !($("#not_bound_mac").hasClass("hidden")))))
         {
-            setTimeout(watch_for_status_change, 1000);
+            setTimeout(watch_for_status_change, 250);
             return;
         }
 
         if(!bound3520 || !bound6699)
         {
             update_bind_failed();
+            setTimeout(watch_for_status_change, 250);
         }
         else
         {
             update_not_connected();
+            setTimeout(watch_for_status_change, 250);
         }
 
     }
     else
     {
         update_connected();
+        setTimeout(watch_for_status_change, 10000);
     }
-
-
-    setTimeout(watch_for_status_change, 1000);
 
 }
 
@@ -294,10 +295,10 @@ function check_for_call_record(message)
 
 function check_for_x_command(message, remote)
 {
-    
+    if(message.length == 90) last_connect_seconds = 0;
+
     if(message.length == 90 && !processing_x_command)
     {
-        last_connect_seconds = 0;
 
         processing_x_command = true;
 
@@ -713,8 +714,16 @@ function send_pinging_commands()
             return;
         }
 
-        if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
-        if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
+        setTimeout(()=>{
+            send_udp_string("^^IdX", connected_port, send_to_ip);
+        }, 150);
+
+        setTimeout(()=>{
+            send_udp_string("^^Id-V", connected_port, send_to_ip);
+        }, 350);
+
+        //if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
+        //if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
         if(ping_alternator == 2 && firmware_version == "Unknown" && firmware_version_count < 10) 
         {
             send_udp_string("^^IdV", connected_port, send_to_ip);
@@ -741,7 +750,7 @@ function send_pinging_commands()
         
 
         // Reset timer
-        setTimeout(send_pinging_commands, 1200);
+        setTimeout(send_pinging_commands, 5000);
 
     }    
 
