@@ -307,7 +307,7 @@ function check_for_x_command(message, remote)
 
         if(send_to_ip != last_sent_ip || connected_port != remote.port)
         {
-            $("#lbSendingTo").html("Sending To: <b>" + last_sent_ip + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
+            //$("#lbSendingTo").html("Sending To: <b>" + last_sent_ip + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + remote.port + "</b>");
         }
 
         send_to_ip = last_sent_ip;
@@ -1159,38 +1159,84 @@ function nth_pattern_occurance_in_string(str, pat, n){
 function send_udp_string(to_send_str, port, ip)
 {
     // Send via UDP port
-    last_sent_ip = ip;
-    console.log('Sending: ' + to_send_str + " on: " + port + " to: " + ip);
+    // last_sent_ip = ip;
+    // console.log('Sending: ' + to_send_str + " on: " + port + " to: " + ip);
     
-    switch(port)
-    {
-        case 3520:
+    // switch(port)
+    // {
+    //     case 3520:
 
-            server3520.send(Buffer.from(to_send_str), port, ip, function(err){
+    //         server3520.send(Buffer.from(to_send_str), port, ip, function(err){
 
-                if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+    //             if(err != null) console.log("ERROR SENDING UDP: " + err.message);
         
-            });
+    //         });
 
-        break;
+    //     break;
 
-        case 6699:
+    //     case 6699:
 
-            server6699.send(Buffer.from(to_send_str), port, ip, function(err){
+    //         server6699.send(Buffer.from(to_send_str), port, ip, function(err){
 
-                if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+    //             if(err != null) console.log("ERROR SENDING UDP: " + err.message);
         
-            });
+    //         });
 
-        break;
+    //     break;
 
-        default:
+    //     default:
 
-            // Non typical UDP send port
+    //         // Non typical UDP send port
 
-        break;
-    }
+    //     break;
+    // }
 
+    var multicast_addresses = [];
+    var send_to_string = "";
+    all_known_pc_ips.forEach((pc_ip) => {
+
+        var m_cast = pc_ip.substr(0, pc_ip.lastIndexOf(".")) + ".255";
+        
+        if(!multicast_addresses.includes(m_cast))
+        {
+            multicast_addresses.push(m_cast);
+            send_to_string += m_cast + "&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;";
+
+            console.log('Sending: ' + to_send_str + " on: " + port + " to: " + m_cast);
+
+            switch(port)
+            {
+                case 3520:
+
+                    server3520.send(Buffer.from(to_send_str), port, m_cast, function(err){
+
+                        if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+                
+                    });
+
+                break;
+
+                case 6699:
+
+                    server6699.send(Buffer.from(to_send_str), port, m_cast, function(err){
+
+                        if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+                
+                    });
+
+                break;
+
+                default:
+
+                    // Non typical UDP send port
+
+                break;
+            }
+        }
+
+    });
+
+    $("#lbSendingTo").html("Sending To: <b>" + send_to_string + "</b> &nbsp;&nbsp;&nbsp;Port: <b>" + port + "</b>");
 }
 
 function handle_computer_info()
