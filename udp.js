@@ -1106,7 +1106,9 @@ function get_toggles()
 function get_pc_ips()
 {
     all_known_pc_ips = [];
-    all_known_pc_ips.push("192.168.0.255");
+    all_known_pc_ips.push("192.168.255.255");
+    all_known_pc_ips.push("10.255.255.255");
+    all_known_pc_ips.push("172.16.255.255");
 
     // Get PC IP and create subnet broadcast
     var ifaces = os.networkInterfaces();
