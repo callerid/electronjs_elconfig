@@ -8,7 +8,7 @@ function createWindow () {
     if(this_os == "darwin")
     {
       win = new BrowserWindow({
-        title: 'ELConfig 5 v.1.0.00',
+        title: 'ELConfig 5m',
         width: 1000,
         minWidth: 1000,
         maxWidth: 1000,
@@ -26,7 +26,7 @@ function createWindow () {
     }
     else{
       win = new BrowserWindow({
-        title: 'ELConfig 5 v.1.0.00',
+        title: 'ELConfig 5m',
         width: 1000,
         minWidth: 1000,
         maxWidth: 1000,

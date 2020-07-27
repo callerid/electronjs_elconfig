@@ -1,7 +1,7 @@
 {
   "name": "elconfig_5m",
   "displayName": "ELConfig 5m",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "ELConfig 5m",
   "productName": "ELConfig 5m",
   "main": "main.js",

@@ -13,6 +13,7 @@ var connected_port = 0;
 var found_unit = false;
 var is_deluxe_unit = false;
 var all_known_pc_ips = [];
+var all_multicast_ips = [];
 var pc_suggested_ip = "192.168.0.90";
 var computer_info_ip;
 var computer_info_mac;
@@ -574,6 +575,7 @@ function check_for_v_command(message, remote)
 //-------------------------------------------------------------------
 // Auto bind at start
 bind();
+console.log("ELConfig 5m v.1.0.6 booting...");
 
 // Get all PC addresses 
 get_pc_ips();
@@ -1106,9 +1108,11 @@ function get_toggles()
 function get_pc_ips()
 {
     all_known_pc_ips = [];
-    all_known_pc_ips.push("192.168.255.255");
-    all_known_pc_ips.push("10.255.255.255");
-    all_known_pc_ips.push("172.16.255.255");
+
+    all_multicast_ips = [];
+    all_multicast_ips.push("192.168.255.255");
+    all_multicast_ips.push("10.255.255.255");
+    all_multicast_ips.push("172.16.255.255");
 
     // Get PC IP and create subnet broadcast
     var ifaces = os.networkInterfaces();
@@ -1128,6 +1132,7 @@ function get_pc_ips()
 
                 var single_ip = iface.address;
                 all_known_pc_ips.push(single_ip);
+                all_multicast_ips.push(single_ip);
                 
                 var mac_entry = [iface.mac, single_ip];
                 macs_of_ips.push(mac_entry);
@@ -1137,6 +1142,7 @@ function get_pc_ips()
             {
                 var single_ip = iface.address;
                 all_known_pc_ips.push(single_ip);
+                all_multicast_ips.push(single_ip);
 
                 var mac_entry = [iface.mac, single_ip];
                 macs_of_ips.push(mac_entry);
@@ -1196,7 +1202,7 @@ function send_udp_string(to_send_str, port, ip)
 
     var multicast_addresses = [];
     var send_to_string = "";
-    all_known_pc_ips.forEach((pc_ip) => {
+    all_multicast_ips.forEach((pc_ip) => {
 
         var m_cast = pc_ip.substr(0, pc_ip.lastIndexOf(".")) + ".255";
         
