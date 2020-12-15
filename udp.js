@@ -198,7 +198,7 @@ function check_boot(message)
 
 function check_for_firmware_version(message)
 {
-    if(message.length == 15)
+    if(message.length == 15 || message.length == 22)
     {
         firmware_version = message[7].toString(16);
         $("#lbFirmwareVersion").text(firmware_version);
@@ -718,19 +718,21 @@ function send_pinging_commands()
 
         setTimeout(()=>{
             send_udp_string("^^IdX", connected_port, send_to_ip);
+            send_udp_string("^^IdV", connected_port, send_to_ip);
         }, 150);
 
         setTimeout(()=>{
             send_udp_string("^^Id-V", connected_port, send_to_ip);
+            send_udp_string("^^IdV", connected_port, send_to_ip);
         }, 350);
 
         //if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
         //if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
-        if(ping_alternator == 2 && firmware_version == "Unknown" && firmware_version_count < 10) 
-        {
-            send_udp_string("^^IdV", connected_port, send_to_ip);
-            firmware_version_count += 1;
-        }
+        // if(ping_alternator == 2 && firmware_version == "Unknown" && firmware_version_count < 10) 
+        // {
+            
+        //     firmware_version_count += 1;
+        // }
         
         ping_alternator++;
 
