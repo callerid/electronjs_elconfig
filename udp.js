@@ -575,7 +575,7 @@ function check_for_v_command(message, remote)
 //-------------------------------------------------------------------
 // Auto bind at start
 bind();
-console.log("ELConfig 5m v.1.0.6 booting...");
+console.log("ELConfig 5m v.1.0.8 booting...");
 
 // Get all PC addresses 
 get_pc_ips();
@@ -1259,9 +1259,15 @@ function handle_computer_info()
     info_content_unit_ip = info_content_unit_ip.replace("[computer_ip]", "<b>" + computer_info_ip + "</b>");
 
     var suggested_ip_parts = computer_info_ip.split('.');
-    var suggested_ip = suggested_ip_parts[0] + "." + suggested_ip_parts[1] + "." + suggested_ip_parts[2] + ".90";
 
-    pc_suggested_ip_parts = [suggested_ip_parts[0], suggested_ip_parts[1], suggested_ip_parts[2], "90"]
+    var ip_ending = Number(suggested_ip_parts[3]);
+    var ending = ".90";
+
+    if (ip_ending >= 50) ending = ".190";
+
+    var suggested_ip = suggested_ip_parts[0] + "." + suggested_ip_parts[1] + "." + suggested_ip_parts[2] + ending;
+
+    pc_suggested_ip_parts = [suggested_ip_parts[0], suggested_ip_parts[1], suggested_ip_parts[2], ending.replace(".","")];
 
     info_content_unit_ip = info_content_unit_ip.replace("[suggested_ip]", "<b>" + suggested_ip + "</b>");
 

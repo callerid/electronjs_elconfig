@@ -537,6 +537,7 @@
                 {
                     editing_unit_number = true;
                     document.getElementById("tbUnitNumber").disabled = false;
+                    document.getElementById("btnCancelUnitNumber").style = "display:inline;";
                     $('#btnChangeUnitNumber').addClass("highlight");
                     $('#tbUnitNumber').addClass("highlight");
                     $('#btnChangeUnitNumber').text("Save");
@@ -556,6 +557,108 @@
                 }
 
             });
+
+            $('#btnCancelUnitNumber').on('click', function(){
+                editing_unit_number = false;
+                document.getElementById("tbUnitNumber").disabled = true;
+                $('#btnChangeUnitNumber').removeClass("highlight");
+                $('#tbUnitNumber').removeClass("highlight");
+                $('#btnChangeUnitNumber').text("Change");
+
+                send_udp_string("^^IdX", connected_port, send_to_ip);
+                document.getElementById("btnCancelUnitNumber").style = "display:none;";
+            });
+
+            $('#btnCancelSuggestIP').on('click', function(){
+
+                // Reset
+                editing_unit_ip = false;
+
+                document.getElementById("tbUnitIP").setAttribute("disabled", true);
+                document.getElementById("tbUnitIP_1").disabled = true;
+                document.getElementById("tbUnitIP_2").disabled = true;
+                document.getElementById("tbUnitIP_3").disabled = true;
+                document.getElementById("tbUnitIP_4").disabled = true;
+
+                $('#btnSuggestIP').removeClass("highlight");
+
+                $('#tbUnitIP').removeClass("highlight");
+                $('#tbUnitIP_1').removeClass("highlight");
+                $('#tbUnitIP_2').removeClass("highlight");
+                $('#tbUnitIP_3').removeClass("highlight");
+                $('#tbUnitIP_4').removeClass("highlight");
+
+                $('#btnSuggestIP').text("Set to Suggested IP");
+
+                send_udp_string("^^IdX", connected_port, send_to_ip);
+                document.getElementById("btnCancelSuggestIP").style = "display:none;";
+            });
+
+            $('#btnCancelDestPort').on('click', function(){
+                
+                $('#btnChangeDestPort').removeClass("highlight");
+                document.getElementById("cbDestPort").setAttribute("disabled", true);
+
+                $('#btnChangeDestPort').text("Change");
+                
+                send_udp_string("^^IdX", connected_port, send_to_ip);
+                document.getElementById("btnCancelDestPort").style = "display:none;";
+            });
+
+            $('#btnCancelDestMac').on('click', function(){
+                
+                // Reset
+                editing_dest_mac = false;
+
+                document.getElementById("tbDestMAC").setAttribute("disabled", true);
+                document.getElementById("tbDestMAC_1").disabled = true;
+                document.getElementById("tbDestMAC_2").disabled = true;
+                document.getElementById("tbDestMAC_3").disabled = true;
+                document.getElementById("tbDestMAC_4").disabled = true;
+                document.getElementById("tbDestMAC_5").disabled = true;
+                document.getElementById("tbDestMAC_6").disabled = true;
+
+                $('#btnChangeDestMAC').removeClass("highlight");
+
+                $('#tbDestMAC').removeClass("highlight");
+                $('#tbDestMAC_1').removeClass("highlight");
+                $('#tbDestMAC_2').removeClass("highlight");
+                $('#tbDestMAC_3').removeClass("highlight");
+                $('#tbDestMAC_4').removeClass("highlight");
+                $('#tbDestMAC_5').removeClass("highlight");
+                $('#tbDestMAC_6').removeClass("highlight");
+
+                $('#btnChangeDestMAC').text("Change");
+
+                send_udp_string("^^IdX", connected_port, send_to_ip);
+                document.getElementById("btnCancelDestMac").style = "display:none;";
+            });
+
+            $('#btnCancelDestIP').on('click', function(){
+                
+                // Reset
+                editing_dest_ip = false;
+
+                document.getElementById("tbDestIP").setAttribute("disabled", true);
+                document.getElementById("tbDestIP_1").disabled = true;
+                document.getElementById("tbDestIP_2").disabled = true;
+                document.getElementById("tbDestIP_3").disabled = true;
+                document.getElementById("tbDestIP_4").disabled = true;
+
+                $('#btnChangeDestIP').removeClass("highlight");
+
+                $('#tbDestIP').removeClass("highlight");
+                $('#tbDestIP_1').removeClass("highlight");
+                $('#tbDestIP_2').removeClass("highlight");
+                $('#tbDestIP_3').removeClass("highlight");
+                $('#tbDestIP_4').removeClass("highlight");
+
+                $('#btnChangeDestIP').text("Change");
+                
+                send_udp_string("^^IdX", connected_port, send_to_ip);
+                document.getElementById("btnCancelDestIP").style = "display:none;";
+            });
+            
 
             $('#btnSuggestIP').hover(
             
@@ -589,6 +692,8 @@
                     document.getElementById("tbUnitIP_2").disabled = false;
                     document.getElementById("tbUnitIP_3").disabled = false;
                     document.getElementById("tbUnitIP_4").disabled = false;
+
+                    document.getElementById("btnCancelSuggestIP").style = "display:inline;";
 
                     $('#btnSuggestIP').addClass("highlight");
 
@@ -655,9 +760,9 @@
                     return;
                 }
 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbUnitIP_2').focus();
                     $('#tbUnitIP_2').select();
@@ -669,7 +774,12 @@
 
                 var key = event.keyCode;
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -696,9 +806,9 @@
                     return;
                 }
                 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbUnitIP_3').focus();
                     $('#tbUnitIP_3').select();
@@ -709,8 +819,14 @@
             $('#tbUnitIP_2').on('keydown', function(event){
 
                 var key = event.keyCode;
+                var text = $('#tbUnitIP_2').val();
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -737,9 +853,9 @@
                     return;
                 }
                 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbUnitIP_4').focus();
                     $('#tbUnitIP_4').select();
@@ -750,8 +866,11 @@
             $('#tbUnitIP_3').on('keydown', function(event){
 
                 var key = event.keyCode;
+                var text = $('#tbUnitIP_3').val();
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -774,8 +893,14 @@
             $('#tbUnitIP_4').on('keydown', function(event){
 
                 var key = event.keyCode;
+                var text = $('#tbUnitIP_4').val();
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -803,6 +928,7 @@
                 if(btn_text == "Change")
                 {
                     editing_dest_port = true;
+                    document.getElementById("btnCancelDestPort").style = "display:inline;";
 
                     $('#btnChangeDestPort').addClass("highlight");
                     document.getElementById("cbDestPort").removeAttribute("disabled", false);
@@ -852,6 +978,8 @@
                     document.getElementById("tbDestIP_2").disabled = false;
                     document.getElementById("tbDestIP_3").disabled = false;
                     document.getElementById("tbDestIP_4").disabled = false;
+
+                    document.getElementById("btnCancelDestIP").style = "display:inline;";
 
                     $('#btnChangeDestIP').addClass("highlight");
 
@@ -904,6 +1032,14 @@
                 var text = $('#tbDestIP_1').val();
 
                 var int_value = parseInt(text);
+                if(int_value == 555) 
+                {
+                    $('#tbDestIP_1').val(255);
+                    $('#tbDestIP_2').focus();
+                    $('#tbDestIP_2').select();
+                    return;
+                }
+
                 if(int_value > 255)
                 {
                     $('#tbDestIP_1').val(text.substr(0, text.length - 1));
@@ -918,9 +1054,9 @@
                     return;
                 }
 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(48|9|37|39|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbDestIP_2').focus();
                     $('#tbDestIP_2').select();
@@ -932,7 +1068,20 @@
 
                 var key = event.keyCode;
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if(key == 9)
+                {
+                    return false;
+                }
+
+                if($('#tbDestIP_1').val() == 555) 
+                {
+                    $('#tbDestIP_1').val(255);
+                    $('#tbDestIP_2').focus();
+                    $('#tbDestIP_2').select();
+                    return;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -945,6 +1094,14 @@
                 var text = $('#tbDestIP_2').val();
 
                 var int_value = parseInt(text);
+                if(int_value == 555) 
+                {
+                    $('#tbDestIP_2').val(255);
+                    $('#tbDestIP_3').focus();
+                    $('#tbDestIP_3').select();
+                    return;
+                }
+
                 if(int_value > 255)
                 {
                     $('#tbDestIP_2').val(text.substr(0, text.length - 1));
@@ -959,9 +1116,9 @@
                     return;
                 }
 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(48|9|37|39|46|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbDestIP_3').focus();
                     $('#tbDestIP_3').select();
@@ -972,8 +1129,22 @@
             $('#tbDestIP_2').on('keydown', function(event){
 
                 var key = event.keyCode;
+                var text = $('#tbDestIP_2').val();
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if(key == 9)
+                {
+                    return false;
+                }
+
+                if($('#tbDestIP_2').val() == 555) 
+                {
+                    $('#tbDestIP_2').val(255);
+                    $('#tbDestIP_3').focus();
+                    $('#tbDestIP_3').select();
+                    return;
+                }
+
+                var is_valid = /^(8|9|37|39|46|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -986,6 +1157,14 @@
                 var text = $('#tbDestIP_3').val();
 
                 var int_value = parseInt(text);
+                if(int_value == 555) 
+                {
+                    $('#tbDestIP_3').val(255);
+                    $('#tbDestIP_4').focus();
+                    $('#tbDestIP_4').select();
+                    return;
+                }
+
                 if(int_value > 255)
                 {
                     $('#tbDestIP_3').val(text.substr(0, text.length - 1));
@@ -1000,9 +1179,9 @@
                     return;
                 }
 
-                var is_valid = /^(48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                var is_valid = /^(48|9|37|39|46|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
 
-                if(key != 8 && text.length == 3 && is_valid) 
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
                 {
                     $('#tbDestIP_4').focus();
                     $('#tbDestIP_4').select();
@@ -1013,8 +1192,22 @@
             $('#tbDestIP_3').on('keydown', function(event){
 
                 var key = event.keyCode;
+                var text = $('#tbDestIP_3').val();
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if(key == 9)
+                {
+                    return false;
+                }
+
+                if($('#tbDestIP_3').val() == 555) 
+                {
+                    $('#tbDestIP_3').val(255);
+                    $('#tbDestIP_4').focus();
+                    $('#tbDestIP_4').select();
+                    return;
+                }
+
+                var is_valid = /^(8|9|37|39|46|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -1026,6 +1219,12 @@
                 var text = $('#tbDestIP_4').val();
 
                 var int_value = parseInt(text);
+                if(int_value == 555) 
+                {
+                    $('#tbDestIP_1').val(255);
+                    return;
+                }
+
                 if(int_value > 255)
                 {
                     $('#tbDestIP_4').val(text.substr(0, text.length - 1));
@@ -1036,9 +1235,21 @@
 
             $('#tbDestIP_4').on('keydown', function(event){
 
+                var text = $('#tbDestIP_4').val();
                 var key = event.keyCode;
 
-                var is_valid = /^(8|9|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if(key == 9)
+                {
+                    return false;
+                }
+
+                if($('#tbDestIP_4').val() == 555) 
+                {
+                    $('#tbDestIP_4').val(255);
+                    return;
+                }
+
+                var is_valid = /^(8|9|37|39|46|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
                 if (!is_valid) {
                     return false;
                 }
@@ -1074,6 +1285,8 @@
                     document.getElementById("tbDestMAC_4").disabled = false;
                     document.getElementById("tbDestMAC_5").disabled = false;
                     document.getElementById("tbDestMAC_6").disabled = false;
+
+                    document.getElementById("btnCancelDestMac").style = "display:inline;";
 
                     $('#btnChangeDestMAC').addClass("highlight");
 
@@ -1136,115 +1349,225 @@
 
                 var key = event.keyCode;
                 var text = $('#tbDestMAC_1').val();
+                var t = document.getElementById("tbDestMAC_1");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(key != 8 && text.length == 2 && is_valid != null) 
+                if(key != 8 && key != 37 && key != 38 && key != 39 && key != 40 && text.length == 2) 
                 {
-                    $("#tbDestMAC_1").val($("#tbDestMAC_1").val().toUpperCase());
-                    $('#tbDestMAC_2').focus();
-                    $('#tbDestMAC_2').select();
+                    var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                    var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                    if(event.shiftKey && !letters) return false;
+                    if (!is_valid) {
+                        return false;
+                    }
+
+                    // $("#tbDestMAC_1").val($("#tbDestMAC_1").val().toUpperCase());
+                    // $('#tbDestMAC_2').focus();
+                    // $('#tbDestMAC_2').select();
                 }
 
             });
 
-            $("#tbDestMAC_1").on('keydown', function(event){
+            var tab_pressed = false;
+            function tbDestMac_keydown(element, event)
+            {
 
-                var key = String.fromCharCode(event.keyCode);
+                var key = event.keyCode;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
+                if(key == 9)
+                {
+                    return false;
+                }
 
-                if(is_valid == null && event.keyCode != 8) return false;
+                var text = $('#tbDestMAC_' + element).val();
 
-            });
+                if (text.length == 3 && key == 70 && element != "6")
+                {
+                    switch(element)
+                    {
+                        case "1":
+                            $("#tbDestMAC_1").val($("#tbDestMAC_1").val().toUpperCase());
+                            $('#tbDestMAC_2').focus();
+                            $('#tbDestMAC_2').select();
+                            break;
+
+                        case "2":
+                            $("#tbDestMAC_2").val($("#tbDestMAC_2").val().toUpperCase());
+                            $('#tbDestMAC_3').focus();
+                            $('#tbDestMAC_3').select();
+                            break;
+
+                        case "3":
+                            $("#tbDestMAC_3").val($("#tbDestMAC_3").val().toUpperCase());
+                            $('#tbDestMAC_4').focus();
+                            $('#tbDestMAC_4').select();
+                            break;
+
+                        case "4":
+                            $("#tbDestMAC_4").val($("#tbDestMAC_4").val().toUpperCase());
+                            $('#tbDestMAC_5').focus();
+                            $('#tbDestMAC_5').select();
+                            break;
+
+                        case "5":
+                            $("#tbDestMAC_5").val($("#tbDestMAC_5").val().toUpperCase());
+                            $('#tbDestMAC_6').focus();
+                            $('#tbDestMAC_6').select();
+                            break;
+                    }
+
+                    return;
+                }
+                else if(text.length==2 && element == "6" && key != 46 && key != 8 && key != 37 && key != 39) 
+                {
+                    $("#tbDestMAC_6").val($("#tbDestMAC_6").val().toUpperCase());
+                    return false;
+                }
+                else if(text.length == 2 && key != 8 && key != 46 && key != 37 && key != 39)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                if(event.shiftKey && !letters) return false;
+                if (!is_valid) {
+                    return false;
+                }
+
+            }
+
+            $("#tbDestMAC_1").on('keydown', (event) => tbDestMac_keydown("1", event));
 
             $("#tbDestMAC_2").on('keyup', function(event){
 
                 var key = event.keyCode;
                 var text = $('#tbDestMAC_2').val();
+                var t = document.getElementById("tbDestMAC_2");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(key != 8 && text.length == 2 && is_valid != null) 
+                if (event.shiftKey && key == 9)
                 {
                     $("#tbDestMAC_2").val($("#tbDestMAC_2").val().toUpperCase());
-                    $('#tbDestMAC_3').focus();
-                    $('#tbDestMAC_3').select();
+                    $('#tbDestMAC_1').focus();
+                    $('#tbDestMAC_1').select();
+                    return;
+                }
+
+                if(key != 8 && key != 37 && key != 38 && key != 39 && key != 40 && text.length == 2) 
+                {
+                    var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                    var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                    if(event.shiftKey && !letters) return false;
+                    if (!is_valid) {
+                        return false;
+                    }
+
+                    // $("#tbDestMAC_2").val($("#tbDestMAC_2").val().toUpperCase());
+                    // $('#tbDestMAC_3').focus();
+                    // $('#tbDestMAC_3').select();
                 }
 
             });
 
-            $("#tbDestMAC_2").on('keydown', function(event){
-
-                var key = String.fromCharCode(event.keyCode);
-
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(is_valid == null && event.keyCode != 8) return false;
-
-            });
+            $("#tbDestMAC_2").on('keydown', (event) => tbDestMac_keydown("2", event));
 
             $("#tbDestMAC_3").on('keyup', function(event){
 
                 var key = event.keyCode;
                 var text = $('#tbDestMAC_3').val();
+                var t = document.getElementById("tbDestMAC_3");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(key != 8 && text.length == 2 && is_valid != null) 
+                if (event.shiftKey && key == 9)
                 {
                     $("#tbDestMAC_3").val($("#tbDestMAC_3").val().toUpperCase());
-                    $('#tbDestMAC_4').focus();
-                    $('#tbDestMAC_4').select();
+                    $('#tbDestMAC_2').focus();
+                    $('#tbDestMAC_2').select();
+                    return;
+                }
+
+                if(key != 8 && key != 37 && key != 38 && key != 39 && key != 40 && text.length == 2) 
+                {
+                    var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                    var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                    if(event.shiftKey && !letters) return false;
+                    if (!is_valid) {
+                        return false;
+                    }
+
+                    // $("#tbDestMAC_3").val($("#tbDestMAC_3").val().toUpperCase());
+                    // $('#tbDestMAC_4').focus();
+                    // $('#tbDestMAC_4').select();
                 }
 
             });
 
-            $("#tbDestMAC_3").on('keydown', function(event){
-
-                var key = String.fromCharCode(event.keyCode);
-
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(is_valid == null && event.keyCode != 8) return false;
-
-            });
+            $("#tbDestMAC_3").on('keydown', (event) => tbDestMac_keydown("3", event));
 
             $("#tbDestMAC_4").on('keyup', function(event){
 
                 var key = event.keyCode;
                 var text = $('#tbDestMAC_4').val();
+                var t = document.getElementById("tbDestMAC_4");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(key != 8 && text.length == 2 && is_valid != null) 
+                if (event.shiftKey && key == 9)
                 {
                     $("#tbDestMAC_4").val($("#tbDestMAC_4").val().toUpperCase());
-                    $('#tbDestMAC_5').focus();
-                    $('#tbDestMAC_5').select();
+                    $('#tbDestMAC_3').focus();
+                    $('#tbDestMAC_3').select();
+                    return;
+                }
+
+                if(key != 8 && key != 37 && key != 38 && key != 39 && key != 40 && text.length == 2) 
+                {
+                    var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                    var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                    if(event.shiftKey && !letters) return false;
+                    if (!is_valid) {
+                        return false;
+                    }
+
+                    // $("#tbDestMAC_4").val($("#tbDestMAC_4").val().toUpperCase());
+                    // $('#tbDestMAC_5').focus();
+                    // $('#tbDestMAC_5').select();
                 }
 
             });
 
-            $("#tbDestMAC_4").on('keydown', function(event){
-
-                var key = String.fromCharCode(event.keyCode);
-
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(is_valid == null && event.keyCode != 8) return false;
-
-            });
+            $("#tbDestMAC_4").on('keydown', (event) => tbDestMac_keydown("4", event));
 
             $("#tbDestMAC_5").on('keyup', function(event){
 
                 var key = event.keyCode;
                 var text = $('#tbDestMAC_5').val();
+                var t = document.getElementById("tbDestMAC_5");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(key != 8 && text.length == 2 && is_valid != null) 
+                if (event.shiftKey && key == 9)
                 {
+                    $("#tbDestMAC_5").val($("#tbDestMAC_5").val().toUpperCase());
+                    $('#tbDestMAC_4').focus();
+                    $('#tbDestMAC_4').select();
+                    return;
+                }
+
+                if(key != 8 && key != 37 && key != 38 && key != 39 && key != 40 && text.length == 2) 
+                {
+                    var is_valid = /^(8|9|37|38|39|40|46|48|49|50|51|52|53|54|55|56|57|65|66|67|68|69|70)$/.test("" + key);
+                    var letters = /^(9|65|66|67|68|69|70)/.test("", key);
+
+                    if(event.shiftKey && !letters) return false;
+                    if (!is_valid) {
+                        return false;
+                    }
+
                     $("#tbDestMAC_5").val($("#tbDestMAC_5").val().toUpperCase());
                     $('#tbDestMAC_6').focus();
                     $('#tbDestMAC_6').select();
@@ -1252,25 +1575,26 @@
 
             });
 
-            $("#tbDestMAC_5").on('keydown', function(event){
+            $("#tbDestMAC_5").on('keydown', (event) => tbDestMac_keydown("5", event));
 
-                var key = String.fromCharCode(event.keyCode);
+            $("#tbDestMAC_6").on('keyup', function(event){
 
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
+                var key = event.keyCode;
+                var text = $('#tbDestMAC_6').val();
+                var t = document.getElementById("tbDestMAC_6");
+                var selected = t.selectionEnd - t.selectionStart;
 
-                if(is_valid == null && event.keyCode != 8) return false;
+                if (event.shiftKey && key == 9)
+                {
+                    $("#tbDestMAC_6").val($("#tbDestMAC_6").val().toUpperCase());
+                    $('#tbDestMAC_5').focus();
+                    $('#tbDestMAC_5').select();
+                    return;
+                }
 
             });
 
-            $("#tbDestMAC_6").on('keydown', function(event){
-
-                var key = String.fromCharCode(event.keyCode);
-
-                var is_valid = /[0-9A-Fa-f]/.exec(key);
-
-                if(is_valid == null && event.keyCode != 8) return false;
-
-            });
+            $("#tbDestMAC_6").on('keydown', (event) => tbDestMac_keydown("6", event));
 
             $("#pWin_ping_btnPing").on('click', function(){
                 
@@ -1704,7 +2028,7 @@
                             <input type="text" style="width:54px" id="tbUnitNumber" disabled="true" maxlength="6" class="custom_input"/><br/>
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeUnitNumber">Change</button><br/>
+                            <button width="80px" id="btnChangeUnitNumber">Change</button> <button style="display:none;" width="80px" id="btnCancelUnitNumber">Cancel</button><br/>
                         </td>
                     </tr>
             
@@ -1725,7 +2049,7 @@
 
                         </td>
                         <td style="width:165px;">
-                            <button id="btnSuggestIP">Set to Suggested IP</button><br/>
+                            <button id="btnSuggestIP">Set to Suggested IP</button> <button style="display:none;" width="80px" id="btnCancelSuggestIP">Cancel</button><br/>
                         </td>
                     </tr>
             
@@ -1760,7 +2084,7 @@
                             </select>
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestPort">Change</button><br/>
+                            <button width="80px" id="btnChangeDestPort">Change</button> <button style="display:none;" width="80px" id="btnCancelDestPort">Cancel</button><br/>
                         </td>
                     </tr>
             
@@ -1781,7 +2105,7 @@
 
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestIP">Change</button><br/>
+                            <button width="80px" id="btnChangeDestIP">Change</button> <button style="display:none;" width="80px" id="btnCancelDestIP">Cancel</button><br/>
                         </td>
                     </tr>
             
@@ -1804,7 +2128,7 @@
 
                         </td>
                         <td style="width:100px;">
-                            <button width="80px" id="btnChangeDestMAC">Change</button><br/>
+                            <button width="80px" id="btnChangeDestMAC">Change</button> <button style="display:none;" width="80px" id="btnCancelDestMac">Cancel</button><br/>
                         </td>
                     </tr>
 
