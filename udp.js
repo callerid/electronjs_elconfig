@@ -200,7 +200,16 @@ function check_for_firmware_version(message)
 {
     if(message.length == 15 || message.length == 22)
     {
-        firmware_version = message[7].toString(16);
+        if(message.length==22)
+        {
+            firmware_version = message[20].toString();
+        }
+        else 
+        {
+            firmware_version = message[7].toString(16);
+        }
+        
+        console.log("Firmware: " + firmware_version);
         $("#lbFirmwareVersion").text(firmware_version);
         dup_locked = false;
     }
@@ -719,39 +728,12 @@ function send_pinging_commands()
         setTimeout(()=>{
             send_udp_string("^^IdX", connected_port, send_to_ip);
             send_udp_string("^^IdV", connected_port, send_to_ip);
+            send_udp_string("^^Id-V", connected_port, send_to_ip);
         }, 150);
 
         setTimeout(()=>{
-            send_udp_string("^^Id-V", connected_port, send_to_ip);
             send_udp_string("^^IdV", connected_port, send_to_ip);
-        }, 350);
-
-        //if(ping_alternator == 0) send_udp_string("^^IdX", connected_port, send_to_ip);
-        //if(ping_alternator == 1) send_udp_string("^^Id-V", connected_port, send_to_ip);
-        // if(ping_alternator == 2 && firmware_version == "Unknown" && firmware_version_count < 10) 
-        // {
-            
-        //     firmware_version_count += 1;
-        // }
-        
-        ping_alternator++;
-
-        if(firmware_version == "Unknown")
-        {
-            if(firmware_version_count > 10)
-            {
-                if(ping_alternator > 1) ping_alternator = 0;
-            }
-            else
-            {
-                if(ping_alternator > 2) ping_alternator = 0;
-            }           
-        }
-        else
-        {
-            if(ping_alternator > 1) ping_alternator = 0;
-        }
-        
+        }, 1000);
 
         // Reset timer
         setTimeout(send_pinging_commands, 5000);
