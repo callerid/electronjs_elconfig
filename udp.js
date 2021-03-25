@@ -198,16 +198,9 @@ function check_boot(message)
 
 function check_for_firmware_version(message)
 {
-    if(message.length == 15 || message.length == 22)
+    if(message.length == 22)
     {
-        if(message.length==22)
-        {
-            firmware_version = message[20].toString();
-        }
-        else 
-        {
-            firmware_version = message[7].toString(16);
-        }
+        firmware_version = message[7].toString(16);
         
         console.log("Firmware: " + firmware_version);
         $("#lbFirmwareVersion").text(firmware_version);
@@ -1245,7 +1238,10 @@ function handle_computer_info()
     var ip_ending = Number(suggested_ip_parts[3]);
     var ending = ".90";
 
-    if (ip_ending >= 50) ending = ".190";
+    if (ip_ending >= 50 && ip_ending < 150) 
+    {
+        ending = ".190";
+    }
 
     var suggested_ip = suggested_ip_parts[0] + "." + suggested_ip_parts[1] + "." + suggested_ip_parts[2] + ending;
 
