@@ -577,7 +577,7 @@ function check_for_v_command(message, remote)
 //-------------------------------------------------------------------
 // Auto bind at start
 bind();
-console.log("ELConfig 5m v.1.0.8 booting...");
+console.log("ELConfig 5m v.1.0.11 booting...");
 
 // Get all PC addresses 
 get_pc_ips();
