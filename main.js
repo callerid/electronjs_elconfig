@@ -97,6 +97,12 @@ function createWindow () {
             }
           },
           {
+            label: 'Uni-cast IP',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_unicast_dialog()");
+            }
+          },
+          {
             type: 'separator'
           },
       ],
@@ -170,6 +176,12 @@ function createWindow () {
             label: 'Set Duplicate Call Records',
             click(item, focused_window){
               focused_window.webContents.executeJavaScript("open_duplicates()");
+            }
+          },
+          {
+            label: 'Uni-cast IP',
+            click(item, focused_window){
+              focused_window.webContents.executeJavaScript("open_unicast_dialog()");
             }
           },
           {

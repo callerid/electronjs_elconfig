@@ -27,6 +27,7 @@ var ping_address = "192.168.0.90";
 var firmware_version = "Unknown";
 var firmware_version_count = 0;
 var dup_locked = true;
+var unicast_ip = "255.255.255.255";
 
 var processing_v_command = false;
 var processing_x_command = false;
@@ -425,7 +426,7 @@ function check_for_x_command(message, remote)
 
         console.log(message_byte);
 
-        console.log("X Command returned.");
+        console.log("X Command returned from: " + remote.address);
     }
 }
 
@@ -577,7 +578,7 @@ function check_for_v_command(message, remote)
 //-------------------------------------------------------------------
 // Auto bind at start
 bind();
-console.log("ELConfig 5m v.1.0.11 booting...");
+console.log("ELConfig 5m v.1.0.13 booting...");
 
 // Get all PC addresses 
 get_pc_ips();
@@ -1144,44 +1145,36 @@ function nth_pattern_occurance_in_string(str, pat, n){
 
 function send_udp_string(to_send_str, port, ip)
 {
-    // Send via UDP port
-    // last_sent_ip = ip;
-    // console.log('Sending: ' + to_send_str + " on: " + port + " to: " + ip);
-    
-    // switch(port)
-    // {
-    //     case 3520:
-
-    //         server3520.send(Buffer.from(to_send_str), port, ip, function(err){
-
-    //             if(err != null) console.log("ERROR SENDING UDP: " + err.message);
-        
-    //         });
-
-    //     break;
-
-    //     case 6699:
-
-    //         server6699.send(Buffer.from(to_send_str), port, ip, function(err){
-
-    //             if(err != null) console.log("ERROR SENDING UDP: " + err.message);
-        
-    //         });
-
-    //     break;
-
-    //     default:
-
-    //         // Non typical UDP send port
-
-    //     break;
-    // }
-
     var multicast_addresses = [];
     var send_to_string = "";
+
+    if(unicast_ip != "255.255.255.255")
+    {
+        send_to_string = "[U]  ";
+        if(all_multicast_ips.indexOf(unicast_ip) == -1) all_multicast_ips.push(unicast_ip);
+    }
+
+    console.log('Sending: ' + to_send_str + " on: " + "3520" + " to: " + "255.255.255.255");
+    server3520.send(Buffer.from(to_send_str), 3520, "255.255.255.255", function(err){
+
+        if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+
+    });
+
+    console.log('Sending: ' + to_send_str + " on: " + "6699" + " to: " + "255.255.255.255");
+    server6699.send(Buffer.from(to_send_str), 6699, "255.255.255.255", function(err){
+
+        if(err != null) console.log("ERROR SENDING UDP: " + err.message);
+
+    });
+
     all_multicast_ips.forEach((pc_ip) => {
 
         var m_cast = pc_ip.substr(0, pc_ip.lastIndexOf(".")) + ".255";
+        if(pc_ip == unicast_ip)
+        {
+            m_cast = unicast_ip;
+        }
         
         if(!multicast_addresses.includes(m_cast))
         {

@@ -113,6 +113,7 @@
         //                 Popups/Windows
         // --------------------------------------------------
         var pWin_computer_info = null;
+        var pWin_unicast_dialog = null;
         var pWin_duplicates = null;
         var pWin_line_count = null;
         var pWin_ping = null;
@@ -163,12 +164,6 @@
 
         function open_duplicates()
         {
-            if(firmware_version == "Unknown" && dup_locked)
-            {
-                alert("Firmware not supported for this action. Contact CallerID.com.");
-                return;
-            }
-
             pWin_duplicates = $("#pWin_duplicates").dialog({
                     autoOpen: false,
                     width: 400,
@@ -202,6 +197,49 @@
             });
 
             pWin_computer_info.dialog('open');
+        }
+
+        function open_unicast_dialog()
+        {
+            var ips = unicast_ip.split('.');
+
+            if(unicast_ip == "255.255.255.255")
+            {
+                $('#rbBroadcast').prop('checked', true);
+                $('#rbUniCast').prop('checked', false);
+            }
+            else
+            {
+                $('#rbBroadcast').prop('checked', false);
+                $('#rbUniCast').prop('checked', true);
+            }
+
+            if(ips.length == 4)
+            {
+                $("#tbUniCastIP_1").val(ips[0]);
+                $("#tbUniCastIP_2").val(ips[1]);
+                $("#tbUniCastIP_3").val(ips[2]);
+                $("#tbUniCastIP_4").val(ips[3]);
+            }
+
+            pWin_unicast_dialog = $("#pWin_unicast_dialog").dialog({
+                    autoOpen: false,
+                    width: 500,
+                    height: 180,
+                    show: {
+                        effect: "blind",
+                        duration: 400
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 400
+                    },
+                    close: () => {
+                        unicast_ip = $("#tbUniCastIP_1").val() + "." + $("#tbUniCastIP_2").val() + "." + $("#tbUniCastIP_3").val() + "." + $("#tbUniCastIP_4").val();
+                    }
+            });
+
+            pWin_unicast_dialog.dialog('open');
         }
 
         function open_resetting_el_defaults()
@@ -318,6 +356,45 @@
                 $("#win_resmon_step_2").removeClass("hidden");
                 $("#win_resmon_step_3").addClass("hidden");
                 set_resmon_1();
+
+            });
+
+            $('.rbUniCast').click(function(){
+
+                $('#rbBroadcast').prop('checked', false);
+
+                if(unicast_ip == "255.255.255.255")
+                {
+                    unicast_ip = "192.168.0.90";
+                }
+
+                var ips = unicast_ip.split('.');
+
+                if(ips.length == 4)
+                {
+                    $("#tbUniCastIP_1").val(ips[0]);
+                    $("#tbUniCastIP_2").val(ips[1]);
+                    $("#tbUniCastIP_3").val(ips[2]);
+                    $("#tbUniCastIP_4").val(ips[3]);
+                }
+
+            });
+
+            $('.rbBroadcast').click(function() {
+
+                $('#rbUniCast').prop('checked', false);
+
+                unicast_ip = "255.255.255.255";
+
+                var ips = unicast_ip.split('.');
+
+                if(ips.length == 4)
+                {
+                    $("#tbUniCastIP_1").val(ips[0]);
+                    $("#tbUniCastIP_2").val(ips[1]);
+                    $("#tbUniCastIP_3").val(ips[2]);
+                    $("#tbUniCastIP_4").val(ips[3]);
+                }
 
             });
 
@@ -739,6 +816,190 @@
                 }
 
             });
+
+            // -------------- unicast ip input
+
+            $('#pWin_unicast_btnSave').on('click', function(){
+            
+                unicast_ip = $("#tbUniCastIP_1").val() + "." + $("#tbUniCastIP_2").val() + "." + $("#tbUniCastIP_3").val() + "." + $("#tbUniCastIP_4").val();
+                pWin_unicast_dialog.dialog('close');
+
+            });
+
+            $('#pWin_unicast_btnBroadcast').on('click', function(){
+            
+                unicast_ip = "255.255.255.255";
+                pWin_unicast_dialog.dialog('close');
+
+            });
+
+            $('#tbUniCastIP_1').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_1').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#tbUniCastIP_1').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#tbUniCastIP_1').val(text.substr(0, text.length - 1));
+                    $('#tbUniCastIP_2').focus();
+                    $('#tbUniCastIP_2').select();
+                    return;
+                }
+
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
+                {
+                    $('#tbUniCastIP_2').focus();
+                    $('#tbUniCastIP_2').select();
+                }
+
+                });
+
+                $('#tbUniCastIP_1').on('keydown', function(event){
+
+                var key = event.keyCode;
+
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+                });
+
+                $('#tbUniCastIP_2').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_2').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#tbUniCastIP_2').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#tbUniCastIP_2').val(text.substr(0, text.length - 1));
+                    $('#tbUniCastIP_3').focus();
+                    $('#tbUniCastIP_3').select();
+                    return;
+                }
+
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
+                {
+                    $('#tbUniCastIP_3').focus();
+                    $('#tbUniCastIP_3').select();
+                }
+
+                });
+
+                $('#tbUniCastIP_2').on('keydown', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_2').val();
+
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+                });
+
+                $('#tbUniCastIP_3').on('keyup', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_3').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#tbUniCastIP_3').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                if(key == 190 || key == 110) // periods
+                {
+                    $('#tbUniCastIP_3').val(text.substr(0, text.length - 1));
+                    $('#tbUniCastIP_4').focus();
+                    $('#tbUniCastIP_4').select();
+                    return;
+                }
+
+                var is_valid = /^(9|37|39|48|49|50|51|52|53|54|55|56|57|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+
+                if(key != 8 && text.length == 3 && is_valid && key != 37 && key != 39) 
+                {
+                    $('#tbUniCastIP_4').focus();
+                    $('#tbUniCastIP_4').select();
+                }
+
+                });
+
+                $('#tbUniCastIP_3').on('keydown', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_3').val();
+
+
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+                });
+
+                $("#tbUniCastIP_4").on('keyup', function(event){
+
+                var text = $('#tbUniCastIP_4').val();
+
+                var int_value = parseInt(text);
+                if(int_value > 255)
+                {
+                    $('#tbUniCastIP_4').val(text.substr(0, text.length - 1));
+                    return;
+                }
+
+                });
+
+                $('#tbUniCastIP_4').on('keydown', function(event){
+
+                var key = event.keyCode;
+                var text = $('#tbUniCastIP_4').val();
+
+                if (key == 9)
+                {
+                    return false;
+                }
+
+                var is_valid = /^(8|9|37|39|48|49|50|51|52|53|54|55|56|57|190|110|96|97|98|99|100|101|102|103|104|105)$/.test("" + key);
+                if (!is_valid) {
+                    return false;
+                }
+
+                });
+            // -------------------------------
 
             $('#tbUnitIP_1').on('keyup', function(event){
 
@@ -2354,6 +2615,46 @@
         </tr>
     </table>
 
+</div>
+
+<div id="pWin_unicast_dialog" title="Uni-cast to Unit" class="hidden">
+
+    <center>
+        <table style="text-align: center;">
+        
+            <tr>
+            
+                <td style="padding-top:20px;text-align:center;padding-right:40px;">
+                    
+                    <center>
+                        <b>Uni-cast IP Address</b><br/>
+                        <p>Enter the known IP address of your CallerID.com Unit.</p>
+                        <div id="tbUniCastIP" class="input_ip">
+    
+                            <input type="text" maxlength="3" id="tbUniCastIP_1"/> .
+                            <input type="text" maxlength="3" id="tbUniCastIP_2"/> .
+                            <input type="text" maxlength="3" id="tbUniCastIP_3"/> .
+                            <input type="text" maxlength="3" id="tbUniCastIP_4"/>
+
+                        </div>
+
+                    </center>
+                
+                </td>
+            
+            </tr>
+
+            <tr>
+
+                <td>
+                    <input type="radio" checked="true" class="rbBroadcast" id="rbBroadcast" value="Broadcast"/>Broadcast
+                    <input type="radio" class="rbUniCast" id="rbUniCast" value="Broadcast"/>Uni-cast
+                </td>
+
+            </tr>
+        
+        </table>
+    </center>
 </div>
 
 <div id="pWin_computer_info" title="Computer IP & MAC Address" class="hidden">
